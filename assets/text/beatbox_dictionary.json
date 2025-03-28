@@ -1,0 +1,11 @@
+{
+    "drum_sound": {
+        "name": "Dźwięk perkusyjny",
+        "description": "Krótki, niemelodyjny dźwięk wydawany przez beatboxera, często imitujący dźwięki prawdziwej perkusji."
+    },
+
+    "pattern": {
+        "name": "Pattern",
+        "description": "Rytmicznie wykonywana kombinacja dźwięków perkusyjnych."
+    }
+}
