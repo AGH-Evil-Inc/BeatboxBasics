@@ -1,4 +1,5 @@
-﻿using api.Models;
+﻿using System.Text.Json;
+using api.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -10,12 +11,22 @@ namespace api.Controllers
         [HttpGet]
         public IActionResult GetSounds()
         {
-            var items = new List<Sound>
+            string relativePath = @"..\..\frontend\assets\text\sound_library.json";
+            string jsonFilePath = Path.Combine(Directory.GetCurrentDirectory(), relativePath);
+            Dictionary<string, Sound> items;
+            try
             {
-                new Sound { Name = "Beat 1", AudioPath = "audio/sounds/example_kicks.wav" },
-                new Sound { Name = "Beat 2", AudioPath = "audio/sounds/example_kicks.wav" },
-                new Sound { Name = "Beat 3", AudioPath = "audio/sounds/example_kicks.wav" }
-            };
+                string jsonString = System.IO.File.ReadAllText(jsonFilePath);
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                items = JsonSerializer.Deserialize<Dictionary<string, Sound>>(jsonString, options);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
 
             return Ok(items);
         }

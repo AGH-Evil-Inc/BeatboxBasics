@@ -4,9 +4,6 @@ namespace api.Models
 {
     public class Sound
     {
-        [Key]
-        public int Id { get; set; }
-
         public string Name { get; set; }
         public string AudioPath { get; set; }
         public string Notation { get; set; }
