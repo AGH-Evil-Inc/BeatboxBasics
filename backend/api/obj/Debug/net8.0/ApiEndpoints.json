@@ -1,0 +1,12 @@
+[
+  {
+    "ContainingType": "api.Controllers.SoundController",
+    "Method": "GetSounds",
+    "RelativePath": "api/Sound",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  }
+]

@@ -1,0 +1,41 @@
+{
+    "kick": {
+        "id": 0,
+        "name": "Stopa",
+        "notation": "B",
+        "audioPath": "audio/sounds/example_kicks.wav",
+        "description": "Stopa jest pierwszym dźwiękiem, którego powinien się nauczyć każdy przyszły beatboxer. Oryginalnie stopa jest dźwiękiem wydawanym przez bęben basowy perkusji, a imitowanie jej sprowadza się do wypowiedzenia głoski \"p\" lub \"b\" w odpowiedni sposób.",
+        "tips": ["Zacznij naukę od wypowiadania głoski \"p\" albo \"b\" bez używania głosu.", "Staraj się włożyć więcej energii w początek głoski, spróbuj zrobić to bez wydychania powietrza.", "Eksperymentuj z ułożeniem i ruchem ust podczas wykonywania dźwięku."],
+        "links": ["https://www.youtube.com/watch?v=kfB9owT9ats", "https://www.youtube.com/watch?v=m37cDsDl-4I"]
+    },
+
+    "hi_hat": {
+        "id": 1,
+        "name": "Hi-hat",
+        "notation": "t",
+        "audioPath": "",
+        "description": "Hi-hat to najważniejszy talerz w perkusji. Aby go wykonać, wystarczy wymówić bezdźwięczne \"c\" (albo \"t\").",
+        "tips": ["Wysuń język do przodu, tak żeby był przyłożony do górnych zębów i powiedz \"c\". W momencie wydania dźwięku język powinien \"odskoczyć\" od zębów.", "Postaraj się nie wydychać powietrza z płuc, tylko użyć samych mięśni języka.", "(Opcjonalnie) możesz zrobić otwartą wersje hi-hat'a wydychając powietrze z płuc, tak aby dźwięk był długi (\"tsss\").", "(Opcjonalnie) możesz spróbować zrobić hi-hat na inne sposoby, na przykład za pomocą głosek \"f\", \"ć\", \"ś\" i \"cz\"."],
+        "links": ["https://www.youtube.com/watch?v=klZBkCyK9Co", "https://www.youtube.com/watch?v=B19ZKJaHamo"]
+    },
+
+    "pf_snare": {
+        "id": 2,
+        "name": "Werbel \"Pf\"",
+        "notation": "Pf",
+        "audioPath": "",
+        "description": "Oryginalnie werbel to niewielki bęben, podstawowy element perkusji nadający rytmikę. Werbel \"Pf\" jest chyba najpopularniejszym werblem używanym w beatbox, aby go wykonać należy po prostu zrobić stopę z dodatkiem głoski \"f\" na końcu.",
+        "tips": ["Zaraz po wykonaniu stopy dolna warga musi zetknąć się z górnymi zębami, aby wydać dźwięk \"f\" (bez głosu).", "Spróbuj użyć więcej powietrza niż w przypadku samej stopy, aby dźwięk \"f\" trwał dłużej.", "(Opcjonalnie) możesz eksperymentować z różnymi głoskami na końcu stopy, zamiast \"f\" możesz zrobić na przykład \"s\", \"sz\", lub nawet \"h\"."],
+        "links": ["https://www.youtube.com/watch?v=guteyLuSOU4"]
+    },
+
+    "outward_k": {
+        "id": 3,
+        "name": "Werbel \"k\" (na wydechu)",
+        "notation": "k",
+        "audioPath": "",
+        "description": "Werbel \"k\" imituje dźwięk wydawany przez uderzenie pałeczki w kant werbla (rimshot). Najprostszym sposobem na jego imitację jest wypowiadanie głoski \"k\" za pomocą samych mięśni języka i jamy ustnej.",
+        "tips": ["W uproszczeniu musisz wypowiedzieć mocne, krótkie, bezdźwięczne \"k\" bez używania płuc.", "Skupiamy się tylko na początkowym napięciu między tyłem języka a podniebieniem, podczas wymawiania litery \"k\".", "Ruch dolnej szczęki pomaga w zwiększeniu napięcia."],
+        "links": ["https://www.youtube.com/watch?v=xsnuWhrXLfo", "https://www.youtube.com/watch?v=BTWwO_Dh21g"]
+    }
+}
