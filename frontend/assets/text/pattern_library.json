@@ -7,7 +7,7 @@
         "pattern": ["B", "t", "Pf", "t", "B", "t", "Pf", "t"],
         "difficulty": 1,
         "audioPath": "",
-        "description": "Najprostszy rockowy beat. Rodzaj werbla jaki użyjesz nie jest istotny (możesz zamienić \"Pf\" na \"k\" albo \"K\"."
+        "description": "Najprostszy rockowy beat. Rodzaj werbla jaki użyjesz nie jest istotny (możesz zamienić \"Pf\" na \"k\" albo \"K\")."
     },
 
     "basic_beat_two_kicks": {
@@ -15,10 +15,64 @@
         "name": "Rock B",
         "base_BPM": 130,
         "no_bars": 2,
-        "pattern": ["B", "t", "K", "t", "B", "B", "K", "t"],
+        "pattern": ["B", "t", "Pf", "t", "B", "B", "Pf", "t"],
         "difficulty": 1,
         "audioPath": "audio/patterns/pattern_basic_B_130BPM.wav",
-        "description": "Najprostszy rockowy beat ale robimy dwie stopy przed drugim werblem. Rodzaj werbla jaki użyjesz nie jest istotny (możesz zamienić \"K\" na \"k\" albo \"Pf\"."
-    }
+        "description": "Najprostszy rockowy beat ale robimy dwie stopy przed drugim werblem. Rodzaj werbla jaki użyjesz nie jest istotny (możesz zamienić \"Pf\" na \"k\" albo \"K\")."
+    },
 
+    "waltz": {
+        "id": 5,
+        "name": "Walc (metrum 6/8)",
+        "base_BPM": 100,
+        "no_bars": 2,
+        "pattern": ["B", "t", "t", "Pf", "t", "t"],
+        "difficulty": 1,
+        "audioPath": "",
+        "description": "Metrum 6/8, oznacza, że w każdym takcie zamiast liczyć do 4, liczymy do 6 w równych odstępach (albo do 3 dwa razy)."
+    },
+
+    "dnb": {
+        "id": 10,
+        "name": "Drum and Bass A",
+        "base_BPM": 170,
+        "no_bars": 2,
+        "pattern": ["B", "t", "K", "t", "t", "B", "K", "t"],
+        "difficulty": 2,
+        "audioPath": "",
+        "description": "Jeden z najpopularniejszych patternów w gatunku Drum and Bass. Możesz zamienić \"K\" na \"Pf\" (użycie \"k\" jest niepolecane, muzyka DnB powinna mieć silne werble)."
+    },
+
+    "dnb_double_hat": {
+        "id": 11,
+        "name": "Drum and Bass B",
+        "base_BPM": 160,
+        "no_bars": 2,
+        "pattern": ["B", "t", "K", "t", "k", "t", "k", "B", "K", "t"],
+        "difficulty": 2,
+        "audioPath": "",
+        "description": "Wariacja normalnego patternu DnB dodająca dodatkowe dźwięki \"k\", tworzące podwójne hi-haty (lżejszy dźwięk \"k\" brzmi jak hi-hat). Możesz zamienić \"K\" na \"Pf\". Przed nauką całego patternu warto przećwiczyć szybkie naprzemienne wykonywanie dźwięków \"t\" i \"k\"."
+    },
+
+    "amen_break": {
+        "id": 20,
+        "name": "Amen Break",
+        "base_BPM": 120,
+        "no_bars": 2,
+        "pattern": ["B", "B", "K", "t", "K", "t", "K", "B", "B", "K", "t", "K"],
+        "difficulty": 3,
+        "audioPath": "",
+        "description": "Jeden z najpopularniejszych patternów w historii muzyki. Pattern ten jest dobrym ćwiczeniem dźwięku \"K\", który warto mieć dobrze opanowany przed przystąpieniem do nauki."
+    },
+
+    "amen_break_simplified": {
+        "id": 21,
+        "name": "Amen Break (uproszczony)",
+        "base_BPM": 110,
+        "no_bars": 2,
+        "pattern": ["B", "t", "Pf", "t", "Pf", "t", "Pf", "t", "Pf", "t"],
+        "difficulty": 2,
+        "audioPath": "",
+        "description": "Łatwiejsza wersja Amen Break, wykorzystująca dźwięk \"Pf\" zamiast \"K\". Oczywiście możesz użyć dźwięku \"K\", jeżeli czujesz się z nim lepiej. Dobre opanowane \"K\" pozwala na szybsze i czystsze wykonywanie tego patternu."
+    }
 }

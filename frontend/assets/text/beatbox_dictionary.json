@@ -6,6 +6,18 @@
 
     "pattern": {
         "name": "Pattern",
-        "description": "Rytmicznie wykonywana kombinacja dźwięków perkusyjnych."
+        "description": "Rytmicznie wykonywana kombinacja dźwięków perkusyjnych, którą zapętlamy, tworząc perkusyjną część muzyki."
+    },
+
+    "bar": {
+        "name": "Takt",
+        "description": "Regularny odcinek czasowy utworu muzycznego. Każdy takt ma długość czterech ćwierćnut (w przypadku utworów pisanych w najpopularniejszym metrum 4/4, górna liczba określa liczbę nut w takcie, a dolna rodzaj nuty, 4 - ćwierćnuta). Długość ćwierćnuty jest definiowana przez BPM utworu."
+    },
+
+    "bpm": {
+        "name": "BPM",
+        "description": "Skrót od \"Beats Per Minute\" - uderzenia na minutę. Jest to liczba określająca tempo utworu - ile ćwierćnut na minutę."
     }
+
+    
 }
