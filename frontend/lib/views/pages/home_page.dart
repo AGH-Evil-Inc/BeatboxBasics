@@ -52,7 +52,7 @@ class HomePage extends StatelessWidget {
                             children: [
                               _buildButton(
                                 context: context,
-                                icon: Icons.mic,
+                                icon: Icons.music_note_outlined,
                                 label: 'Dźwięki',
                                 color: Colors.purple.shade600,
                                 onTap: () {
@@ -62,8 +62,8 @@ class HomePage extends StatelessWidget {
                               ),
                               _buildButton(
                                 context: context,
-                                icon: Icons.graphic_eq,
-                                label: 'Wzorce',
+                                icon: Icons.library_music_outlined,
+                                label: 'Patterny',
                                 color: Colors.orange.shade600,
                                 onTap: () {
                                   selectedPageNotifier.value = 2;
@@ -72,7 +72,7 @@ class HomePage extends StatelessWidget {
                               ),
                               _buildButton(
                                 context: context,
-                                icon: Icons.book,
+                                icon: Icons.book_outlined,
                                 label: 'Słowniczek',
                                 color: Colors.teal.shade600,
                                 onTap: () {
@@ -145,7 +145,7 @@ class HomePage extends StatelessWidget {
         .animate()
         .fadeIn(duration: 500.ms, delay: delay)
         .slideX(
-          begin: label == 'Dźwięki' ? -0.2 : label == 'Wzorce' ? 0.2 : 0,
+          begin: label == 'Dźwięki' ? -0.2 : label == 'Patterny' ? 0.2 : 0,
           end: 0,
         )
         .scale(

@@ -238,7 +238,7 @@ class _SoundPageState extends State<SoundPage> {
                               final path = item['audioPath'] ?? '';
                               final description =
                                   item['description'] ?? 'Dowiedz się więcej!';
-                              final notation = "Notacja: " + item['notation'] ?? 'Brak notacji';
+                              final notation = item['notation'] ?? 'Brak notacji';
 
                               return GestureDetector(
                                 onTap: () {
@@ -294,20 +294,32 @@ class _SoundPageState extends State<SoundPage> {
                                                 ),
                                               ),
                                               const SizedBox(height: 4),
+                                              Row( 
+                                                children: [ Text(
+                                                'Notacja:',
+                                                style: GoogleFonts.poppins(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.blue.shade600,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 8),
                                               Text(
                                                 notation.length > 30
                                                     ? '${notation.substring(0, 30)}…'
                                                     : notation,
                                                 style: GoogleFonts.poppins(
                                                   fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
                                                   color: notation == 'Brak notacji'
                                                       ? Colors.grey.shade600
-                                                      : Colors.blue.shade600,
+                                                      : Colors.blue.shade900,
                                                   fontStyle: notation == 'Brak notacji'
                                                       ? FontStyle.italic
                                                       : FontStyle.normal,
                                                 ),
-                                              ).animate().fadeIn(duration: 300.ms),
+                                              ).animate().fadeIn(duration: 300.ms),])
+                                            
                                             ],
                                           ),
                                         ),

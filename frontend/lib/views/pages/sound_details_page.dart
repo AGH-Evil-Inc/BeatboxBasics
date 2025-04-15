@@ -130,7 +130,7 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
               borderRadius: BorderRadius.circular(16),
             ),
             title: Text(
-              'Notacja',
+              'Zapis w notacji:',
               style: GoogleFonts.poppins(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
@@ -138,6 +138,7 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
               ),
             ),
             content: SingleChildScrollView(
+              
               child: Text(
                 notation,
                 style: GoogleFonts.poppins(
@@ -168,7 +169,7 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Notacja',
+                'Zapis w notacji:',
                 style: GoogleFonts.poppins(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -179,8 +180,14 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
               Text(
                 notation,
                 style: GoogleFonts.poppins(
-                  fontSize: 16,
-                  color: Colors.black87,
+                  fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: notation == 'Brak notacji'
+                        ? Colors.grey.shade600
+                        : Colors.blueAccent.shade700,
+                    fontStyle: notation == 'Brak notacji'
+                        ? FontStyle.italic
+                        : FontStyle.normal,
                 ),
               ),
               const SizedBox(height: 8),

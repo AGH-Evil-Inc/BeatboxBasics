@@ -149,7 +149,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
           builder: (context) => AlertDialog(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             title: Text(
-              'Wzorzec',
+              'Pattern',
               style: GoogleFonts.poppins(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
@@ -194,7 +194,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Wzorzec',
+                'Pattern',
                 style: GoogleFonts.poppins(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -283,8 +283,8 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
                 ],
               ),
               const SizedBox(height: 8),
-              Text(
-                'Dotknij wzorca, aby powiększyć lub dźwięku, aby zobaczyć szczegóły',
+              Text( 
+                'Kliknij na dźwięk, aby zobaczyć szczegóły',
                 style: GoogleFonts.poppins(
                   fontSize: 14,
                   color: Colors.purple.shade600,
@@ -330,7 +330,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
             ),
             const SizedBox(height: 8),
             Text(
-              '$description\n\nBPM: $bpm\nTakty: $bars',
+              '$description\n\nBPM: $bpm',
               style: GoogleFonts.poppins(
                 fontSize: 16,
                 color: Colors.black87,
@@ -364,7 +364,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Posłuchaj wzorca',
+              'Posłuchaj patterny',
               style: GoogleFonts.poppins(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -688,9 +688,9 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildPatternCard(),
-                      const SizedBox(height: 16),
                       _buildDescriptionCard(),
+                      const SizedBox(height: 16),
+                      _buildPatternCard(),
                       const SizedBox(height: 16),
                       _buildPatternPlayer(),
                       const SizedBox(height: 16),

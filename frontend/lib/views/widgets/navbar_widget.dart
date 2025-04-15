@@ -34,11 +34,19 @@ class _NavbarWidgetState extends State<NavbarWidget> with SingleTickerProviderSt
         return BottomNavigationBar(
           items: [
             BottomNavigationBarItem(
-              icon: AnimatedIcon(
-                icon: AnimatedIcons.home_menu,
-                progress: selectedPage == 0 ? _controller : AlwaysStoppedAnimation(0.0),
+              icon: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                transitionBuilder: (child, animation) {
+                  return RotationTransition(
+                    turns: animation,
+                    child: child,
+                  );
+                },
+                child: selectedPage == 1
+                    ? const Icon(Icons.home_outlined, key: ValueKey('selected'))
+                    : const Icon(Icons.home, key: ValueKey('unselected')),
               ),
-              label: 'Home',
+              label: 'Strona główna',
             ),
             BottomNavigationBarItem(
               icon: AnimatedSwitcher(
@@ -53,7 +61,7 @@ class _NavbarWidgetState extends State<NavbarWidget> with SingleTickerProviderSt
                     ? const Icon(Icons.music_note, key: ValueKey('selected'))
                     : const Icon(Icons.music_note_outlined, key: ValueKey('unselected')),
               ),
-              label: 'Sound',
+              label: 'Dźwięki',
             ),
             BottomNavigationBarItem(
               icon: AnimatedSwitcher(
@@ -68,7 +76,7 @@ class _NavbarWidgetState extends State<NavbarWidget> with SingleTickerProviderSt
                     ? const Icon(Icons.library_music, key: ValueKey('selected'))
                     : const Icon(Icons.library_music_outlined, key: ValueKey('unselected')),
               ),
-              label: 'Pattern',
+              label: 'Patterny',
             ),
             BottomNavigationBarItem(
               icon: AnimatedSwitcher(
@@ -83,7 +91,7 @@ class _NavbarWidgetState extends State<NavbarWidget> with SingleTickerProviderSt
                     ? const Icon(Icons.book, key: ValueKey('selected'))
                     : const Icon(Icons.book_outlined, key: ValueKey('unselected')),
               ),
-              label: 'Dictionary',
+              label: 'Słowniczek',
             ),
           ],
           currentIndex: selectedPage,

@@ -18,7 +18,6 @@ class _PatternPageState extends State<PatternPage> {
   final AudioPlayer audioPlayer = AudioPlayer();
   List<Map<String, dynamic>> items = [];
   List<Map<String, dynamic>> sounds = [];
-  String url = "";
   bool isLoading = true;
   bool hasError = false;
   bool isPlaying = false;
@@ -27,111 +26,90 @@ class _PatternPageState extends State<PatternPage> {
   @override
   void initState() {
     super.initState();
-    fetchPatterns();
-    fetchSounds();
+    fetchData();
   }
 
-  Future<void> fetchPatterns() async {
+  Future<void> fetchData() async {
     setState(() {
       isLoading = true;
       hasError = false;
     });
 
-    if (Platform.isAndroid || Platform.isIOS) {
-      url = "https://192.168.218.107:5001/api/pattern";
-    } else {
-      url = "https://localhost:5001/api/pattern";
-    }
-
     try {
-      final ioc = HttpClient();
-      ioc.badCertificateCallback = (cert, host, port) => true;
-      final http = IOClient(ioc);
-
-      final response = await http.get(
-        Uri.parse(url),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-      );
-
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        final Map<String, dynamic> data = json.decode(response.body);
-        setState(() {
-          items = data.entries
-              .map((entry) => {
-                    'key': entry.key,
-                    ...entry.value as Map<String, dynamic>,
-                  })
-              .toList();
-          isLoading = false;
-        });
-      } else {
-        setState(() {
-          isLoading = false;
-          hasError = true;
-        });
-        debugPrint('Failed to load patterns: ${response.statusCode}');
-      }
+      await Future.wait([fetchPatterns(), fetchSounds()]);
+      setState(() {
+        isLoading = false;
+      });
     } catch (e) {
       setState(() {
         isLoading = false;
         hasError = true;
       });
-      debugPrint("Error: $e");
+      debugPrint("Error fetching data: $e");
+    }
+  }
+
+  Future<void> fetchPatterns() async {
+    String url = Platform.isAndroid || Platform.isIOS
+        ? "https://192.168.218.107:5001/api/pattern"
+        : "https://localhost:5001/api/pattern";
+
+    final ioc = HttpClient();
+    ioc.badCertificateCallback = (cert, host, port) => true;
+    final http = IOClient(ioc);
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    );
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      setState(() {
+        items = data.entries
+            .map((entry) => {
+                  'key': entry.key,
+                  ...entry.value as Map<String, dynamic>,
+                })
+            .toList();
+      });
+    } else {
+      throw Exception('Failed to load patterns: ${response.statusCode}');
     }
   }
 
   Future<void> fetchSounds() async {
-    setState(() {
-      isLoading = true;
-      hasError = false;
-    });
+    String url = Platform.isAndroid || Platform.isIOS
+        ? "https://192.168.218.107:5001/api/sound"
+        : "https://localhost:5001/api/sound";
 
-    if (Platform.isAndroid || Platform.isIOS) {
-      url = "https://192.168.218.107:5001/api/sound";
-    } else {
-      url = "https://localhost:5001/api/sound";
-    }
+    final ioc = HttpClient();
+    ioc.badCertificateCallback = (cert, host, port) => true;
+    final http = IOClient(ioc);
 
-    try {
-      final ioc = HttpClient();
-      ioc.badCertificateCallback = (cert, host, port) => true;
-      final http = IOClient(ioc);
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    );
 
-      final response = await http.get(
-        Uri.parse(url),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-      );
-
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        final Map<String, dynamic> data = json.decode(response.body);
-        setState(() {
-          sounds = data.entries
-              .map((entry) => {
-                    'key': entry.key,
-                    ...entry.value as Map<String, dynamic>,
-                  })
-              .toList();
-          isLoading = false;
-        });
-      } else {
-        setState(() {
-          isLoading = false;
-          hasError = true;
-        });
-        debugPrint('Failed to load sounds: ${response.statusCode}');
-      }
-    } catch (e) {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      final Map<String, dynamic> data = json.decode(response.body);
       setState(() {
-        isLoading = false;
-        hasError = true;
+        sounds = data.entries
+            .map((entry) => {
+                  'key': entry.key,
+                  ...entry.value as Map<String, dynamic>,
+                })
+            .toList();
       });
-      debugPrint("Error: $e");
+    } else {
+      throw Exception('Failed to load sounds: ${response.statusCode}');
     }
   }
 
@@ -203,7 +181,7 @@ class _PatternPageState extends State<PatternPage> {
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             ),
-            onPressed: fetchPatterns,
+            onPressed: fetchData,
           ),
         ],
       ),
@@ -230,7 +208,7 @@ class _PatternPageState extends State<PatternPage> {
             children: [
               AppBar(
                 title: Text(
-                  'Wzorce',
+                  'Patterny',
                   style: GoogleFonts.poppins(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
@@ -256,7 +234,7 @@ class _PatternPageState extends State<PatternPage> {
                 actions: [
                   IconButton(
                     icon: const Icon(Icons.refresh, color: Colors.white),
-                    onPressed: fetchPatterns,
+                    onPressed: fetchData,
                     tooltip: 'Odśwież',
                   ),
                 ],
@@ -272,7 +250,7 @@ class _PatternPageState extends State<PatternPage> {
                             ),
                             const SizedBox(height: 16),
                             Text(
-                              'Ładujemy wzorce…',
+                              'Ładujemy patterny…',
                               style: GoogleFonts.poppins(
                                 fontSize: 16,
                                 color: Colors.purple.shade900,
@@ -292,15 +270,18 @@ class _PatternPageState extends State<PatternPage> {
                               final path = item['audioPath'] ?? '';
                               final description =
                                   item['description'] ?? 'Dowiedz się więcej!';
-                              final difficulty = item['difficulty'] ?? 'Brak poziomu';
-                        
+                              final difficulty = item['difficulty']?.toString() ?? 'Brak poziomu';
+
                               return GestureDetector(
                                 onTap: () {
-                  
+                                  audioPlayer.stop(); // Stop audio before navigating
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (_) => PatternDetailsPage(pattern: item, sounds: sounds),
+                                      builder: (_) => PatternDetailsPage(
+                                        pattern: item,
+                                        sounds: sounds,
+                                      ),
                                     ),
                                   );
                                 },
@@ -314,12 +295,13 @@ class _PatternPageState extends State<PatternPage> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(16),
                                     child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         CircleAvatar(
                                           backgroundColor: Colors.purple.shade100,
                                           child: Icon(
-                                            Icons.repeat,
+                                            Icons.library_music_outlined,
                                             color: Colors.purple.shade600,
                                             size: 24,
                                           ),
@@ -353,26 +335,20 @@ class _PatternPageState extends State<PatternPage> {
                                                 children: [
                                                   Icon(
                                                     _getDifficultyIcon(difficulty),
-                                                    color: Colors.purple.shade600,
+                                                    color: _getDifficultyColor(difficulty),
                                                     size: 16,
                                                   ),
                                                   const SizedBox(width: 4),
                                                   Text(
-                                                    difficulty == 'Brak poziomu'
-                                                        ? 'Brak poziomu'
-                                                        : 'Poziom trudności: $difficulty',
+                                                    'Poziom: $difficulty',
                                                     style: GoogleFonts.poppins(
                                                       fontSize: 14,
-                                                      color: difficulty == 'Brak poziomu'
-                                                          ? Colors.grey.shade600
-                                                          : Colors.purple.shade600,
-                                                      fontStyle:
-                                                          difficulty == 'Brak poziomu'
-                                                              ? FontStyle.italic
-                                                              : FontStyle.normal,
-                                                      fontWeight: FontWeight.w600,
+                                                      color: _getDifficultyColor(difficulty),
                                                     ),
                                                   ),
+                                      
+                                                  const SizedBox(width: 4),
+                                                  _buildDifficultyStars(difficulty),
                                                 ],
                                               ).animate().fadeIn(duration: 300.ms),
                                             ],
@@ -386,14 +362,14 @@ class _PatternPageState extends State<PatternPage> {
                                               width: 48,
                                               height: 48,
                                               child: CircularProgressIndicator(
-                                                value: difficulty/3.0,
-                                                color: Colors.purple.shade600,
+                                                value: _getProgressValue(difficulty),
+                                                color: _getDifficultyColor(difficulty),
                                                 backgroundColor: Colors.purple.shade100,
                                                 strokeWidth: 3,
                                               ),
                                             ).animate().scale(
-                                                  begin: Offset(0.8, 0),
-                                                  end: Offset(1.0, 0.0),
+                                                  begin: const Offset(0.8, 0.8),
+                                                  end: const Offset(1.0, 1.0),
                                                   duration: 500.ms,
                                                 ),
                                             IconButton(
@@ -436,8 +412,9 @@ class _PatternPageState extends State<PatternPage> {
     );
   }
 
-  IconData _getDifficultyIcon(int difficulty) {
-    switch (difficulty) {
+  IconData _getDifficultyIcon(String difficulty) {
+    final level = int.tryParse(difficulty) ?? 0;
+    switch (level) {
       case 1:
         return Icons.emoji_emotions;
       case 2:
@@ -447,5 +424,48 @@ class _PatternPageState extends State<PatternPage> {
       default:
         return Icons.help_outline;
     }
+  }
+
+  Color _getDifficultyColor(String difficulty) {
+    final level = int.tryParse(difficulty) ?? 0;
+    switch (level) {
+      case 1:
+        return Colors.green.shade600;
+      case 2:
+        return Colors.yellow.shade900;
+      case 3:
+        return Colors.red.shade600;
+      default:
+        return Colors.grey.shade600;
+    }
+  }
+
+  double _getProgressValue(String difficulty) {
+    final level = int.tryParse(difficulty) ?? 0;
+    return level / 3.0;
+  }
+
+  Widget _buildDifficultyStars(String difficulty) {
+    final level = int.tryParse(difficulty) ?? 0;
+    if (level < 1 || level > 3) {
+      return Text(
+        'Brak poziomu',
+        style: GoogleFonts.poppins(
+          fontSize: 14,
+          color: Colors.grey.shade600,
+          fontStyle: FontStyle.italic,
+        ),
+      );
+    }
+
+    return Row(
+      children: List.generate(level, (index) {
+        return Icon(
+          Icons.music_note,
+          color: _getDifficultyColor(difficulty),
+          size: 16,
+        );
+      }),
+    );
   }
 }
