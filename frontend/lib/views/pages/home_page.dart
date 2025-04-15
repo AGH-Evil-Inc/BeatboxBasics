@@ -34,11 +34,11 @@ class HomePage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Zacznij Beatbox!',
+                            'Naucz się beatboxu!',
                             style: GoogleFonts.poppins(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color: Colors.purple.shade900,
+                              color: Colors.black54,
                             ),
                           )
                               .animate()
@@ -54,7 +54,7 @@ class HomePage extends StatelessWidget {
                                 context: context,
                                 icon: Icons.music_note_outlined,
                                 label: 'Dźwięki',
-                                color: Colors.purple.shade600,
+                                color: const Color(0xFF1E88E5),
                                 onTap: () {
                                   selectedPageNotifier.value = 1;
                                 },
@@ -64,7 +64,7 @@ class HomePage extends StatelessWidget {
                                 context: context,
                                 icon: Icons.library_music_outlined,
                                 label: 'Patterny',
-                                color: Colors.orange.shade600,
+                                color: const Color(0xFF8E24AA),
                                 onTap: () {
                                   selectedPageNotifier.value = 2;
                                 },
@@ -74,7 +74,7 @@ class HomePage extends StatelessWidget {
                                 context: context,
                                 icon: Icons.book_outlined,
                                 label: 'Słowniczek',
-                                color: Colors.teal.shade600,
+                                color: const Color(0xFF00897B),
                                 onTap: () {
                                   selectedPageNotifier.value = 3;
                                 },

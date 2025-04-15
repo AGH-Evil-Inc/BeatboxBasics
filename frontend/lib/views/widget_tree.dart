@@ -29,7 +29,7 @@ class WidgetTree extends StatelessWidget {
             style: GoogleFonts.poppins(
               fontSize: 22,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: Colors.black54,
             ),
           ),
           centerTitle: true,
@@ -37,12 +37,7 @@ class WidgetTree extends StatelessWidget {
           elevation: 4,
           flexibleSpace: Container(
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Colors.purple.shade600,
-                  Colors.purple.shade800,
-                ],
-              ),
+              color: const Color(0xFFe8db7d),
             ),
           ),
           shape: const RoundedRectangleBorder(
@@ -50,7 +45,7 @@ class WidgetTree extends StatelessWidget {
           ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.settings, color: Colors.teal),
+              icon: const Icon(Icons.settings, color: Colors.black54),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -69,7 +64,7 @@ class WidgetTree extends StatelessWidget {
                 return IconButton(
                   icon: Icon(
                     isLightMode ? Icons.dark_mode : Icons.light_mode,
-                    color: Colors.teal.shade600,
+                    color: Colors.black54,
                   ),
                   onPressed: () {
                     isLightModeNotifier.value = !isLightMode;
