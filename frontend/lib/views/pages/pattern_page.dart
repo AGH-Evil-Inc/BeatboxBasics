@@ -1,65 +1,122 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:app/views/pages/sound_page.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:http/io_client.dart';
 
-class PatternPage extends StatelessWidget {
+
+class PatternPage extends StatefulWidget {
   const PatternPage({super.key});
 
   @override
+  State<PatternPage> createState() => _PatternPageState();
+}
+
+class _PatternPageState extends State<PatternPage> {
+  final AudioPlayer audioPlayer = AudioPlayer();
+  List<Map<String, dynamic>> items = [];
+  String url = "";
+
+   @override
+  void initState() {
+    super.initState();
+    fetchSounds();
+  }
+
+    Future<void> fetchSounds() async {
+    if (Platform.isAndroid || Platform.isIOS) {
+      url = "https://192.168.218.107:5001/api/pattern";
+    } else {
+      url = "https://localhost:5001/api/pattern";
+    }
+
+    try {
+      final ioc = HttpClient();
+      ioc.badCertificateCallback = (cert, host, port) => true;
+      final http = IOClient(ioc);
+
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      );
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        setState(() {
+          items = data.entries.map((entry) => {
+            'key': entry.key,
+            ...entry.value as Map<String, dynamic>,
+          }).toList();
+        });
+      } else {
+        print('Failed to load sounds: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
+
+   Future<void> playSound(String path) async {
+    try {
+      await audioPlayer.play(AssetSource(path));
+    } catch (e) {
+      print("Error playing sound: $e");
+    }
+  }
+
+ @override
   Widget build(BuildContext context) {
-    final AudioPlayer audioPlayer = AudioPlayer();
-
-    // List of items with their names and actions
-    // Each item has a name, an action for the row tap, and an action for the icon tap
-    final List<Map<String, dynamic>> items = [
-      {
-        'name': 'Pattern 1',
-        'onTapRow': () => print('Row of Beat 1 clicked'),
-        'onTapIcon': () async {
-          await audioPlayer.play(AssetSource('audio/patterns/pattern_basic_B_130BPM.wav'));
-        },
-      },
-      {
-        'name': 'Pattern 2',
-        'onTapRow': () => print('Row of Beat 2 clicked'),
-        'onTapIcon': () async {
-          await audioPlayer.play(AssetSource('audio/patterns/pattern_basic_B_130BPM.wav'));
-        },
-      },
-      {
-        'name': 'Pattern 3',
-        'onTapRow': () => print('Row of Beat 3 clicked'),
-        'onTapIcon': () async {
-          await audioPlayer.play(AssetSource('audio/patterns/pattern_basic_B_130BPM.wav'));
-        },
-      },
-    ];
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pattern Page'),
+        title: const Text('Sounds'),
+        centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView.builder(
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            final item = items[index];
-            return Card(
-              margin: const EdgeInsets.only(bottom: 16.0),
-              child: ListTile(
-                title: GestureDetector(
-                  onTap: item['onTapRow'], 
-                  child: Text(item['name']),
-                ),
-                trailing: GestureDetector(
-                  onTap: item['onTapIcon'], 
-                  child: Icon(Icons.play_arrow),
-                ),
-              ),
-            );
-          },
-        ),
-      ),
+      body: items.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                final item = items[index];
+                final name = item['name'] ?? 'Unknown';
+                final path = item['audioPath'] ?? '';
+
+                return Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  elevation: 6,
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.all(16),
+                    title: Text(
+                      name,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                    subtitle: const Text('Tap to view details'),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.play_circle_fill, color: Colors.deepPurpleAccent, size: 32),
+                      onPressed: () => playSound(path),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => SoundPage(),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
     );
   }
 }

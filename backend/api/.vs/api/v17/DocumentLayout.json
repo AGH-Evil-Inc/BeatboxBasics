@@ -1,46 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Jakub\\Desktop\\STUDIA\\Magisterka sem3\\BeatboxBasics\\backend\\api\\",
+  "WorkspaceRootPath": "D:\\studia\\BeatboxBasics\\backend\\api\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|c:\\users\\jakub\\desktop\\studia\\magisterka sem3\\beatboxbasics\\backend\\api\\controllers\\dictionarycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|solutionrelative:controllers\\dictionarycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|c:\\users\\jakub\\desktop\\studia\\magisterka sem3\\beatboxbasics\\backend\\api\\controllers\\patterncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|solutionrelative:controllers\\patterncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|c:\\users\\jakub\\desktop\\studia\\magisterka sem3\\beatboxbasics\\backend\\api\\controllers\\soundcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|d:\\studia\\beatboxbasics\\backend\\api\\controllers\\soundcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|solutionrelative:controllers\\soundcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|c:\\users\\jakub\\desktop\\studia\\magisterka sem3\\beatboxbasics\\backend\\api\\models\\dictionaryentry.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|solutionrelative:models\\dictionaryentry.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-<<<<<<< Updated upstream
-      "AbsoluteMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|d:\\studia\\projekty\\beatboxbasics\\backend\\api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-=======
-      "AbsoluteMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|c:\\users\\jakub\\desktop\\studia\\magisterka sem3\\beatboxbasics\\backend\\api\\models\\pattern.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|solutionrelative:models\\pattern.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|c:\\users\\jakub\\desktop\\studia\\magisterka sem3\\beatboxbasics\\backend\\api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|solutionrelative:properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|c:\\users\\jakub\\desktop\\studia\\magisterka sem3\\beatboxbasics\\backend\\api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|c:\\users\\jakub\\desktop\\studia\\magisterka sem3\\beatboxbasics\\backend\\api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
->>>>>>> Stashed changes
-      "RelativeMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|c:\\users\\jakub\\desktop\\studia\\magisterka sem3\\beatboxbasics\\backend\\api\\models\\sound.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|d:\\studia\\beatboxbasics\\backend\\api\\models\\sound.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|solutionrelative:models\\sound.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|d:\\studia\\beatboxbasics\\backend\\api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -50,132 +22,48 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "DictionaryController.cs",
-              "DocumentMoniker": "C:\\Users\\Jakub\\Desktop\\STUDIA\\Magisterka sem3\\BeatboxBasics\\backend\\api\\Controllers\\DictionaryController.cs",
-              "RelativeDocumentMoniker": "Controllers\\DictionaryController.cs",
-              "ToolTip": "C:\\Users\\Jakub\\Desktop\\STUDIA\\Magisterka sem3\\BeatboxBasics\\backend\\api\\Controllers\\DictionaryController.cs",
-              "RelativeToolTip": "Controllers\\DictionaryController.cs",
-              "ViewState": "AgIAAAEAAAAAAAAAAAAowAoAAAARAAAAAAAAAA==",
+              "Title": "SoundController.cs",
+              "DocumentMoniker": "D:\\studia\\BeatboxBasics\\backend\\api\\Controllers\\SoundController.cs",
+              "RelativeDocumentMoniker": "Controllers\\SoundController.cs",
+              "ToolTip": "D:\\studia\\BeatboxBasics\\backend\\api\\Controllers\\SoundController.cs",
+              "RelativeToolTip": "Controllers\\SoundController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-06T09:10:16.183Z",
+              "WhenOpened": "2025-04-15T10:48:39.087Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "PatternController.cs",
-              "DocumentMoniker": "C:\\Users\\Jakub\\Desktop\\STUDIA\\Magisterka sem3\\BeatboxBasics\\backend\\api\\Controllers\\PatternController.cs",
-              "RelativeDocumentMoniker": "Controllers\\PatternController.cs",
-              "ToolTip": "C:\\Users\\Jakub\\Desktop\\STUDIA\\Magisterka sem3\\BeatboxBasics\\backend\\api\\Controllers\\PatternController.cs",
-              "RelativeToolTip": "Controllers\\PatternController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-06T09:08:08.236Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "DictionaryEntry.cs",
-              "DocumentMoniker": "C:\\Users\\Jakub\\Desktop\\STUDIA\\Magisterka sem3\\BeatboxBasics\\backend\\api\\Models\\DictionaryEntry.cs",
-              "RelativeDocumentMoniker": "Models\\DictionaryEntry.cs",
-              "ToolTip": "C:\\Users\\Jakub\\Desktop\\STUDIA\\Magisterka sem3\\BeatboxBasics\\backend\\api\\Models\\DictionaryEntry.cs",
-              "RelativeToolTip": "Models\\DictionaryEntry.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-06T09:07:45.006Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Pattern.cs",
-              "DocumentMoniker": "C:\\Users\\Jakub\\Desktop\\STUDIA\\Magisterka sem3\\BeatboxBasics\\backend\\api\\Models\\Pattern.cs",
-              "RelativeDocumentMoniker": "Models\\Pattern.cs",
-              "ToolTip": "C:\\Users\\Jakub\\Desktop\\STUDIA\\Magisterka sem3\\BeatboxBasics\\backend\\api\\Models\\Pattern.cs",
-              "RelativeToolTip": "Models\\Pattern.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-06T09:06:50.165Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\Jakub\\Desktop\\STUDIA\\Magisterka sem3\\BeatboxBasics\\backend\\api\\appsettings.json",
-              "RelativeDocumentMoniker": "appsettings.json",
-              "ToolTip": "C:\\Users\\Jakub\\Desktop\\STUDIA\\Magisterka sem3\\BeatboxBasics\\backend\\api\\appsettings.json",
-              "RelativeToolTip": "appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-04-06T07:15:57.872Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "SoundController.cs",
-              "DocumentMoniker": "C:\\Users\\Jakub\\Desktop\\STUDIA\\Magisterka sem3\\BeatboxBasics\\backend\\api\\Controllers\\SoundController.cs",
-              "RelativeDocumentMoniker": "Controllers\\SoundController.cs",
-              "ToolTip": "C:\\Users\\Jakub\\Desktop\\STUDIA\\Magisterka sem3\\BeatboxBasics\\backend\\api\\Controllers\\SoundController.cs",
-              "RelativeToolTip": "Controllers\\SoundController.cs",
-<<<<<<< Updated upstream
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAPAAAAAAAAAA==",
-=======
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAEAAAAAAAAAA==",
->>>>>>> Stashed changes
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-04T23:27:09.773Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
               "Title": "Sound.cs",
-              "DocumentMoniker": "C:\\Users\\Jakub\\Desktop\\STUDIA\\Magisterka sem3\\BeatboxBasics\\backend\\api\\Models\\Sound.cs",
+              "DocumentMoniker": "D:\\studia\\BeatboxBasics\\backend\\api\\Models\\Sound.cs",
               "RelativeDocumentMoniker": "Models\\Sound.cs",
-              "ToolTip": "C:\\Users\\Jakub\\Desktop\\STUDIA\\Magisterka sem3\\BeatboxBasics\\backend\\api\\Models\\Sound.cs",
+              "ToolTip": "D:\\studia\\BeatboxBasics\\backend\\api\\Models\\Sound.cs",
               "RelativeToolTip": "Models\\Sound.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-04T23:22:14.607Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-15T10:48:39.09Z"
             },
             {
               "$type": "Document",
-<<<<<<< Updated upstream
               "DocumentIndex": 2,
-=======
-              "DocumentIndex": 5,
-              "Title": "launchSettings.json",
-              "DocumentMoniker": "C:\\Users\\Jakub\\Desktop\\STUDIA\\Magisterka sem3\\BeatboxBasics\\backend\\api\\Properties\\launchSettings.json",
-              "RelativeDocumentMoniker": "Properties\\launchSettings.json",
-              "ToolTip": "C:\\Users\\Jakub\\Desktop\\STUDIA\\Magisterka sem3\\BeatboxBasics\\backend\\api\\Properties\\launchSettings.json",
-              "RelativeToolTip": "Properties\\launchSettings.json",
-              "ViewState": "AgIAAAcAAAAAAAAAAAAmwA8AAAAdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-04-04T20:46:31.482Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
->>>>>>> Stashed changes
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Jakub\\Desktop\\STUDIA\\Magisterka sem3\\BeatboxBasics\\backend\\api\\Program.cs",
+              "DocumentMoniker": "D:\\studia\\BeatboxBasics\\backend\\api\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\Jakub\\Desktop\\STUDIA\\Magisterka sem3\\BeatboxBasics\\backend\\api\\Program.cs",
+              "ToolTip": "D:\\studia\\BeatboxBasics\\backend\\api\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-04T20:43:26.422Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-15T10:48:39.093Z"
             }
           ]
         }

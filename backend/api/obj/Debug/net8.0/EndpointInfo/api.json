@@ -5,6 +5,30 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/Dictionary": {
+      "get": {
+        "tags": [
+          "Dictionary"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Pattern": {
+      "get": {
+        "tags": [
+          "Pattern"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Sound": {
       "get": {
         "tags": [

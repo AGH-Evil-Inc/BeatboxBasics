@@ -1,5 +1,25 @@
 [
   {
+    "ContainingType": "api.Controllers.DictionaryController",
+    "Method": "GetDictionaryEntries",
+    "RelativePath": "api/Dictionary",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "api.Controllers.PatternController",
+    "Method": "GetPatterns",
+    "RelativePath": "api/Pattern",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "api.Controllers.SoundController",
     "Method": "GetSounds",
     "RelativePath": "api/Sound",

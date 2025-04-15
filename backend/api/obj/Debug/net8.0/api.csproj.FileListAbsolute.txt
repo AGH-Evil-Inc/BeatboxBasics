@@ -72,3 +72,40 @@ C:\Users\Jakub\Desktop\STUDIA\Magisterka sem3\BeatboxBasics\backend\api\obj\Debu
 C:\Users\Jakub\Desktop\STUDIA\Magisterka sem3\BeatboxBasics\backend\api\obj\Debug\net8.0\api.pdb
 C:\Users\Jakub\Desktop\STUDIA\Magisterka sem3\BeatboxBasics\backend\api\obj\Debug\net8.0\api.genruntimeconfig.cache
 C:\Users\Jakub\Desktop\STUDIA\Magisterka sem3\BeatboxBasics\backend\api\obj\Debug\net8.0\ref\api.dll
+D:\studia\BeatboxBasics\backend\api\bin\Debug\net8.0\appsettings.Development.json
+D:\studia\BeatboxBasics\backend\api\bin\Debug\net8.0\appsettings.json
+D:\studia\BeatboxBasics\backend\api\bin\Debug\net8.0\api.staticwebassets.endpoints.json
+D:\studia\BeatboxBasics\backend\api\bin\Debug\net8.0\api.exe
+D:\studia\BeatboxBasics\backend\api\bin\Debug\net8.0\api.deps.json
+D:\studia\BeatboxBasics\backend\api\bin\Debug\net8.0\api.runtimeconfig.json
+D:\studia\BeatboxBasics\backend\api\bin\Debug\net8.0\api.dll
+D:\studia\BeatboxBasics\backend\api\bin\Debug\net8.0\api.pdb
+D:\studia\BeatboxBasics\backend\api\bin\Debug\net8.0\Microsoft.OpenApi.dll
+D:\studia\BeatboxBasics\backend\api\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
+D:\studia\BeatboxBasics\backend\api\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+D:\studia\BeatboxBasics\backend\api\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\api.csproj.AssemblyReference.cache
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\api.GeneratedMSBuildEditorConfig.editorconfig
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\api.AssemblyInfoInputs.cache
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\api.AssemblyInfo.cs
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\api.csproj.CoreCompileInputs.cache
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\api.MvcApplicationPartsAssemblyInfo.cs
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\api.MvcApplicationPartsAssemblyInfo.cache
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\api.sourcelink.json
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\scopedcss\bundle\api.styles.css
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\staticwebassets.build.json
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\staticwebassets.development.json
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\staticwebassets\msbuild.api.Microsoft.AspNetCore.StaticWebAssets.props
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\staticwebassets\msbuild.api.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\staticwebassets\msbuild.build.api.props
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.api.props
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.api.props
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\staticwebassets.pack.json
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\api.csproj.Up2Date
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\api.dll
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\refint\api.dll
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\api.pdb
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\api.genruntimeconfig.cache
+D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\ref\api.dll

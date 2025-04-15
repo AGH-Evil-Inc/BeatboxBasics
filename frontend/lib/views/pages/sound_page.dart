@@ -25,7 +25,7 @@ class _SoundPageState extends State<SoundPage> {
 
   Future<void> fetchSounds() async {
     if (Platform.isAndroid || Platform.isIOS) {
-      url = "https://192.168.170.22:5001/api/sound";
+      url = "https://192.168.218.107:5001/api/sound";
     } else {
       url = "https://localhost:5001/api/sound";
     }
