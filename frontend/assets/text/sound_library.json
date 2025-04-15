@@ -1,5 +1,5 @@
 {
-    "kick": {
+    "B": {
         "id": 0,
         "name": "Stopa",
         "notation": "B",
@@ -10,7 +10,7 @@
         "links": ["https://www.youtube.com/watch?v=kfB9owT9ats", "https://www.youtube.com/watch?v=m37cDsDl-4I"]
     },
 
-    "hi_hat": {
+    "t": {
         "id": 1,
         "name": "Hi-hat",
         "notation": "t",
@@ -21,7 +21,7 @@
         "links": ["https://www.youtube.com/watch?v=klZBkCyK9Co", "https://www.youtube.com/watch?v=B19ZKJaHamo"]
     },
 
-    "pf_snare": {
+    "Pf": {
         "id": 2,
         "name": "Werbel \"Pf\"",
         "notation": "Pf",
@@ -32,7 +32,7 @@
         "links": ["https://www.youtube.com/watch?v=guteyLuSOU4"]
     },
 
-    "outward_k": {
+    "k": {
         "id": 3,
         "name": "Werbel \"k\" (na wydechu)",
         "notation": "k",

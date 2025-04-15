@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class SoundDetailsPage extends StatefulWidget {
   final Map<String, dynamic> sound;
@@ -17,17 +19,14 @@ class SoundDetailsPage extends StatefulWidget {
 class _SoundDetailsPageState extends State<SoundDetailsPage> {
   final List<YoutubePlayerController> _controllers = [];
   late final audio_waveforms.PlayerController playerController;
-  
-  double playbackSpeed = 1.0;
-  bool isRepeating = false;
+  bool _isPlaying = false;
+  double _playbackSpeed = 1.0; // Default speed
 
   @override
   void initState() {
     super.initState();
     _initYoutubeControllers();
     _initAudioPlayer();
-  
-
   }
 
   void _initYoutubeControllers() {
@@ -38,7 +37,12 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
           _controllers.add(
             YoutubePlayerController(
               initialVideoId: videoId,
-              flags: const YoutubePlayerFlags(autoPlay: false),
+              flags: const YoutubePlayerFlags(
+                autoPlay: false,
+                hideThumbnail: true,
+                disableDragSeek: true,
+                showLiveFullscreenButton: false,
+              ),
             ),
           );
         }
@@ -46,9 +50,8 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
     }
   }
 
-  void _initAudioPlayer() async {
+  Future<void> _initAudioPlayer() async {
     playerController = audio_waveforms.PlayerController();
-
     final assetPath = widget.sound['audioPath'];
     if (assetPath == null) {
       debugPrint('Brak ścieżki do pliku audio');
@@ -67,7 +70,19 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
         shouldExtractWaveform: true,
       );
 
-      
+      playerController.onCompletion.listen((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Świetnie! Posłuchałeś dźwięku!',
+              style: GoogleFonts.poppins(),
+            ),
+            backgroundColor: Colors.green.shade600,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+        setState(() => _isPlaying = false);
+      });
 
       setState(() {});
     } catch (e) {
@@ -80,193 +95,472 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
     for (var controller in _controllers) {
       controller.dispose();
     }
-    // playerController.dispose();
+    playerController.dispose();
     super.dispose();
   }
 
-  Widget buildSectionTitle(String title) {
+  Widget _buildSectionTitle(String title, IconData icon) {
     return Padding(
-      padding: const EdgeInsets.only(top: 24, bottom: 8),
-      child: Text(
-        title,
-        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.blue.shade900, size: 24),
+          const SizedBox(width: 8),
+          Text(
+            title,
+            style: GoogleFonts.poppins(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: Colors.blue.shade900,
+            ),
+          ),
+        ],
       ),
+    ).animate().fadeIn(duration: 500.ms);
+  }
+
+  Widget _buildNotationCard() {
+    final notation = widget.sound['notation'] ?? 'Brak notacji';
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            title: Text(
+              'Notacja',
+              style: GoogleFonts.poppins(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue.shade900,
+              ),
+            ),
+            content: SingleChildScrollView(
+              child: Text(
+                notation,
+                style: GoogleFonts.poppins(
+                  fontSize: 18,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(
+                  'Zamknij',
+                  style: GoogleFonts.poppins(color: Colors.blue.shade600),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+      child: Card(
+        color: Colors.yellow.shade100,
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Notacja',
+                style: GoogleFonts.poppins(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue.shade900,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                notation,
+                style: GoogleFonts.poppins(
+                  fontSize: 16,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Dotknij, aby powiększyć',
+                style: GoogleFonts.poppins(
+                  fontSize: 14,
+                  color: Colors.blue.shade600,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ).animate().slideY(begin: 0.2, end: 0, duration: 500.ms);
+  }
+
+  Widget _buildAudioPlayer() {
+    final audioPath = widget.sound['audioPath'];
+    if (audioPath == null) {
+      return Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: const Padding(
+          padding: EdgeInsets.all(16),
+          child: Text('Brak dostępnego audio'),
+        ),
+      );
+    }
+
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Posłuchaj dźwięku',
+              style: GoogleFonts.poppins(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue.shade900,
+              ),
+            ),
+            const SizedBox(height: 12),
+            audio_waveforms.AudioFileWaveforms(
+              playerController: playerController,
+              size: const Size(double.infinity, 50),
+              waveformType: audio_waveforms.WaveformType.fitWidth,
+              playerWaveStyle: audio_waveforms.PlayerWaveStyle(
+                liveWaveColor: Colors.blue.shade700,
+                fixedWaveColor: Colors.blue.shade200,
+                scaleFactor: 50,
+                showSeekLine: true,
+                seekLineColor: Colors.red.shade300,
+                seekLineThickness: 2,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    if (_isPlaying)
+                      SizedBox(
+                        width: 60,
+                        height: 60,
+                        child: CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation(Colors.blue.shade200),
+                          strokeWidth: 3,
+                          backgroundColor: Colors.transparent,
+                        ),
+                      ).animate().fadeIn(duration: 300.ms),
+                    ElevatedButton.icon(
+                      icon: const Icon(Icons.play_arrow, color: Colors.white),
+                      label: Text(
+                        'Odtwórz',
+                        style: GoogleFonts.poppins(color: Colors.white),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green.shade600,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                      ),
+                      onPressed: () {
+                        playerController.startPlayer();
+                        setState(() => _isPlaying = true);
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 16),
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.pause, color: Colors.white),
+                  label: Text(
+                    'Pauza',
+                    style: GoogleFonts.poppins(color: Colors.white),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange.shade600,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                  ),
+                  onPressed: () {
+                    playerController.pausePlayer();
+                    setState(() => _isPlaying = false);
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildSpeedButton(
+                  speed: 0.5,
+                  label: 'Wolno',
+                  icon: Icons.arrow_downward,
+                ),
+                const SizedBox(width: 8),
+                _buildSpeedButton(
+                  speed: 1.0,
+                  label: 'Normalnie',
+                  icon: Icons.play_arrow,
+                ),
+                const SizedBox(width: 8),
+                _buildSpeedButton(
+                  speed: 1.5,
+                  label: 'Szybko',
+                  icon: Icons.arrow_upward,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ).animate().fadeIn(duration: 500.ms);
+  }
+
+  Widget _buildSpeedButton({
+    required double speed,
+    required String label,
+    required IconData icon,
+  }) {
+    final isSelected = _playbackSpeed == speed;
+    return ElevatedButton.icon(
+      icon: Icon(
+        icon,
+        color: isSelected ? Colors.white : Colors.blue.shade600,
+        size: 20,
+      ),
+      label: Text(
+        label,
+        style: GoogleFonts.poppins(
+          color: isSelected ? Colors.white : Colors.blue.shade600,
+          fontSize: 12,
+        ),
+      ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor:
+            isSelected ? Colors.blue.shade600 : Colors.blue.shade100,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        minimumSize: const Size(80, 40),
+      ),
+      onPressed: () {
+        setState(() {
+          _playbackSpeed = speed;
+          playerController.setRate(speed);
+        });
+      },
     );
   }
 
-  Widget buildAudioPlayer() {
-    final audioPath = widget.sound['audioPath'];
+  Widget _buildDescriptionCard() {
+    final description = widget.sound['description'] ?? 'Brak opisu';
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Opis',
+              style: GoogleFonts.poppins(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue.shade900,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              description,
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                color: Colors.black87,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ).animate().slideY(begin: 0.2, end: 0, duration: 500.ms);
+  }
 
-    if (audioPath == null) {
-      return const Text('Brak dostępnego audio');
-    }
-
+  Widget _buildTipsSection() {
+    final tips = widget.sound['tips'] ?? [];
+    if (tips.isEmpty) return const SizedBox.shrink();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 16),
-        const Text(
-          'Podgląd audio',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 8),
-        Center(
-          child: audio_waveforms.AudioFileWaveforms(
-            playerController: playerController,
-            size: const Size(double.infinity, 60),
-            waveformType: audio_waveforms.WaveformType.long,
-            playerWaveStyle: const audio_waveforms.PlayerWaveStyle(
-              liveWaveColor: Colors.blueAccent,
-              fixedWaveColor: Colors.lightBlue,
-              scaleFactor: 60,
-              showSeekLine: true,
-              seekLineColor: Colors.red,
-              seekLineThickness: 2.0,
+        _buildSectionTitle('Wskazówki', Icons.lightbulb_outline),
+        Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: tips
+                  .asMap()
+                  .entries
+                  .map<Widget>((entry) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.star_border,
+                              color: Colors.yellow.shade700,
+                              size: 24,
+                            ).animate().scale(
+                                  begin: Offset(0.8, 0.8),
+                                  end: Offset(1.0, 1.0),
+                                  duration: 300.ms,
+                                  delay: (100 * entry.key).ms,
+                                ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                entry.value,
+                                style: GoogleFonts.poppins(
+                                  fontSize: 16,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ))
+                  .toList(),
             ),
           ),
         ),
-        const SizedBox(height: 16),
-        Wrap(
-          spacing: 12,
-          runSpacing: 8,
-          children: [
-            ElevatedButton.icon(
-              icon: const Icon(Icons.play_arrow),
-              label: const Text('Odtwórz'),
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-              onPressed: () => playerController.startPlayer(),
-            ),
-            ElevatedButton.icon(
-              icon: const Icon(Icons.pause),
-              label: const Text('Pauza'),
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-              onPressed: () => playerController.pausePlayer(),
-            ),
-            ElevatedButton.icon(
-              icon: Icon( Icons.repeat),
-              label: Text('Powtórz'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: isRepeating ? Colors.blueGrey : Colors.grey,
-              ),
-              
-              onPressed: () {
-                setState(() {
-                  isRepeating = !isRepeating;
-                  playerController.seekTo(1);
-                });
-              },
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text('Szybkość odtwarzania:'),
-            Text('${playbackSpeed.toStringAsFixed(1)}x'),
-          ],
-        ),
-        Slider(
-          value: playbackSpeed,
-          min: 0.2,
-          max: 1.5,
-          divisions: 15,
-          label: '${playbackSpeed.toStringAsFixed(1)}x',
-          onChanged: (value) {
-            setState(() {
-              playbackSpeed = value;
-              playerController.setRate(playbackSpeed);
-            });
-          },
-        ),
       ],
-    );
+    ).animate().fadeIn(duration: 500.ms);
+  }
+
+  Widget _buildLinksSection() {
+    final links = widget.sound['links'] ?? [];
+    if (links.isEmpty) return const SizedBox.shrink();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSectionTitle('Filmy', Icons.video_library),
+        ..._controllers.map((controller) => Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: YoutubePlayer(
+                  controller: controller,
+                  showVideoProgressIndicator: true,
+                  bottomActions: [
+                    CurrentPosition(),
+                    ProgressBar(isExpanded: true),
+                    RemainingDuration(),
+                  ],
+                ),
+              ),
+            )),
+        ...links
+            .where((link) => YoutubePlayer.convertUrlToId(link) == null)
+            .map<Widget>((link) => Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(
+                      'Nieprawidłowy link YouTube: $link',
+                      style: GoogleFonts.poppins(
+                        fontSize: 16,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+                )),
+      ],
+    ).animate().fadeIn(duration: 500.ms);
   }
 
   @override
   Widget build(BuildContext context) {
     final sound = widget.sound;
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            sound['name'] ?? 'Brak nazwy',
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          centerTitle: true,
-          backgroundColor: Theme.of(context).brightness == Brightness.light
-              ? Colors.lightBlueAccent
-              : Colors.blue,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(20.0),
-            ),
-          ),
-        ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
+    return 
+      Scaffold(
+        body: Container(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Card(
-                color: Theme.of(context).brightness == Brightness.light
-                    ? Colors.lightBlueAccent.shade100
-                    : Colors.blue.shade700,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
-                child: Padding(
+              AppBar(
+                title: Text(
+                  sound['name'] ?? 'Brak nazwy',
+                  style: GoogleFonts.poppins(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                centerTitle: true,
+                backgroundColor: Colors.blue.shade600,
+                shape: const RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.vertical(bottom: Radius.circular(16)),
+                ),
+                elevation: 4,
+                flexibleSpace: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.blue.shade600,
+                        Colors.blue.shade800,
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: SingleChildScrollView(
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        sound['name'] ?? '',
-                        style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                      const SizedBox(height: 10),
-                      Text('Notacja: ${sound['notation'] ?? 'Brak'}'),
-                      const SizedBox(height: 10),
-                      Text(sound['description'] ?? 'Brak opisu'),
+                      _buildNotationCard(),
+                      const SizedBox(height: 16),
+                      _buildDescriptionCard(),
+                      const SizedBox(height: 16),
+                      _buildAudioPlayer(),
+                      const SizedBox(height: 16),
+                      _buildTipsSection(),
+                      const SizedBox(height: 16),
+                      _buildLinksSection(),
                     ],
                   ),
                 ),
               ),
-              if ((sound['tips'] ?? []).isNotEmpty) ...[
-                buildSectionTitle("Wskazówki"),
-                ...sound['tips'].map<Widget>((tip) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4.0),
-                      child: Text('• $tip'),
-                    ))
-              ],
-              buildAudioPlayer(),
-              if ((sound['links'] ?? []).isNotEmpty) ...[
-                buildSectionTitle("Linki"),
-                ..._controllers.map((controller) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: YoutubePlayer(
-                        controller: controller,
-                        showVideoProgressIndicator: true,
-                      ),
-                    )),
-                ...sound['links']
-                    .where((link) => YoutubePlayer.convertUrlToId(link) == null)
-                    .map<Widget>((link) => Text(
-                          'Nieprawidłowy link YouTube: $link',
-                          style: const TextStyle(color: Colors.red),
-                        )),
-              ],
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 }
