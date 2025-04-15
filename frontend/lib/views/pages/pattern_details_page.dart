@@ -374,12 +374,12 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
             const SizedBox(height: 12),
             audio_waveforms.AudioFileWaveforms(
               playerController: patternController,
-              size: const Size(double.infinity, 50),
+              size: const Size(double.infinity, 100),
               waveformType: audio_waveforms.WaveformType.fitWidth,
               playerWaveStyle: audio_waveforms.PlayerWaveStyle(
                 liveWaveColor: Colors.purple.shade700,
                 fixedWaveColor: Colors.purple.shade200,
-                scaleFactor: 50,
+                scaleFactor: 100,
                 showSeekLine: true,
                 seekLineColor: Colors.orange.shade300,
                 seekLineThickness: 2,
@@ -512,8 +512,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
                 ),
               ),
             const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Wrap(
               children: [
                 ElevatedButton.icon(
                   icon: Icon(

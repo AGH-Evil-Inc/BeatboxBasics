@@ -28,6 +28,7 @@ class _PatternPageState extends State<PatternPage> {
   void initState() {
     super.initState();
     fetchPatterns();
+    fetchSounds();
   }
 
   Future<void> fetchPatterns() async {
@@ -359,7 +360,7 @@ class _PatternPageState extends State<PatternPage> {
                                                   Text(
                                                     difficulty == 'Brak poziomu'
                                                         ? 'Brak poziomu'
-                                                        : 'Poziom trudności: ' + difficulty.toString(),
+                                                        : 'Poziom trudności: $difficulty',
                                                     style: GoogleFonts.poppins(
                                                       fontSize: 14,
                                                       color: difficulty == 'Brak poziomu'
