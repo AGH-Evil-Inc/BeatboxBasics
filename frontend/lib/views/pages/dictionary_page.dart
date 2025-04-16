@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -35,7 +36,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
 
     String url;
     if (Platform.isAndroid || Platform.isIOS) {
-      url = 'https://192.168.218.107:5001/api/Dictionary';
+      url = 'https://192.168.0.34:5001/api/Dictionary';
     } else {
       url = 'https://localhost:5001/api/Dictionary';
     }
@@ -104,6 +105,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -111,8 +113,8 @@ class _DictionaryPageState extends State<DictionaryPage> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Colors.purple.shade50,
-              Colors.white,
+              appColors.gradientStartColor,
+              appColors.gradientEndColor,
             ],
           ),
         ),
@@ -144,6 +146,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
   }
 
   Widget _buildAppBar() {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     return AppBar(
       title: Text(
         'Słowniczek Beatboxu',
@@ -154,7 +157,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
         ),
       ),
       centerTitle: true,
-      backgroundColor: Colors.teal.shade600,
+      backgroundColor: appColors.dictionaryColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
       ),
@@ -163,8 +166,8 @@ class _DictionaryPageState extends State<DictionaryPage> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.teal.shade600,
-              Colors.teal.shade800,
+              appColors.dictionaryColor,
+              appColors.accentColor,
             ],
           ),
         ),
@@ -173,6 +176,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
   }
 
   Widget _buildSearchBar() {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -181,18 +185,18 @@ class _DictionaryPageState extends State<DictionaryPage> {
         decoration: InputDecoration(
           hintText: 'Szukaj pojęć…',
           hintStyle: GoogleFonts.poppins(
-            color: Colors.grey.shade600,
+            color: appColors.navUnselectedColor,
             fontSize: 16,
           ),
           prefixIcon: Icon(
             Icons.search,
-            color: Colors.teal.shade600,
+            color: appColors.dictionaryColor,
           ),
           suffixIcon: searchController.text.isNotEmpty
               ? IconButton(
                   icon: Icon(
                     Icons.clear,
-                    color: Colors.teal.shade600,
+                    color: appColors.dictionaryColor,
                   ),
                   onPressed: () {
                     searchController.clear();
@@ -205,19 +209,20 @@ class _DictionaryPageState extends State<DictionaryPage> {
             borderSide: BorderSide.none,
           ),
           filled: true,
-          fillColor: Colors.white,
+          fillColor: appColors.cardColor,
           contentPadding: const EdgeInsets.symmetric(vertical: 16),
         ),
-        style: GoogleFonts.poppins(fontSize: 16),
+        style: GoogleFonts.poppins(fontSize: 16, color: appColors.secondaryColor),
       ),
     ).animate().fadeIn(duration: 500.ms).slideY(begin: 0.2, end: 0);
   }
 
   Widget _buildContent() {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     if (isLoading) {
-      return const Center(
+      return Center(
         child: CircularProgressIndicator(
-          color: Colors.teal,
+          color: appColors.dictionaryColor,
         ),
       ).animate().fadeIn(duration: 300.ms);
     }
@@ -231,14 +236,14 @@ class _DictionaryPageState extends State<DictionaryPage> {
               'Nie udało się załadować słowniczka',
               style: GoogleFonts.poppins(
                 fontSize: 16,
-                color: Colors.red.shade600,
+                color: appColors.errorColor,
               ),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: fetchDictionary,
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.teal.shade600,
+                backgroundColor: appColors.buttonPrimaryColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -261,8 +266,8 @@ class _DictionaryPageState extends State<DictionaryPage> {
         child: Text(
           'Nie znaleziono pojęć…',
           style: GoogleFonts.poppins(
-            fontSize: 16,
-            color: Colors.grey.shade600,
+    fontSize: 16,
+            color: appColors.navUnselectedColor,
           ),
         ),
       ).animate().fadeIn(duration: 300.ms);
@@ -289,6 +294,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
     required String description,
     required Duration delay,
   }) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     return GestureDetector(
       onTap: () {
         showDialog(
@@ -302,7 +308,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
               style: GoogleFonts.poppins(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.teal.shade900,
+                color: appColors.primaryColor,
               ),
             ),
             content: SingleChildScrollView(
@@ -310,7 +316,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 description,
                 style: GoogleFonts.poppins(
                   fontSize: 14,
-                  color: Colors.black87,
+                  color: appColors.secondaryColor,
                 ),
               ),
             ),
@@ -320,7 +326,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 child: Text(
                   'Zamknij',
                   style: GoogleFonts.poppins(
-                    color: Colors.teal.shade600,
+                    color: appColors.highlightColor,
                   ),
                 ),
               ),
@@ -333,7 +339,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        color: Colors.orange.shade100,
+        color: appColors.cardColor,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -344,7 +350,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 style: GoogleFonts.poppins(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.teal.shade900,
+                  color: appColors.primaryColor,
                 ),
               ),
               const SizedBox(height: 8),
@@ -354,7 +360,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.poppins(
                   fontSize: 14,
-                  color: Colors.black87,
+                  color: appColors.secondaryColor,
                 ),
               ),
               const SizedBox(height: 8),
@@ -362,7 +368,7 @@ class _DictionaryPageState extends State<DictionaryPage> {
                 'Dotknij, aby przeczytać więcej',
                 style: GoogleFonts.poppins(
                   fontSize: 12,
-                  color: Colors.teal.shade600,
+                  color: appColors.highlightColor,
                   fontStyle: FontStyle.italic,
                 ),
               ),

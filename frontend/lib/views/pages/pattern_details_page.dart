@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:app/main.dart';
 import 'package:audio_waveforms/audio_waveforms.dart' as audio_waveforms;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -118,18 +119,19 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
   }
 
   Widget _buildSectionTitle(String title, IconData icon) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: Row(
         children: [
-          Icon(icon, color: Colors.purple.shade900, size: 24),
+          Icon(icon, color: appColors.primaryColor, size: 24),
           const SizedBox(width: 8),
           Text(
             title,
             style: GoogleFonts.poppins(
               fontSize: 20,
               fontWeight: FontWeight.w600,
-              color: Colors.purple.shade900,
+              color: appColors.primaryColor,
             ),
           ),
         ],
@@ -138,6 +140,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
   }
 
   Widget _buildPatternCard() {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     final patternList = widget.pattern['pattern'] as List<dynamic>? ?? [];
     final patternStr = patternList.join(' ');
     final difficulty = widget.pattern['difficulty']?.toString() ?? 'Brak poziomu';
@@ -153,7 +156,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
               style: GoogleFonts.poppins(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: Colors.purple.shade900,
+                color: appColors.primaryColor,
               ),
             ),
             content: SingleChildScrollView(
@@ -162,12 +165,12 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
                 children: [
                   Text(
                     patternStr,
-                    style: GoogleFonts.poppins(fontSize: 18, color: Colors.black87),
+                    style: GoogleFonts.poppins(fontSize: 18, color: appColors.secondaryColor),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'Legenda:\n${_buildLegend()}',
-                    style: GoogleFonts.poppins(fontSize: 14, color: Colors.black87),
+                    style: GoogleFonts.poppins(fontSize: 14, color: appColors.secondaryColor),
                   ),
                 ],
               ),
@@ -177,7 +180,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
                 onPressed: () => Navigator.pop(context),
                 child: Text(
                   'Zamknij',
-                  style: GoogleFonts.poppins(color: Colors.purple.shade600),
+                  style: GoogleFonts.poppins(color: appColors.highlightColor),
                 ),
               ),
             ],
@@ -185,7 +188,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
         );
       },
       child: Card(
-        color: Colors.orange.shade100,
+        color: appColors.cardColor,
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Padding(
@@ -198,7 +201,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
                 style: GoogleFonts.poppins(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.purple.shade900,
+                  color: appColors.primaryColor,
                 ),
               ),
               const SizedBox(height: 8),
@@ -226,7 +229,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
                               'Nie znaleziono dźwięku dla $note',
                               style: GoogleFonts.poppins(),
                             ),
-                            backgroundColor: Colors.red.shade600,
+                            backgroundColor: appColors.errorColor,
                           ),
                         );
                       }
@@ -236,8 +239,8 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: isPatternPlaying
-                            ? Colors.purple.shade100
-                            : Colors.purple.shade50,
+                            ? appColors.waveformFixedColor
+                            : appColors.cardColor.withOpacity(0.7),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
@@ -247,7 +250,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
                             note.toString(),
                             style: GoogleFonts.poppins(
                               fontSize: 20,
-                              color: Colors.purple.shade600,
+                              color: appColors.highlightColor,
                               decoration: TextDecoration.underline,
                             ),
                           ),
@@ -255,7 +258,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
                           Icon(
                             Icons.info_outline,
                             size: 16,
-                            color: Colors.purple.shade600,
+                            color: appColors.highlightColor,
                           ),
                         ],
                       ),
@@ -268,7 +271,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
                 children: [
                   Icon(
                     _getDifficultyIcon(difficulty),
-                    color: Colors.purple.shade600,
+                    color: appColors.highlightColor,
                     size: 16,
                   ),
                   const SizedBox(width: 4),
@@ -276,18 +279,18 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
                     'Poziom: $difficulty',
                     style: GoogleFonts.poppins(
                       fontSize: 14,
-                      color: Colors.purple.shade600,
+                      color: appColors.highlightColor,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 8),
-              Text( 
+              Text(
                 'Kliknij na dźwięk, aby zobaczyć szczegóły',
                 style: GoogleFonts.poppins(
                   fontSize: 14,
-                  color: Colors.purple.shade600,
+                  color: appColors.highlightColor,
                   fontStyle: FontStyle.italic,
                 ),
               ),
@@ -299,6 +302,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
   }
 
   String _buildLegend() {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     final notations = widget.sounds.map((sound) {
       final notation = sound['notation'] ?? '';
       final name = sound['name'] ?? 'Nieznany dźwięk';
@@ -308,6 +312,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
   }
 
   Widget _buildDescriptionCard() {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     final description = widget.pattern['description'] ?? 'Brak opisu';
     final bpm = widget.pattern['base_BPM']?.toString() ?? 'Brak';
     final bars = widget.pattern['no_bars']?.toString() ?? 'Brak';
@@ -325,7 +330,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
               style: GoogleFonts.poppins(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.purple.shade900,
+                color: appColors.primaryColor,
               ),
             ),
             const SizedBox(height: 8),
@@ -333,7 +338,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
               '$description\n\nBPM: $bpm',
               style: GoogleFonts.poppins(
                 fontSize: 16,
-                color: Colors.black87,
+                color: appColors.secondaryColor,
               ),
             ),
           ],
@@ -343,14 +348,18 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
   }
 
   Widget _buildPatternPlayer() {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     final audioPath = widget.pattern['audioPath'];
     if (audioPath == null) {
       return Card(
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: const Padding(
+        child: Padding(
           padding: EdgeInsets.all(16),
-          child: Text('Brak dostępnego audio'),
+          child: Text(
+            'Brak dostępnego audio',
+            style: GoogleFonts.poppins(color: appColors.secondaryColor),
+          ),
         ),
       );
     }
@@ -364,11 +373,11 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Posłuchaj patterny',
+              'Posłuchaj patternu',
               style: GoogleFonts.poppins(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.purple.shade900,
+                color: appColors.primaryColor,
               ),
             ),
             const SizedBox(height: 12),
@@ -377,11 +386,11 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
               size: const Size(double.infinity, 100),
               waveformType: audio_waveforms.WaveformType.fitWidth,
               playerWaveStyle: audio_waveforms.PlayerWaveStyle(
-                liveWaveColor: Colors.purple.shade700,
-                fixedWaveColor: Colors.purple.shade200,
+                liveWaveColor: appColors.waveformLiveColor,
+                fixedWaveColor: appColors.waveformFixedColor,
                 scaleFactor: 100,
                 showSeekLine: true,
-                seekLineColor: Colors.orange.shade300,
+                seekLineColor: appColors.waveformSeekColor,
                 seekLineThickness: 2,
               ),
             ),
@@ -397,8 +406,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
                         width: 60,
                         height: 60,
                         child: CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation(Colors.purple.shade200),
+                          valueColor: AlwaysStoppedAnimation(appColors.waveformFixedColor),
                           strokeWidth: 3,
                           backgroundColor: Colors.transparent,
                         ),
@@ -410,7 +418,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
                         style: GoogleFonts.poppins(color: Colors.white),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green.shade700,
+                        backgroundColor: appColors.buttonPrimaryColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -434,7 +442,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
                     style: GoogleFonts.poppins(color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange.shade700,
+                    backgroundColor: appColors.buttonSecondaryColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -480,6 +488,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
   }
 
   Widget _buildRecordingPlayer() {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -493,7 +502,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
               style: GoogleFonts.poppins(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.purple.shade900,
+                color: appColors.primaryColor,
               ),
             ),
             const SizedBox(height: 12),
@@ -503,11 +512,11 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
                 size: const Size(double.infinity, 50),
                 waveformType: audio_waveforms.WaveformType.fitWidth,
                 playerWaveStyle: audio_waveforms.PlayerWaveStyle(
-                  liveWaveColor: Colors.purple.shade700,
-                  fixedWaveColor: Colors.purple.shade200,
+                  liveWaveColor: appColors.waveformLiveColor,
+                  fixedWaveColor: appColors.waveformFixedColor,
                   scaleFactor: 50,
                   showSeekLine: true,
-                  seekLineColor: Colors.orange.shade300,
+                  seekLineColor: appColors.waveformSeekColor,
                   seekLineThickness: 2,
                 ),
               ),
@@ -524,7 +533,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
                     style: GoogleFonts.poppins(color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.purple.shade600,
+                    backgroundColor: appColors.buttonTertiaryColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -545,8 +554,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
                           width: 60,
                           height: 60,
                           child: CircularProgressIndicator(
-                            valueColor:
-                                AlwaysStoppedAnimation(Colors.purple.shade200),
+                            valueColor: AlwaysStoppedAnimation(appColors.waveformFixedColor),
                             strokeWidth: 3,
                             backgroundColor: Colors.transparent,
                           ),
@@ -558,7 +566,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
                           style: GoogleFonts.poppins(color: Colors.white),
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green.shade700,
+                          backgroundColor: appColors.buttonPrimaryColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -579,7 +587,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
                       style: GoogleFonts.poppins(color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange.shade700,
+                      backgroundColor: appColors.buttonSecondaryColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -607,22 +615,23 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
     required String label,
     required IconData icon,
   }) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     final isSelected = playbackSpeed == speed;
     return ElevatedButton.icon(
       icon: Icon(
         icon,
-        color: isSelected ? Colors.white : Colors.purple.shade600,
+        color: isSelected ? Colors.white : appColors.highlightColor,
         size: 20,
       ),
       label: Text(
         label,
         style: GoogleFonts.poppins(
-          color: isSelected ? Colors.white : Colors.purple.shade600,
+          color: isSelected ? Colors.white : appColors.highlightColor,
           fontSize: 12,
         ),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: isSelected ? Colors.purple.shade600 : Colors.purple.shade100,
+        backgroundColor: isSelected ? appColors.buttonTertiaryColor : appColors.cardColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         minimumSize: const Size(80, 40),
@@ -638,6 +647,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     final pattern = widget.pattern;
 
     return SafeArea(
@@ -649,8 +659,8 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.purple.shade50,
-                Colors.white,
+                appColors.gradientStartColor,
+                appColors.gradientEndColor,
               ],
             ),
           ),
@@ -666,7 +676,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
                   ),
                 ),
                 centerTitle: true,
-                backgroundColor: Colors.purple.shade600,
+                backgroundColor: appColors.patternColor,
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
                 ),
@@ -675,8 +685,8 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        Colors.purple.shade600,
-                        Colors.purple.shade800,
+                        appColors.patternColor,
+                        appColors.accentColor,
                       ],
                     ),
                   ),

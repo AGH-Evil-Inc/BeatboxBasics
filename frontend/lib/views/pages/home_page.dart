@@ -1,3 +1,4 @@
+import 'package:app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -8,20 +9,15 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+  final appColors = Theme.of(context).extension<AppColors>()!;
+
     return ValueListenableBuilder(
       valueListenable: selectedPageNotifier,
       builder: (context, selectedPage, child) {
         return Scaffold(
           body: Container(
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.purple.shade50,
-                  Colors.white,
-                ],
-              ),
+            color: appColors.backgroundColor
             ),
             child: SafeArea(
               child: SingleChildScrollView(
@@ -38,7 +34,7 @@ class HomePage extends StatelessWidget {
                             style: GoogleFonts.poppins(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black54,
+                              color: appColors.primaryColor,
                             ),
                           )
                               .animate()
@@ -54,7 +50,7 @@ class HomePage extends StatelessWidget {
                                 context: context,
                                 icon: Icons.music_note_outlined,
                                 label: 'Dźwięki',
-                                color: const Color(0xFF1E88E5),
+                                color: appColors.soundColor,
                                 onTap: () {
                                   selectedPageNotifier.value = 1;
                                 },
@@ -64,7 +60,7 @@ class HomePage extends StatelessWidget {
                                 context: context,
                                 icon: Icons.library_music_outlined,
                                 label: 'Patterny',
-                                color: const Color(0xFF8E24AA),
+                                color: appColors.patternColor,
                                 onTap: () {
                                   selectedPageNotifier.value = 2;
                                 },
@@ -74,7 +70,7 @@ class HomePage extends StatelessWidget {
                                 context: context,
                                 icon: Icons.book_outlined,
                                 label: 'Słowniczek',
-                                color: const Color(0xFF00897B),
+                                color: appColors.dictionaryColor,
                                 onTap: () {
                                   selectedPageNotifier.value = 3;
                                 },

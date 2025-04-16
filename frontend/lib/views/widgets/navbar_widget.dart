@@ -1,3 +1,5 @@
+import 'package:app/main.dart';
+
 import '../../data/notifiers.dart';
 import 'package:flutter/material.dart';
 
@@ -28,6 +30,8 @@ class _NavbarWidgetState extends State<NavbarWidget> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
+    
     return ValueListenableBuilder<int>(
       valueListenable: selectedPageNotifier,
       builder: (context, selectedPage, child) {
@@ -95,9 +99,9 @@ class _NavbarWidgetState extends State<NavbarWidget> with SingleTickerProviderSt
             ),
           ],
           currentIndex: selectedPage,
-          selectedItemColor: Colors.greenAccent,
-          unselectedItemColor: Colors.blueGrey,
-          backgroundColor: Colors.black87,
+          selectedItemColor: appColors.navSelectedColor,
+          unselectedItemColor: appColors.navUnselectedColor,
+          backgroundColor: appColors.backgroundColor,
           type: BottomNavigationBarType.fixed,
           onTap: (index) {
             if (selectedPage != index) {

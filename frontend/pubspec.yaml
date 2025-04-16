@@ -42,6 +42,8 @@ dependencies:
   google_fonts: ^6.2.1
   flutter_animate: ^4.5.2
   record: ^6.0.0
+  flutter_colorpicker: ^1.1.0
+  provider: ^6.1.4
 
 
 dev_dependencies:
@@ -71,7 +73,6 @@ flutter:
   assets:
     - assets/images/
     - assets/audio/sounds/
-    - assets/fonts/
     - assets/audio/patterns/
     - assets/text/
     #- images/a_dot_ham.jpeg

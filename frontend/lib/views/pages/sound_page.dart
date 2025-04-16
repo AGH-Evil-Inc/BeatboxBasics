@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:http/io_client.dart';
@@ -36,7 +37,7 @@ class _SoundPageState extends State<SoundPage> {
     });
 
     if (Platform.isAndroid || Platform.isIOS) {
-      url = "https://192.168.218.107:5001/api/sound";
+      url = "https://192.168.0.34:5001/api/sound";
     } else {
       url = "https://localhost:5001/api/sound";
     }
@@ -90,7 +91,7 @@ class _SoundPageState extends State<SoundPage> {
           currentlyPlayingPath = null;
         });
       } else {
-        await audioPlayer.stop(); // Stop any currently playing sound
+        await audioPlayer.stop();
         await audioPlayer.play(AssetSource(path));
         setState(() {
           isPlaying = true;
@@ -109,13 +110,14 @@ class _SoundPageState extends State<SoundPage> {
   }
 
   Widget _buildErrorState() {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             Icons.error_outline,
-            color: Colors.red.shade400,
+            color: appColors.errorColor,
             size: 48,
           ),
           const SizedBox(height: 16),
@@ -123,7 +125,7 @@ class _SoundPageState extends State<SoundPage> {
             'Oj, coś poszło nie tak!',
             style: GoogleFonts.poppins(
               fontSize: 18,
-              color: Colors.blue.shade900,
+              color: appColors.primaryColor,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -132,7 +134,7 @@ class _SoundPageState extends State<SoundPage> {
             'Spróbuj jeszcze raz.',
             style: GoogleFonts.poppins(
               fontSize: 16,
-              color: Colors.black87,
+              color: appColors.secondaryColor,
             ),
           ),
           const SizedBox(height: 16),
@@ -143,7 +145,7 @@ class _SoundPageState extends State<SoundPage> {
               style: GoogleFonts.poppins(color: Colors.white),
             ),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue.shade600,
+              backgroundColor: appColors.buttonPrimaryColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -158,6 +160,7 @@ class _SoundPageState extends State<SoundPage> {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -167,8 +170,8 @@ class _SoundPageState extends State<SoundPage> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.blue.shade50,
-                Colors.white,
+                appColors.gradientStartColor,
+                appColors.gradientEndColor,
               ],
             ),
           ),
@@ -184,7 +187,7 @@ class _SoundPageState extends State<SoundPage> {
                   ),
                 ),
                 centerTitle: true,
-                backgroundColor: Colors.blue.shade600,
+                backgroundColor: appColors.soundColor,
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
                 ),
@@ -193,15 +196,15 @@ class _SoundPageState extends State<SoundPage> {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        Colors.blue.shade600,
-                        Colors.blue.shade800,
+                        appColors.soundColor,
+                        appColors.accentColor,
                       ],
                     ),
                   ),
                 ),
                 actions: [
                   IconButton(
-                    icon: const Icon(Icons.refresh, color: Colors.white),
+                    icon: Icon(Icons.refresh, color: appColors.navSelectedColor),
                     onPressed: fetchSounds,
                     tooltip: 'Odśwież',
                   ),
@@ -214,14 +217,14 @@ class _SoundPageState extends State<SoundPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             CircularProgressIndicator(
-                              color: Colors.blue.shade600,
+                              color: appColors.soundColor,
                             ),
                             const SizedBox(height: 16),
                             Text(
                               'Ładujemy dźwięki…',
                               style: GoogleFonts.poppins(
                                 fontSize: 16,
-                                color: Colors.blue.shade900,
+                                color: appColors.primaryColor,
                               ),
                             ),
                           ],
@@ -238,19 +241,21 @@ class _SoundPageState extends State<SoundPage> {
                               final path = item['audioPath'] ?? '';
                               final description =
                                   item['description'] ?? 'Dowiedz się więcej!';
-                              final notation = item['notation'] ?? 'Brak notacji';
+                              final notation =
+                                  item['notation'] ?? 'Brak notacji';
 
                               return GestureDetector(
                                 onTap: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (_) => SoundDetailsPage(sound: item),
+                                      builder: (_) =>
+                                          SoundDetailsPage(sound: item),
                                     ),
                                   );
                                 },
                                 child: Card(
-                                  color: Colors.yellow.shade50,
+                                  color: appColors.cardColor,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16),
                                   ),
@@ -259,13 +264,14 @@ class _SoundPageState extends State<SoundPage> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(16),
                                     child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         CircleAvatar(
-                                          backgroundColor: Colors.blue.shade100,
+                                          backgroundColor: appColors.waveformFixedColor,
                                           child: Icon(
                                             Icons.music_note,
-                                            color: Colors.blue.shade600,
+                                            color: appColors.highlightColor,
                                             size: 24,
                                           ),
                                         ),
@@ -280,7 +286,7 @@ class _SoundPageState extends State<SoundPage> {
                                                 style: GoogleFonts.poppins(
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.bold,
-                                                  color: Colors.blue.shade900,
+                                                  color: appColors.primaryColor,
                                                 ),
                                               ),
                                               const SizedBox(height: 4),
@@ -290,53 +296,60 @@ class _SoundPageState extends State<SoundPage> {
                                                     : description,
                                                 style: GoogleFonts.poppins(
                                                   fontSize: 14,
-                                                  color: Colors.black87,
+                                                  color: appColors.secondaryColor,
                                                 ),
                                               ),
                                               const SizedBox(height: 4),
-                                              Row( 
-                                                children: [ Text(
-                                                'Notacja:',
-                                                style: GoogleFonts.poppins(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.blue.shade600,
-                                                ),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    'Notacja:',
+                                                    style: GoogleFonts.poppins(
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: appColors.highlightColor,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 8),
+                                                  Text(
+                                                    notation.length > 30
+                                                        ? '${notation.substring(0, 30)}…'
+                                                        : notation,
+                                                    style: GoogleFonts.poppins(
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: notation ==
+                                                              'Brak notacji'
+                                                          ? appColors
+                                                              .navUnselectedColor
+                                                          : appColors.soundColor,
+                                                      fontStyle: notation ==
+                                                              'Brak notacji'
+                                                          ? FontStyle.italic
+                                                          : FontStyle.normal,
+                                                    ),
+                                                  ).animate().fadeIn(
+                                                        duration: 300.ms),
+                                                ],
                                               ),
-                                              const SizedBox(width: 8),
-                                              Text(
-                                                notation.length > 30
-                                                    ? '${notation.substring(0, 30)}…'
-                                                    : notation,
-                                                style: GoogleFonts.poppins(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: notation == 'Brak notacji'
-                                                      ? Colors.grey.shade600
-                                                      : Colors.blue.shade900,
-                                                  fontStyle: notation == 'Brak notacji'
-                                                      ? FontStyle.italic
-                                                      : FontStyle.normal,
-                                                ),
-                                              ).animate().fadeIn(duration: 300.ms),])
-                                            
                                             ],
                                           ),
                                         ),
                                         const SizedBox(width: 8),
                                         IconButton(
                                           icon: Icon(
-                                            isPlaying && path == currentlyPlayingPath
+                                            isPlaying &&
+                                                    path == currentlyPlayingPath
                                                 ? Icons.pause_circle_filled
                                                 : Icons.play_circle_filled,
                                             color: Colors.white,
                                             size: 36,
                                           ),
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                isPlaying && path == currentlyPlayingPath
-                                                    ? Colors.orange.shade600
-                                                    : Colors.green.shade600,
+                                            backgroundColor: isPlaying &&
+                                                    path == currentlyPlayingPath
+                                                ? appColors.buttonSecondaryColor
+                                                : appColors.buttonPrimaryColor,
                                             shape: const CircleBorder(),
                                             padding: const EdgeInsets.all(8),
                                           ),

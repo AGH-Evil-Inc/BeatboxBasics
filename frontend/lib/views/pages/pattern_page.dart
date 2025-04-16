@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:app/views/pages/pattern_details_page.dart';
+import 'package:app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:http/io_client.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'pattern_details_page.dart';
 
 class PatternPage extends StatefulWidget {
   const PatternPage({super.key});
@@ -51,7 +52,7 @@ class _PatternPageState extends State<PatternPage> {
 
   Future<void> fetchPatterns() async {
     String url = Platform.isAndroid || Platform.isIOS
-        ? "https://192.168.218.107:5001/api/pattern"
+        ? "https://192.168.0.34:5001/api/pattern"
         : "https://localhost:5001/api/pattern";
 
     final ioc = HttpClient();
@@ -83,7 +84,7 @@ class _PatternPageState extends State<PatternPage> {
 
   Future<void> fetchSounds() async {
     String url = Platform.isAndroid || Platform.isIOS
-        ? "https://192.168.218.107:5001/api/sound"
+        ? "https://192.168.0.34:5001/api/sound"
         : "https://localhost:5001/api/sound";
 
     final ioc = HttpClient();
@@ -141,13 +142,14 @@ class _PatternPageState extends State<PatternPage> {
   }
 
   Widget _buildErrorState() {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             Icons.error_outline,
-            color: Colors.red.shade400,
+            color: appColors.errorColor,
             size: 48,
           ),
           const SizedBox(height: 16),
@@ -155,7 +157,7 @@ class _PatternPageState extends State<PatternPage> {
             'Oj, coś poszło nie tak!',
             style: GoogleFonts.poppins(
               fontSize: 18,
-              color: Colors.purple.shade900,
+              color: appColors.primaryColor,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -164,7 +166,7 @@ class _PatternPageState extends State<PatternPage> {
             'Spróbuj jeszcze raz.',
             style: GoogleFonts.poppins(
               fontSize: 16,
-              color: Colors.black87,
+              color: appColors.secondaryColor,
             ),
           ),
           const SizedBox(height: 16),
@@ -175,7 +177,7 @@ class _PatternPageState extends State<PatternPage> {
               style: GoogleFonts.poppins(color: Colors.white),
             ),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.purple.shade600,
+              backgroundColor: appColors.buttonPrimaryColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -190,6 +192,7 @@ class _PatternPageState extends State<PatternPage> {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -199,8 +202,8 @@ class _PatternPageState extends State<PatternPage> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.purple.shade50,
-                Colors.white,
+                appColors.gradientStartColor,
+                appColors.gradientEndColor,
               ],
             ),
           ),
@@ -216,7 +219,7 @@ class _PatternPageState extends State<PatternPage> {
                   ),
                 ),
                 centerTitle: true,
-                backgroundColor: Colors.purple.shade600,
+                backgroundColor: appColors.patternColor,
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
                 ),
@@ -225,15 +228,15 @@ class _PatternPageState extends State<PatternPage> {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        Colors.purple.shade600,
-                        Colors.purple.shade800,
+                        appColors.patternColor,
+                        appColors.accentColor,
                       ],
                     ),
                   ),
                 ),
                 actions: [
                   IconButton(
-                    icon: const Icon(Icons.refresh, color: Colors.white),
+                    icon: Icon(Icons.refresh, color: appColors.navSelectedColor),
                     onPressed: fetchData,
                     tooltip: 'Odśwież',
                   ),
@@ -246,14 +249,14 @@ class _PatternPageState extends State<PatternPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             CircularProgressIndicator(
-                              color: Colors.purple.shade600,
+                              color: appColors.patternColor,
                             ),
                             const SizedBox(height: 16),
                             Text(
                               'Ładujemy patterny…',
                               style: GoogleFonts.poppins(
                                 fontSize: 16,
-                                color: Colors.purple.shade900,
+                                color: appColors.primaryColor,
                               ),
                             ),
                           ],
@@ -270,11 +273,12 @@ class _PatternPageState extends State<PatternPage> {
                               final path = item['audioPath'] ?? '';
                               final description =
                                   item['description'] ?? 'Dowiedz się więcej!';
-                              final difficulty = item['difficulty']?.toString() ?? 'Brak poziomu';
+                              final difficulty =
+                                  item['difficulty']?.toString() ?? 'Brak poziomu';
 
                               return GestureDetector(
                                 onTap: () {
-                                  audioPlayer.stop(); // Stop audio before navigating
+                                  audioPlayer.stop();
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -286,7 +290,7 @@ class _PatternPageState extends State<PatternPage> {
                                   );
                                 },
                                 child: Card(
-                                  color: Colors.orange.shade50,
+                                  color: appColors.cardColor,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(16),
                                   ),
@@ -299,10 +303,10 @@ class _PatternPageState extends State<PatternPage> {
                                           CrossAxisAlignment.center,
                                       children: [
                                         CircleAvatar(
-                                          backgroundColor: Colors.purple.shade100,
+                                          backgroundColor: appColors.waveformFixedColor,
                                           child: Icon(
                                             Icons.library_music_outlined,
-                                            color: Colors.purple.shade600,
+                                            color: appColors.highlightColor,
                                             size: 24,
                                           ),
                                         ),
@@ -317,7 +321,7 @@ class _PatternPageState extends State<PatternPage> {
                                                 style: GoogleFonts.poppins(
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.bold,
-                                                  color: Colors.purple.shade900,
+                                                  color: appColors.primaryColor,
                                                 ),
                                               ),
                                               const SizedBox(height: 4),
@@ -327,7 +331,7 @@ class _PatternPageState extends State<PatternPage> {
                                                     : description,
                                                 style: GoogleFonts.poppins(
                                                   fontSize: 14,
-                                                  color: Colors.black87,
+                                                  color: appColors.secondaryColor,
                                                 ),
                                               ),
                                               const SizedBox(height: 4),
@@ -343,10 +347,10 @@ class _PatternPageState extends State<PatternPage> {
                                                     'Poziom: $difficulty',
                                                     style: GoogleFonts.poppins(
                                                       fontSize: 14,
-                                                      color: _getDifficultyColor(difficulty),
+                                                      color: _getDifficultyColor(
+                                                          difficulty),
                                                     ),
                                                   ),
-                                      
                                                   const SizedBox(width: 4),
                                                   _buildDifficultyStars(difficulty),
                                                 ],
@@ -364,7 +368,7 @@ class _PatternPageState extends State<PatternPage> {
                                               child: CircularProgressIndicator(
                                                 value: _getProgressValue(difficulty),
                                                 color: _getDifficultyColor(difficulty),
-                                                backgroundColor: Colors.purple.shade100,
+                                                backgroundColor: appColors.waveformFixedColor,
                                                 strokeWidth: 3,
                                               ),
                                             ).animate().scale(
@@ -374,7 +378,8 @@ class _PatternPageState extends State<PatternPage> {
                                                 ),
                                             IconButton(
                                               icon: Icon(
-                                                isPlaying && path == currentlyPlayingPath
+                                                isPlaying &&
+                                                        path == currentlyPlayingPath
                                                     ? Icons.pause_circle_filled
                                                     : Icons.play_circle_filled,
                                                 color: Colors.white,
@@ -383,8 +388,8 @@ class _PatternPageState extends State<PatternPage> {
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor: isPlaying &&
                                                         path == currentlyPlayingPath
-                                                    ? Colors.orange.shade700
-                                                    : Colors.green.shade700,
+                                                    ? appColors.buttonSecondaryColor
+                                                    : appColors.buttonPrimaryColor,
                                                 shape: const CircleBorder(),
                                                 padding: const EdgeInsets.all(8),
                                               ),
@@ -427,16 +432,17 @@ class _PatternPageState extends State<PatternPage> {
   }
 
   Color _getDifficultyColor(String difficulty) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     final level = int.tryParse(difficulty) ?? 0;
     switch (level) {
       case 1:
-        return Colors.green.shade600;
+        return appColors.buttonPrimaryColor;
       case 2:
-        return Colors.yellow.shade900;
+        return appColors.accentColor;
       case 3:
-        return Colors.red.shade600;
+        return appColors.errorColor;
       default:
-        return Colors.grey.shade600;
+        return appColors.navUnselectedColor;
     }
   }
 
@@ -446,13 +452,14 @@ class _PatternPageState extends State<PatternPage> {
   }
 
   Widget _buildDifficultyStars(String difficulty) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     final level = int.tryParse(difficulty) ?? 0;
     if (level < 1 || level > 3) {
       return Text(
         'Brak poziomu',
         style: GoogleFonts.poppins(
           fontSize: 14,
-          color: Colors.grey.shade600,
+          color: appColors.navUnselectedColor,
           fontStyle: FontStyle.italic,
         ),
       );

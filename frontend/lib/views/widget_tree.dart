@@ -1,3 +1,4 @@
+import 'package:app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -21,6 +22,8 @@ class WidgetTree extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
+    
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -29,15 +32,15 @@ class WidgetTree extends StatelessWidget {
             style: GoogleFonts.poppins(
               fontSize: 22,
               fontWeight: FontWeight.bold,
-              color: Colors.black54,
+              color: appColors.primaryColor,
             ),
           ),
           centerTitle: true,
-          backgroundColor: Colors.purple.shade600,
+          backgroundColor: appColors.backgroundColor,
           elevation: 4,
           flexibleSpace: Container(
             decoration: BoxDecoration(
-              color: const Color(0xFFe8db7d),
+              color: appColors.secondaryColor,
             ),
           ),
           shape: const RoundedRectangleBorder(
@@ -45,7 +48,7 @@ class WidgetTree extends StatelessWidget {
           ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.settings, color: Colors.black54),
+              icon: Icon(Icons.settings, color: appColors.navUnselectedColor),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -64,7 +67,7 @@ class WidgetTree extends StatelessWidget {
                 return IconButton(
                   icon: Icon(
                     isLightMode ? Icons.dark_mode : Icons.light_mode,
-                    color: Colors.black54,
+                    color: appColors.navUnselectedColor,
                   ),
                   onPressed: () {
                     isLightModeNotifier.value = !isLightMode;

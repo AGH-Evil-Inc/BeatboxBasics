@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:app/main.dart';
 import 'package:audio_waveforms/audio_waveforms.dart' as audio_waveforms;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,7 +21,7 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
   final List<YoutubePlayerController> _controllers = [];
   late final audio_waveforms.PlayerController playerController;
   bool _isPlaying = false;
-  double _playbackSpeed = 1.0; // Default speed
+  double _playbackSpeed = 1.0;
 
   @override
   void initState() {
@@ -77,7 +78,7 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
               'Świetnie! Posłuchałeś dźwięku!',
               style: GoogleFonts.poppins(),
             ),
-            backgroundColor: Colors.green.shade600,
+            backgroundColor: Theme.of(context).extension<AppColors>()!.buttonPrimaryColor,
             duration: const Duration(seconds: 2),
           ),
         );
@@ -100,18 +101,19 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
   }
 
   Widget _buildSectionTitle(String title, IconData icon) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: Row(
         children: [
-          Icon(icon, color: Colors.blue.shade900, size: 24),
+          Icon(icon, color: appColors.primaryColor, size: 24),
           const SizedBox(width: 8),
           Text(
             title,
             style: GoogleFonts.poppins(
               fontSize: 20,
               fontWeight: FontWeight.w600,
-              color: Colors.blue.shade900,
+              color: appColors.primaryColor,
             ),
           ),
         ],
@@ -120,6 +122,7 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
   }
 
   Widget _buildNotationCard() {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     final notation = widget.sound['notation'] ?? 'Brak notacji';
     return GestureDetector(
       onTap: () {
@@ -134,16 +137,15 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
               style: GoogleFonts.poppins(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: Colors.blue.shade900,
+                color: appColors.primaryColor,
               ),
             ),
             content: SingleChildScrollView(
-              
               child: Text(
                 notation,
                 style: GoogleFonts.poppins(
                   fontSize: 18,
-                  color: Colors.black87,
+                  color: appColors.secondaryColor,
                 ),
               ),
             ),
@@ -152,7 +154,7 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
                 onPressed: () => Navigator.pop(context),
                 child: Text(
                   'Zamknij',
-                  style: GoogleFonts.poppins(color: Colors.blue.shade600),
+                  style: GoogleFonts.poppins(color: appColors.highlightColor),
                 ),
               ),
             ],
@@ -160,7 +162,7 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
         );
       },
       child: Card(
-        color: Colors.yellow.shade100,
+        color: appColors.cardColor,
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Padding(
@@ -173,7 +175,7 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
                 style: GoogleFonts.poppins(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blue.shade900,
+                  color: appColors.primaryColor,
                 ),
               ),
               const SizedBox(height: 8),
@@ -181,13 +183,13 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
                 notation,
                 style: GoogleFonts.poppins(
                   fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: notation == 'Brak notacji'
-                        ? Colors.grey.shade600
-                        : Colors.blueAccent.shade700,
-                    fontStyle: notation == 'Brak notacji'
-                        ? FontStyle.italic
-                        : FontStyle.normal,
+                  fontWeight: FontWeight.bold,
+                  color: notation == 'Brak notacji'
+                      ? appColors.navUnselectedColor
+                      : appColors.soundColor,
+                  fontStyle: notation == 'Brak notacji'
+                      ? FontStyle.italic
+                      : FontStyle.normal,
                 ),
               ),
               const SizedBox(height: 8),
@@ -195,7 +197,7 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
                 'Dotknij, aby powiększyć',
                 style: GoogleFonts.poppins(
                   fontSize: 14,
-                  color: Colors.blue.shade600,
+                  color: appColors.highlightColor,
                   fontStyle: FontStyle.italic,
                 ),
               ),
@@ -207,14 +209,18 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
   }
 
   Widget _buildAudioPlayer() {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     final audioPath = widget.sound['audioPath'];
     if (audioPath == null) {
       return Card(
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: const Padding(
+        child: Padding(
           padding: EdgeInsets.all(16),
-          child: Text('Brak dostępnego audio'),
+          child: Text(
+            'Brak dostępnego audio',
+            style: GoogleFonts.poppins(color: appColors.secondaryColor),
+          ),
         ),
       );
     }
@@ -232,7 +238,7 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
               style: GoogleFonts.poppins(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.blue.shade900,
+                color: appColors.primaryColor,
               ),
             ),
             const SizedBox(height: 12),
@@ -241,11 +247,11 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
               size: const Size(double.infinity, 50),
               waveformType: audio_waveforms.WaveformType.fitWidth,
               playerWaveStyle: audio_waveforms.PlayerWaveStyle(
-                liveWaveColor: Colors.blue.shade700,
-                fixedWaveColor: Colors.blue.shade200,
+                liveWaveColor: appColors.waveformLiveColor,
+                fixedWaveColor: appColors.waveformFixedColor,
                 scaleFactor: 50,
                 showSeekLine: true,
-                seekLineColor: Colors.red.shade300,
+                seekLineColor: appColors.waveformSeekColor,
                 seekLineThickness: 2,
               ),
             ),
@@ -261,8 +267,7 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
                         width: 60,
                         height: 60,
                         child: CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation(Colors.blue.shade200),
+                          valueColor: AlwaysStoppedAnimation(appColors.waveformFixedColor),
                           strokeWidth: 3,
                           backgroundColor: Colors.transparent,
                         ),
@@ -274,7 +279,7 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
                         style: GoogleFonts.poppins(color: Colors.white),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green.shade600,
+                        backgroundColor: appColors.buttonPrimaryColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -298,7 +303,7 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
                     style: GoogleFonts.poppins(color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange.shade600,
+                    backgroundColor: appColors.buttonSecondaryColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -348,23 +353,23 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
     required String label,
     required IconData icon,
   }) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     final isSelected = _playbackSpeed == speed;
     return ElevatedButton.icon(
       icon: Icon(
         icon,
-        color: isSelected ? Colors.white : Colors.blue.shade600,
+        color: isSelected ? Colors.white : appColors.highlightColor,
         size: 20,
       ),
       label: Text(
         label,
         style: GoogleFonts.poppins(
-          color: isSelected ? Colors.white : Colors.blue.shade600,
+          color: isSelected ? Colors.white : appColors.highlightColor,
           fontSize: 12,
         ),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor:
-            isSelected ? Colors.blue.shade600 : Colors.blue.shade100,
+        backgroundColor: isSelected ? appColors.buttonPrimaryColor : appColors.cardColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -381,6 +386,7 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
   }
 
   Widget _buildDescriptionCard() {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     final description = widget.sound['description'] ?? 'Brak opisu';
     return Card(
       elevation: 4,
@@ -395,7 +401,7 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
               style: GoogleFonts.poppins(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.blue.shade900,
+                color: appColors.primaryColor,
               ),
             ),
             const SizedBox(height: 8),
@@ -403,7 +409,7 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
               description,
               style: GoogleFonts.poppins(
                 fontSize: 16,
-                color: Colors.black87,
+                color: appColors.secondaryColor,
               ),
             ),
           ],
@@ -413,6 +419,7 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
   }
 
   Widget _buildTipsSection() {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     final tips = widget.sound['tips'] ?? [];
     if (tips.isEmpty) return const SizedBox.shrink();
     return Column(
@@ -436,7 +443,7 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
                           children: [
                             Icon(
                               Icons.star_border,
-                              color: Colors.yellow.shade700,
+                              color: appColors.accentColor,
                               size: 24,
                             ).animate().scale(
                                   begin: Offset(0.8, 0.8),
@@ -450,7 +457,7 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
                                 entry.value,
                                 style: GoogleFonts.poppins(
                                   fontSize: 16,
-                                  color: Colors.black87,
+                                  color: appColors.secondaryColor,
                                 ),
                               ),
                             ),
@@ -466,6 +473,7 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
   }
 
   Widget _buildLinksSection() {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     final links = widget.sound['links'] ?? [];
     if (links.isEmpty) return const SizedBox.shrink();
     return Column(
@@ -501,7 +509,7 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
                       'Nieprawidłowy link YouTube: $link',
                       style: GoogleFonts.poppins(
                         fontSize: 16,
-                        color: Colors.red,
+                        color: appColors.errorColor,
                       ),
                     ),
                   ),
@@ -512,62 +520,72 @@ class _SoundDetailsPageState extends State<SoundDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     final sound = widget.sound;
 
-    return 
-      Scaffold(
-        body: Container(
-          child: Column(
-            children: [
-              AppBar(
-                title: Text(
-                  sound['name'] ?? 'Brak nazwy',
-                  style: GoogleFonts.poppins(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                centerTitle: true,
-                backgroundColor: Colors.blue.shade600,
-                shape: const RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(16)),
-                ),
-                elevation: 4,
-                flexibleSpace: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.blue.shade600,
-                        Colors.blue.shade800,
-                      ],
-                    ),
-                  ),
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              appColors.gradientStartColor,
+              appColors.gradientEndColor,
+            ],
+          ),
+        ),
+        child: Column(
+          children: [
+            AppBar(
+              title: Text(
+                sound['name'] ?? 'Brak nazwy',
+                style: GoogleFonts.poppins(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildNotationCard(),
-                      const SizedBox(height: 16),
-                      _buildDescriptionCard(),
-                      const SizedBox(height: 16),
-                      _buildAudioPlayer(),
-                      const SizedBox(height: 16),
-                      _buildTipsSection(),
-                      const SizedBox(height: 16),
-                      _buildLinksSection(),
+              centerTitle: true,
+              backgroundColor: appColors.soundColor,
+              shape: const RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.vertical(bottom: Radius.circular(16)),
+              ),
+              elevation: 4,
+              flexibleSpace: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      appColors.soundColor,
+                      appColors.accentColor,
                     ],
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildNotationCard(),
+                    const SizedBox(height: 16),
+                    _buildDescriptionCard(),
+                    const SizedBox(height: 16),
+                    _buildAudioPlayer(),
+                    const SizedBox(height: 16),
+                    _buildTipsSection(),
+                    const SizedBox(height: 16),
+                    _buildLinksSection(),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
-      );
+      ),
+    );
   }
 }
