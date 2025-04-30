@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OnesetDetectionExample")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4d68f089f6d6008b3550b0e0eed309fba79ef72d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f9345dab699bd2e287bc9aa0ce0e457c0470a41a")]
 [assembly: System.Reflection.AssemblyProductAttribute("OnesetDetectionExample")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OnesetDetectionExample")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

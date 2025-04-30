@@ -6,7 +6,7 @@
       "AbsoluteMoniker": "D:0:0:{1C1EA7FF-5A62-45FC-BE8A-31C4B7010EE5}|..\\OnesetDetectionExample\\OnesetDetectionExample.csproj|e:\\szkolaprogramowanie\\beatboxbasics\\backend\\onesetdetectionexample\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3E1E7501-AE92-4781-AB38-301CB35AAAF4}|..\\OnesetDetection\\OnesetDetection.csproj|e:\\szkolaprogramowanie\\beatboxbasics\\backend\\onesetdetection\\audioanalysis.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3E1E7501-AE92-4781-AB38-301CB35AAAF4}|..\\OnesetDetection\\OnesetDetection.csproj|e:\\szkolaprogramowanie\\beatboxbasics\\backend\\onesetdetection\\beatscorer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -21,14 +21,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "AudioAnalysis.cs",
-              "DocumentMoniker": "E:\\SzkolaProgramowanie\\BeatboxBasics\\backend\\OnesetDetection\\AudioAnalysis.cs",
-              "RelativeDocumentMoniker": "..\\OnesetDetection\\AudioAnalysis.cs",
-              "ToolTip": "E:\\SzkolaProgramowanie\\BeatboxBasics\\backend\\OnesetDetection\\AudioAnalysis.cs",
-              "RelativeToolTip": "..\\OnesetDetection\\AudioAnalysis.cs",
-              "ViewState": "AgIAAI4AAAAAAAAAAIA6wKMAAAAlAAAAAAAAAA==",
+              "Title": "BeatScorer.cs",
+              "DocumentMoniker": "E:\\SzkolaProgramowanie\\BeatboxBasics\\backend\\OnesetDetection\\BeatScorer.cs",
+              "RelativeDocumentMoniker": "..\\OnesetDetection\\BeatScorer.cs",
+              "ToolTip": "E:\\SzkolaProgramowanie\\BeatboxBasics\\backend\\OnesetDetection\\BeatScorer.cs",
+              "RelativeToolTip": "..\\OnesetDetection\\BeatScorer.cs",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAqwDkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-29T21:25:17.3Z",
+              "WhenOpened": "2025-04-30T19:45:14.115Z",
               "EditorCaption": ""
             },
             {
@@ -39,7 +39,7 @@
               "RelativeDocumentMoniker": "..\\OnesetDetectionExample\\Program.cs",
               "ToolTip": "E:\\SzkolaProgramowanie\\BeatboxBasics\\backend\\OnesetDetectionExample\\Program.cs",
               "RelativeToolTip": "..\\OnesetDetectionExample\\Program.cs",
-              "ViewState": "AgIAAAEAAAAAAAAAAAAowBMAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAowB0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-29T21:22:30.565Z",
               "EditorCaption": ""
