@@ -1,18 +1,12 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\studia\\BeatboxBasics\\backend\\api\\",
+  "WorkspaceRootPath": "E:\\SzkolaProgramowanie\\BeatboxBasics\\backend\\api\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|d:\\studia\\beatboxbasics\\backend\\api\\controllers\\soundcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|solutionrelative:controllers\\soundcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3E1E7501-AE92-4781-AB38-301CB35AAAF4}|..\\OnesetDetection\\OnesetDetection.csproj|e:\\szkolaprogramowanie\\beatboxbasics\\backend\\onesetdetection\\beatscorer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|d:\\studia\\beatboxbasics\\backend\\api\\models\\sound.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|solutionrelative:models\\sound.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|d:\\studia\\beatboxbasics\\backend\\api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1CC52708-3590-48C7-B0BC-8488DF29F6E3}|api.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1C1EA7FF-5A62-45FC-BE8A-31C4B7010EE5}|..\\OnesetDetectionExample\\OnesetDetectionExample.csproj|e:\\szkolaprogramowanie\\beatboxbasics\\backend\\onesetdetectionexample\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,48 +16,33 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
-            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "SoundController.cs",
-              "DocumentMoniker": "D:\\studia\\BeatboxBasics\\backend\\api\\Controllers\\SoundController.cs",
-              "RelativeDocumentMoniker": "Controllers\\SoundController.cs",
-              "ToolTip": "D:\\studia\\BeatboxBasics\\backend\\api\\Controllers\\SoundController.cs",
-              "RelativeToolTip": "Controllers\\SoundController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAPAAAAAAAAAA==",
+              "Title": "BeatScorer.cs",
+              "DocumentMoniker": "E:\\SzkolaProgramowanie\\BeatboxBasics\\backend\\OnesetDetection\\BeatScorer.cs",
+              "RelativeDocumentMoniker": "..\\OnesetDetection\\BeatScorer.cs",
+              "ToolTip": "E:\\SzkolaProgramowanie\\BeatboxBasics\\backend\\OnesetDetection\\BeatScorer.cs",
+              "RelativeToolTip": "..\\OnesetDetection\\BeatScorer.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAADkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-15T10:48:39.087Z",
+              "WhenOpened": "2025-04-30T19:45:14.115Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Sound.cs",
-              "DocumentMoniker": "D:\\studia\\BeatboxBasics\\backend\\api\\Models\\Sound.cs",
-              "RelativeDocumentMoniker": "Models\\Sound.cs",
-              "ToolTip": "D:\\studia\\BeatboxBasics\\backend\\api\\Models\\Sound.cs",
-              "RelativeToolTip": "Models\\Sound.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-15T10:48:39.09Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
               "Title": "Program.cs",
-              "DocumentMoniker": "D:\\studia\\BeatboxBasics\\backend\\api\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "D:\\studia\\BeatboxBasics\\backend\\api\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAhAAAAAAAAAA==",
+              "DocumentMoniker": "E:\\SzkolaProgramowanie\\BeatboxBasics\\backend\\OnesetDetectionExample\\Program.cs",
+              "RelativeDocumentMoniker": "..\\OnesetDetectionExample\\Program.cs",
+              "ToolTip": "E:\\SzkolaProgramowanie\\BeatboxBasics\\backend\\OnesetDetectionExample\\Program.cs",
+              "RelativeToolTip": "..\\OnesetDetectionExample\\Program.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAowB0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-15T10:48:39.093Z"
+              "WhenOpened": "2025-04-29T21:22:30.565Z",
+              "EditorCaption": ""
             }
           ]
         }
