@@ -13,17 +13,19 @@ namespace OnesetDetection
     public class BeatScoreResult
     {
         public bool BeatAccepted { get; set; } = true; // Niezaakceptowany jeśli zostanie wykrytych mniej beatów niż powinno być
-        public double MSE { get; set; } = -1;
-        public int SE { get; set; } = -1;
+        public float MSE { get; set; } = -1f; // time diff mean square error (seconds)
+        public float SE { get; set; } = -1f; // time diff square error (seconds)
+        public float StepMSE { get; set; } = -1f; // no samples diff mean square error
+        public int StepSE { get; set; } = -1; // no samples diff square error
         public int Score { get; set; } = -1;
-        public bool[] ActualOnsets { get; set; }
-        public bool[] ModelOnsets { get; set; }
+        public bool[] ActualOnsets { get; set; } // Detected from user's recording
+        public bool[] ModelOnsets { get; set; } // Generated
         public float TimePerSample { get; set; }
     }
 
     public static class BeatScorer
     {
-        public static BeatScoreResult ScoreBeat(string audioPath, int bpm, int noBars, int[] rhythm)
+        public static BeatScoreResult ScoreBeat(string audioPath, int bpm, int noBars, int[] rhythm, int leniency=1, int scoreHarshnessMul=6) // Harshness could be variable on beat difficulty
         {
             BeatScoreResult result = new();
 
@@ -36,6 +38,11 @@ namespace OnesetDetection
 
             float timePerSample = audioAnalysis.GetTimePerSample();
             result.TimePerSample = timePerSample;
+
+            /*foreach (var onset in onsets)
+            {
+                Console.WriteLine(onset);
+            }*/
 
             bool[] actualOnsets = GetQuantizedOnsets(onsets);
             result.ActualOnsets = actualOnsets;
@@ -62,7 +69,7 @@ namespace OnesetDetection
                 if (waitingForActual && actualOnsetIdx > actualOnsetsLength)
                 {
                     result.BeatAccepted = false;
-                    break;
+                    return result;
                 }
 
                 bool actualOnset = actualOnsetIdx < actualOnsetsLength ? actualOnsets[actualOnsetIdx] : false;
@@ -117,48 +124,59 @@ namespace OnesetDetection
             }
 
             if (noteDifferences.Count != noNotes)
-                throw new Exception("Something went really damn wrong.");
-
-            if (!result.BeatAccepted) 
-                return result;
+                throw new Exception($"Something went really damn wrong. Notes: {noNotes}, differences: {noteDifferences.Count}");
 
             Console.WriteLine("\nRóżnice nut:");
-            int se = 0;
-            double mse = 0;
+            float se = 0.0f;
+            int stepse = 0;
             for (int i = 0; i < noNotes; i++)
             {
                 Console.WriteLine(noteDifferences[i]);
 
-                // Jeżeli błąd to tylko 1 to go nie ma, bo jest tak mały jak możliwy błąd wykrywania onsetów
-                if (noteDifferences[i] > 0)
-                    noteDifferences[i] -= 1; // Dlatego zmniejszam wszystko o 1
+                // Zmniejszamy błąd o leniency żeby wziąć pod uwagę błąd wykrywania onsetów
+                int lenientDifference = Math.Max(0, noteDifferences[i] - leniency);
 
-                se += noteDifferences[i] * noteDifferences[i];
+                float timeDifference = lenientDifference * timePerSample;
+                se += timeDifference * timeDifference;
+                stepse += lenientDifference * lenientDifference;
             }
 
-            mse = (double)se / noNotes;
-            result.SE = se; result.MSE = mse;
+            result.MSE = se / noNotes;
+            result.StepMSE = (float)stepse / noNotes;
 
-            int score = Math.Max(0, 100 - (int)mse); // TODO: temporary score calculation, make it cool
+            result.SE = se; result.StepSE = stepse;
+
+            int score = Math.Max(0, 100 - (int)(result.StepMSE * scoreHarshnessMul)); // TODO: temporary score calculation, make it cool
             result.Score = score;
 
             return result;
         }
 
-        private static bool[] GetQuantizedOnsets(float[] onsets, float threshold=0.1f)
+        // For very very fast beats there is a risk of cooldown being too long and eating actual percussion
+        private static bool[] GetQuantizedOnsets(float[] onsets, int cooldownSteps=4, float threshold=0.03f)
         {
             List<bool> quantizedOnsets = new();
+            int cooldown = 0;
             bool quietBeginning = true;
             foreach (float onset in onsets)
             {
+                cooldown--;
+
                 bool quantizedOnset = onset > threshold ? true : false;
 
+                bool setToFalse = cooldown > 0 ? true : false;
+
                 // The false values at the start should be ignored so both model and live start at the same time
-                if (quantizedOnset)  
+                if (quantizedOnset)
+                {
                     quietBeginning = false;
+                    cooldown = cooldownSteps + 1; // one more because one will go down immediatly after
+                } 
                 else if (quietBeginning)
                     continue;
 
+                if (setToFalse)
+                    quantizedOnset = false;
                 quantizedOnsets.Add(quantizedOnset);
             }
 
@@ -197,9 +215,7 @@ namespace OnesetDetection
 
             List<bool> modelOnsetsMultiplied = new();
             for (int i = 0; i < noBars; i++)
-            {
-                modelOnsetsMultiplied.AddRange(modelOnsets); // Append the original list `n` times
-            }
+                modelOnsetsMultiplied.AddRange(modelOnsets);
 
             return modelOnsetsMultiplied.ToArray();
         }
