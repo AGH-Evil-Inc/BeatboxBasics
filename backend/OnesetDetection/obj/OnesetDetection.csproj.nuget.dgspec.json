@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "E:\\SzkolaProgramowanie\\BeatboxBasics\\backend\\OnesetDetection\\OnesetDetection.csproj": {}
+    "D:\\studia\\BeatboxBasics\\backend\\OnesetDetection\\OnesetDetection.csproj": {}
   },
   "projects": {
-    "E:\\SzkolaProgramowanie\\BeatboxBasics\\backend\\OnesetDetection\\OnesetDetection.csproj": {
+    "D:\\studia\\BeatboxBasics\\backend\\OnesetDetection\\OnesetDetection.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\SzkolaProgramowanie\\BeatboxBasics\\backend\\OnesetDetection\\OnesetDetection.csproj",
+        "projectUniqueName": "D:\\studia\\BeatboxBasics\\backend\\OnesetDetection\\OnesetDetection.csproj",
         "projectName": "OnesetDetection",
-        "projectPath": "E:\\SzkolaProgramowanie\\BeatboxBasics\\backend\\OnesetDetection\\OnesetDetection.csproj",
-        "packagesPath": "C:\\Users\\pomid\\.nuget\\packages\\",
-        "outputPath": "E:\\SzkolaProgramowanie\\BeatboxBasics\\backend\\OnesetDetection\\obj\\",
+        "projectPath": "D:\\studia\\BeatboxBasics\\backend\\OnesetDetection\\OnesetDetection.csproj",
+        "packagesPath": "C:\\Users\\pioac\\.nuget\\packages\\",
+        "outputPath": "D:\\studia\\BeatboxBasics\\backend\\OnesetDetection\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\pomid\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\pioac\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],

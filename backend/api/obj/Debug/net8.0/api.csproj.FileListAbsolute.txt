@@ -109,3 +109,11 @@ D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\refint\api.dll
 D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\api.pdb
 D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\api.genruntimeconfig.cache
 D:\studia\BeatboxBasics\backend\api\obj\Debug\net8.0\ref\api.dll
+D:\studia\BeatboxBasics\backend\api\bin\Debug\net8.0\NAudio.dll
+D:\studia\BeatboxBasics\backend\api\bin\Debug\net8.0\NAudio.Asio.dll
+D:\studia\BeatboxBasics\backend\api\bin\Debug\net8.0\NAudio.Core.dll
+D:\studia\BeatboxBasics\backend\api\bin\Debug\net8.0\NAudio.Midi.dll
+D:\studia\BeatboxBasics\backend\api\bin\Debug\net8.0\NAudio.Wasapi.dll
+D:\studia\BeatboxBasics\backend\api\bin\Debug\net8.0\NAudio.WinMM.dll
+D:\studia\BeatboxBasics\backend\api\bin\Debug\net8.0\OnesetDetection.dll
+D:\studia\BeatboxBasics\backend\api\bin\Debug\net8.0\OnesetDetection.pdb

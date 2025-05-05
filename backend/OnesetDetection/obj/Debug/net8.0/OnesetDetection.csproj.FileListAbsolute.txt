@@ -11,3 +11,16 @@ E:\SzkolaProgramowanie\BeatboxBasics\backend\OnesetDetection\obj\Debug\net8.0\On
 E:\SzkolaProgramowanie\BeatboxBasics\backend\OnesetDetection\obj\Debug\net8.0\refint\OnesetDetection.dll
 E:\SzkolaProgramowanie\BeatboxBasics\backend\OnesetDetection\obj\Debug\net8.0\OnesetDetection.pdb
 E:\SzkolaProgramowanie\BeatboxBasics\backend\OnesetDetection\obj\Debug\net8.0\ref\OnesetDetection.dll
+D:\studia\BeatboxBasics\backend\OnesetDetection\obj\Debug\net8.0\OnesetDetection.dll
+D:\studia\BeatboxBasics\backend\OnesetDetection\obj\Debug\net8.0\refint\OnesetDetection.dll
+D:\studia\BeatboxBasics\backend\OnesetDetection\obj\Debug\net8.0\OnesetDetection.pdb
+D:\studia\BeatboxBasics\backend\OnesetDetection\obj\Debug\net8.0\OnesetDetection.GeneratedMSBuildEditorConfig.editorconfig
+D:\studia\BeatboxBasics\backend\OnesetDetection\obj\Debug\net8.0\OnesetDetection.AssemblyInfoInputs.cache
+D:\studia\BeatboxBasics\backend\OnesetDetection\obj\Debug\net8.0\OnesetDetection.AssemblyInfo.cs
+D:\studia\BeatboxBasics\backend\OnesetDetection\obj\Debug\net8.0\OnesetDetection.csproj.CoreCompileInputs.cache
+D:\studia\BeatboxBasics\backend\OnesetDetection\obj\Debug\net8.0\OnesetDetection.sourcelink.json
+D:\studia\BeatboxBasics\backend\OnesetDetection\bin\Debug\net8.0\OnesetDetection.deps.json
+D:\studia\BeatboxBasics\backend\OnesetDetection\bin\Debug\net8.0\OnesetDetection.dll
+D:\studia\BeatboxBasics\backend\OnesetDetection\bin\Debug\net8.0\OnesetDetection.pdb
+D:\studia\BeatboxBasics\backend\OnesetDetection\obj\Debug\net8.0\OnesetDetection.csproj.AssemblyReference.cache
+D:\studia\BeatboxBasics\backend\OnesetDetection\obj\Debug\net8.0\ref\OnesetDetection.dll

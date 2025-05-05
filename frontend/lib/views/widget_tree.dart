@@ -1,8 +1,10 @@
-import 'package:app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:vibration/vibration.dart';
 import '../data/notifiers.dart';
+import '../main.dart';
 import 'pages/dictionary_page.dart';
 import 'pages/home_page.dart';
 import 'pages/pattern_page.dart';
@@ -23,33 +25,39 @@ class WidgetTree extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appColors = Theme.of(context).extension<AppColors>()!;
-    
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return SafeArea(
       child: Scaffold(
+        backgroundColor: appColors.backgroundColor,
         appBar: AppBar(
           title: Text(
             'Beatbox Basics',
             style: GoogleFonts.poppins(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
               color: appColors.primaryColor,
             ),
           ),
           centerTitle: true,
           backgroundColor: appColors.backgroundColor,
-          elevation: 4,
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              color: appColors.secondaryColor,
-            ),
-          ),
+          elevation: 6,
           shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(24),
+              bottomRight: Radius.circular(8),
+            ),
           ),
           actions: [
             IconButton(
-              icon: Icon(Icons.settings, color: appColors.navUnselectedColor),
-              onPressed: () {
+              icon: Icon(
+                Icons.settings,
+                color: appColors.navUnselectedColor,
+                size: 28,
+              ),
+              onPressed: () async {
+                await AudioPlayer().play(AssetSource('audio/click.mp3'));
+                Vibration.vibrate(pattern: [0, 50, 50, 50]);
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const SettingsPage()),
@@ -57,32 +65,38 @@ class WidgetTree extends StatelessWidget {
               },
               tooltip: 'Ustawienia',
             ).animate().scale(
-                  begin: const Offset(0.8, 0.8),
+                  begin: const Offset(0.95, 0.95),
                   end: const Offset(1.0, 1.0),
-                  duration: 200.ms,
+                  duration: 400.ms,
+                  curve: Curves.easeOutBack,
                 ),
-            ValueListenableBuilder(
+            ValueListenableBuilder<bool>(
               valueListenable: isLightModeNotifier,
               builder: (context, isLightMode, child) {
                 return IconButton(
                   icon: Icon(
                     isLightMode ? Icons.dark_mode : Icons.light_mode,
                     color: appColors.navUnselectedColor,
+                    size: 28,
                   ),
-                  onPressed: () {
+                  onPressed: () async {
+                    await AudioPlayer().play(AssetSource('audio/click.mp3'));
+                    Vibration.vibrate(pattern: [0, 50, 50, 50]);
                     isLightModeNotifier.value = !isLightMode;
+                    customColorsNotifier.value = isLightMode ? AppColors.dark() : AppColors.light();
                   },
                   tooltip: isLightMode ? 'Tryb ciemny' : 'Tryb jasny',
                 ).animate().scale(
-                      begin: const Offset(0.8, 0.8),
+                      begin: const Offset(0.95, 0.95),
                       end: const Offset(1.0, 1.0),
-                      duration: 200.ms,
+                      duration: 400.ms,
+                      curve: Curves.easeOutBack,
                     );
               },
             ),
           ],
         ),
-        body: ValueListenableBuilder(
+        body: ValueListenableBuilder<int>(
           valueListenable: selectedPageNotifier,
           builder: (context, selectedPage, child) {
             return AnimatedSwitcher(
@@ -92,7 +106,9 @@ class WidgetTree extends StatelessWidget {
               },
               child: ConstrainedBox(
                 key: ValueKey<int>(selectedPage),
-                constraints: const BoxConstraints(maxWidth: 600),
+                constraints: BoxConstraints(
+                  
+                ),
                 child: Center(
                   child: pages.elementAt(selectedPage),
                 ),
@@ -104,6 +120,7 @@ class WidgetTree extends StatelessWidget {
               begin: 0.2,
               end: 0,
               duration: 500.ms,
+              curve: Curves.easeOutBack,
             ),
       ),
     );

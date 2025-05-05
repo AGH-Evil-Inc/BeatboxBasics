@@ -905,23 +905,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\pomid\\.nuget\\packages\\": {},
+    "C:\\Users\\pioac\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\SzkolaProgramowanie\\BeatboxBasics\\backend\\api\\api.csproj",
+      "projectUniqueName": "D:\\studia\\BeatboxBasics\\backend\\api\\api.csproj",
       "projectName": "api",
-      "projectPath": "E:\\SzkolaProgramowanie\\BeatboxBasics\\backend\\api\\api.csproj",
-      "packagesPath": "C:\\Users\\pomid\\.nuget\\packages\\",
-      "outputPath": "E:\\SzkolaProgramowanie\\BeatboxBasics\\backend\\api\\obj\\",
+      "projectPath": "D:\\studia\\BeatboxBasics\\backend\\api\\api.csproj",
+      "packagesPath": "C:\\Users\\pioac\\.nuget\\packages\\",
+      "outputPath": "D:\\studia\\BeatboxBasics\\backend\\api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\pomid\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\pioac\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -936,8 +936,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "E:\\SzkolaProgramowanie\\BeatboxBasics\\backend\\OnesetDetection\\OnesetDetection.csproj": {
-              "projectPath": "E:\\SzkolaProgramowanie\\BeatboxBasics\\backend\\OnesetDetection\\OnesetDetection.csproj"
+            "D:\\studia\\BeatboxBasics\\backend\\OnesetDetection\\OnesetDetection.csproj": {
+              "projectPath": "D:\\studia\\BeatboxBasics\\backend\\OnesetDetection\\OnesetDetection.csproj"
             }
           }
         }

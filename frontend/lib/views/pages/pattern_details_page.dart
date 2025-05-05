@@ -1,48 +1,62 @@
 import 'dart:io';
 import 'package:app/main.dart';
-import 'package:audio_waveforms/audio_waveforms.dart' as audio_waveforms;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:audio_waveforms/audio_waveforms.dart' as audio_waveforms;
 import 'package:record/record.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:vibration/vibration.dart';
 import 'sound_details_page.dart';
 
 class PatternDetailsPage extends StatefulWidget {
   final Map<String, dynamic> pattern;
   final List<Map<String, dynamic>> sounds;
 
-  const PatternDetailsPage({super.key, required this.pattern, required this.sounds});
+  const PatternDetailsPage({
+    super.key,
+    required this.pattern,
+    required this.sounds,
+  });
 
   @override
   State<PatternDetailsPage> createState() => _PatternDetailsPageState();
 }
 
 class _PatternDetailsPageState extends State<PatternDetailsPage> {
-  late final audio_waveforms.PlayerController patternController;
-  late final audio_waveforms.PlayerController recordingController;
-  final AudioRecorder recorder = AudioRecorder();
-  String? recordingPath;
-  bool isRecording = false;
-  bool isPatternPlaying = false;
-  bool isRecordingPlaying = false;
-  double playbackSpeed = 1.0;
+  late final audio_waveforms.PlayerController _patternController;
+  late final audio_waveforms.RecorderController _recordingController;
+  late final audio_waveforms.PlayerController _recordingPlayerController;
+  final AudioRecorder _recorder = AudioRecorder();
+  String? _recordingPath;
+  bool _isRecording = false;
+  bool _isPatternPlaying = false;
+  bool _isRecordingPlaying = false;
+  double _playbackSpeed = 1.0;
+  int _playCount = 0; 
 
   @override
   void initState() {
     super.initState();
-    _initPatternPlayer();
-    _initRecordingPlayer();
+    _initControllers();
   }
 
-  Future<void> _initPatternPlayer() async {
-    patternController = audio_waveforms.PlayerController();
+  Future<void> _initControllers() async {
+    _patternController = audio_waveforms.PlayerController();
+    _recordingController = audio_waveforms.RecorderController()
+      ..androidEncoder = audio_waveforms.AndroidEncoder.aac
+      ..androidOutputFormat = audio_waveforms.AndroidOutputFormat.mpeg4
+      ..iosEncoder = audio_waveforms.IosEncoder.kAudioFormatMPEG4AAC
+      ..sampleRate = 16000;
+    _recordingPlayerController = audio_waveforms.PlayerController();
+    await _loadPatternAudio();
+  }
+
+  Future<void> _loadPatternAudio() async {
     final assetPath = widget.pattern['audioPath'];
-    if (assetPath == null) {
-      debugPrint('Brak ścieżki do pliku audio');
-      return;
-    }
+    if (assetPath == null) return;
 
     try {
       final byteData = await rootBundle.load('assets/$assetPath');
@@ -51,679 +65,678 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
       await file.create(recursive: true);
       await file.writeAsBytes(byteData.buffer.asUint8List());
 
-      await patternController.preparePlayer(
+      await _patternController.preparePlayer(
         path: file.path,
         shouldExtractWaveform: true,
       );
-      patternController.onCompletion.listen((_) {
-        setState(() => isPatternPlaying = false);
+
+      await _patternController.setFinishMode(finishMode: audio_waveforms.FinishMode.pause);
+      _patternController.updateFrequency = audio_waveforms.UpdateFrequency.high;
+      _patternController.onCompletion.listen((_) {
+        setState(() => _isPatternPlaying = false);
       });
-      setState(() {});
     } catch (e) {
-      debugPrint('Błąd podczas ładowania pliku audio: $e');
+      debugPrint('Error loading audio: $e');
     }
   }
 
-  Future<void> _initRecordingPlayer() async {
-    recordingController = audio_waveforms.PlayerController();
+  Future<void> _toggleRecording() async {
+    await AudioPlayer().play(AssetSource('audio/click.mp3'));
+    Vibration.vibrate(pattern: [0, 50, 50, 50]);
+    if (_isRecording) {
+      await _stopRecording();
+    } else {
+      await _startRecording();
+    }
   }
 
   Future<void> _startRecording() async {
-    try {
-      if (await recorder.hasPermission()) {
-        final tempDir = await getTemporaryDirectory();
-        recordingPath = '${tempDir.path}/recording_${DateTime.now().millisecondsSinceEpoch}.m4a';
-        await recorder.start(const RecordConfig(), path: recordingPath!);
-        setState(() => isRecording = true);
-      }
-    } catch (e) {
-      debugPrint('Błąd podczas nagrywania: $e');
+    if (await _recorder.hasPermission()) {
+      final tempDir = await getTemporaryDirectory();
+      _recordingPath = '${tempDir.path}/recording_${DateTime.now().millisecondsSinceEpoch}.m4a';
+      await _recordingController.record(path: _recordingPath);
+      await _recorder.start(const RecordConfig(), path: _recordingPath!);
+      setState(() => _isRecording = true);
     }
   }
 
   Future<void> _stopRecording() async {
-    try {
-      await recorder.stop();
-      if (recordingPath != null) {
-        await recordingController.preparePlayer(
-          path: recordingPath!,
-          shouldExtractWaveform: true,
-        );
-      }
-      setState(() => isRecording = false);
-    } catch (e) {
-      debugPrint('Błąd podczas zatrzymywania nagrywania: $e');
+    await _recorder.stop();
+    await _recordingController.stop();
+    if (_recordingPath != null) {
+      await _recordingPlayerController.preparePlayer(
+        path: _recordingPath!,
+        shouldExtractWaveform: true,
+      );
+      _recordingPlayerController.onCompletion.listen((_) {
+        setState(() => _isRecordingPlaying = false);
+      });
     }
+    setState(() => _isRecording = false);
   }
 
   Future<void> _playRecording() async {
-    try {
-      if (recordingPath != null) {
-        await recordingController.startPlayer();
-        setState(() => isRecordingPlaying = true);
-        recordingController.onCompletion.listen((_) {
-          setState(() => isRecordingPlaying = false);
-        });
-      }
-    } catch (e) {
-      debugPrint('Błąd podczas odtwarzania nagrania: $e');
+    if (_recordingPath == null) return;
+    await AudioPlayer().play(AssetSource('audio/click.mp3'));
+    Vibration.vibrate(pattern: [0, 50, 50, 50]);
+    if (_isRecordingPlaying) {
+      await _recordingPlayerController.pausePlayer();
+    } else {
+      await _recordingPlayerController.startPlayer();
     }
+    setState(() => _isRecordingPlaying = !_isRecordingPlaying);
+  }
+
+  Future<void> _togglePatternPlayback() async {
+    await AudioPlayer().play(AssetSource('audio/click.mp3'));
+    Vibration.vibrate(pattern: [0, 50, 50, 50]);
+    if (_isPatternPlaying) {
+      await _patternController.pausePlayer();
+    } else {
+      await _patternController.startPlayer();
+      setState(() {
+        _playCount++;
+        if (_playCount == 3) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                '3 razy z rzędu! Jesteś pro! 🔥',
+                style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.w600),
+              ),
+              backgroundColor: Theme.of(context).extension<AppColors>()!.accentColor,
+            ),
+          );
+        }
+      });
+    }
+    setState(() => _isPatternPlaying = !_isPatternPlaying);
+  }
+
+  Future<void> _setPlaybackSpeed(double speed) async {
+    await AudioPlayer().play(AssetSource('audio/click.mp3'));
+    Vibration.vibrate(duration: 30);
+    setState(() => _playbackSpeed = speed);
+    await _patternController.setRate(speed);
   }
 
   @override
   void dispose() {
-    patternController.dispose();
-    recordingController.dispose();
-    recorder.dispose();
+    _patternController.dispose();
+    _recordingController.dispose();
+    _recordingPlayerController.dispose();
+    _recorder.dispose();
     super.dispose();
-  }
-
-  Widget _buildSectionTitle(String title, IconData icon) {
-    final appColors = Theme.of(context).extension<AppColors>()!;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Row(
-        children: [
-          Icon(icon, color: appColors.primaryColor, size: 24),
-          const SizedBox(width: 8),
-          Text(
-            title,
-            style: GoogleFonts.poppins(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: appColors.primaryColor,
-            ),
-          ),
-        ],
-      ),
-    ).animate().fadeIn(duration: 500.ms);
-  }
-
-  Widget _buildPatternCard() {
-    final appColors = Theme.of(context).extension<AppColors>()!;
-    final patternList = widget.pattern['pattern'] as List<dynamic>? ?? [];
-    final patternStr = patternList.join(' ');
-    final difficulty = widget.pattern['difficulty']?.toString() ?? 'Brak poziomu';
-
-    return GestureDetector(
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            title: Text(
-              'Pattern',
-              style: GoogleFonts.poppins(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: appColors.primaryColor,
-              ),
-            ),
-            content: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    patternStr,
-                    style: GoogleFonts.poppins(fontSize: 18, color: appColors.secondaryColor),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Legenda:\n${_buildLegend()}',
-                    style: GoogleFonts.poppins(fontSize: 14, color: appColors.secondaryColor),
-                  ),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(
-                  'Zamknij',
-                  style: GoogleFonts.poppins(color: appColors.highlightColor),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-      child: Card(
-        color: appColors.cardColor,
-        elevation: 4,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Pattern',
-                style: GoogleFonts.poppins(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: appColors.primaryColor,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: patternList.map((note) {
-                  return GestureDetector(
-                    onTap: () {
-                      final sound = widget.sounds.firstWhere(
-                        (sound) => sound['notation'] == note.toString(),
-                        orElse: () => <String, dynamic>{},
-                      );
-                      if (sound.isNotEmpty) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SoundDetailsPage(sound: sound),
-                          ),
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'Nie znaleziono dźwięku dla $note',
-                              style: GoogleFonts.poppins(),
-                            ),
-                            backgroundColor: appColors.errorColor,
-                          ),
-                        );
-                      }
-                    },
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: isPatternPlaying
-                            ? appColors.waveformFixedColor
-                            : appColors.cardColor.withOpacity(0.7),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            note.toString(),
-                            style: GoogleFonts.poppins(
-                              fontSize: 20,
-                              color: appColors.highlightColor,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Icon(
-                            Icons.info_outline,
-                            size: 16,
-                            color: appColors.highlightColor,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ).animate().fadeIn(duration: 300.ms),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Icon(
-                    _getDifficultyIcon(difficulty),
-                    color: appColors.highlightColor,
-                    size: 16,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    'Poziom: $difficulty',
-                    style: GoogleFonts.poppins(
-                      fontSize: 14,
-                      color: appColors.highlightColor,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Kliknij na dźwięk, aby zobaczyć szczegóły',
-                style: GoogleFonts.poppins(
-                  fontSize: 14,
-                  color: appColors.highlightColor,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    ).animate().slideY(begin: 0.2, end: 0, duration: 500.ms);
-  }
-
-  String _buildLegend() {
-    final appColors = Theme.of(context).extension<AppColors>()!;
-    final notations = widget.sounds.map((sound) {
-      final notation = sound['notation'] ?? '';
-      final name = sound['name'] ?? 'Nieznany dźwięk';
-      return '$notation = $name';
-    }).toSet();
-    return notations.isEmpty ? 'Brak dostępnych dźwięków' : notations.join('\n');
-  }
-
-  Widget _buildDescriptionCard() {
-    final appColors = Theme.of(context).extension<AppColors>()!;
-    final description = widget.pattern['description'] ?? 'Brak opisu';
-    final bpm = widget.pattern['base_BPM']?.toString() ?? 'Brak';
-    final bars = widget.pattern['no_bars']?.toString() ?? 'Brak';
-
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Opis',
-              style: GoogleFonts.poppins(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: appColors.primaryColor,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              '$description\n\nBPM: $bpm',
-              style: GoogleFonts.poppins(
-                fontSize: 16,
-                color: appColors.secondaryColor,
-              ),
-            ),
-          ],
-        ),
-      ),
-    ).animate().slideY(begin: 0.2, end: 0, duration: 500.ms);
-  }
-
-  Widget _buildPatternPlayer() {
-    final appColors = Theme.of(context).extension<AppColors>()!;
-    final audioPath = widget.pattern['audioPath'];
-    if (audioPath == null) {
-      return Card(
-        elevation: 4,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Padding(
-          padding: EdgeInsets.all(16),
-          child: Text(
-            'Brak dostępnego audio',
-            style: GoogleFonts.poppins(color: appColors.secondaryColor),
-          ),
-        ),
-      );
-    }
-
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Posłuchaj patternu',
-              style: GoogleFonts.poppins(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: appColors.primaryColor,
-              ),
-            ),
-            const SizedBox(height: 12),
-            audio_waveforms.AudioFileWaveforms(
-              playerController: patternController,
-              size: const Size(double.infinity, 100),
-              waveformType: audio_waveforms.WaveformType.fitWidth,
-              playerWaveStyle: audio_waveforms.PlayerWaveStyle(
-                liveWaveColor: appColors.waveformLiveColor,
-                fixedWaveColor: appColors.waveformFixedColor,
-                scaleFactor: 100,
-                showSeekLine: true,
-                seekLineColor: appColors.waveformSeekColor,
-                seekLineThickness: 2,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    if (isPatternPlaying)
-                      SizedBox(
-                        width: 60,
-                        height: 60,
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation(appColors.waveformFixedColor),
-                          strokeWidth: 3,
-                          backgroundColor: Colors.transparent,
-                        ),
-                      ).animate().fadeIn(duration: 300.ms),
-                    ElevatedButton.icon(
-                      icon: const Icon(Icons.play_arrow, color: Colors.white),
-                      label: Text(
-                        'Odtwórz',
-                        style: GoogleFonts.poppins(color: Colors.white),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: appColors.buttonPrimaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
-                        ),
-                      ),
-                      onPressed: () {
-                        patternController.startPlayer();
-                        setState(() => isPatternPlaying = true);
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 16),
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.pause, color: Colors.white),
-                  label: Text(
-                    'Pauza',
-                    style: GoogleFonts.poppins(color: Colors.white),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: appColors.buttonSecondaryColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                  ),
-                  onPressed: () {
-                    patternController.pausePlayer();
-                    setState(() => isPatternPlaying = false);
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildSpeedButton(
-                  speed: 0.5,
-                  label: 'Wolno',
-                  icon: Icons.arrow_downward,
-                ),
-                const SizedBox(width: 8),
-                _buildSpeedButton(
-                  speed: 1.0,
-                  label: 'Normalnie',
-                  icon: Icons.play_arrow,
-                ),
-                const SizedBox(width: 8),
-                _buildSpeedButton(
-                  speed: 1.5,
-                  label: 'Szybko',
-                  icon: Icons.arrow_upward,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    ).animate().fadeIn(duration: 500.ms);
-  }
-
-  Widget _buildRecordingPlayer() {
-    final appColors = Theme.of(context).extension<AppColors>()!;
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Nagraj swoją próbę',
-              style: GoogleFonts.poppins(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: appColors.primaryColor,
-              ),
-            ),
-            const SizedBox(height: 12),
-            if (recordingPath != null)
-              audio_waveforms.AudioFileWaveforms(
-                playerController: recordingController,
-                size: const Size(double.infinity, 50),
-                waveformType: audio_waveforms.WaveformType.fitWidth,
-                playerWaveStyle: audio_waveforms.PlayerWaveStyle(
-                  liveWaveColor: appColors.waveformLiveColor,
-                  fixedWaveColor: appColors.waveformFixedColor,
-                  scaleFactor: 50,
-                  showSeekLine: true,
-                  seekLineColor: appColors.waveformSeekColor,
-                  seekLineThickness: 2,
-                ),
-              ),
-            const SizedBox(height: 12),
-            Wrap(
-              children: [
-                ElevatedButton.icon(
-                  icon: Icon(
-                    isRecording ? Icons.stop : Icons.mic,
-                    color: Colors.white,
-                  ),
-                  label: Text(
-                    isRecording ? 'Zatrzymaj' : 'Nagraj',
-                    style: GoogleFonts.poppins(color: Colors.white),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: appColors.buttonTertiaryColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                  ),
-                  onPressed: isRecording ? _stopRecording : _startRecording,
-                ),
-                if (recordingPath != null) ...[
-                  const SizedBox(width: 16),
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      if (isRecordingPlaying)
-                        SizedBox(
-                          width: 60,
-                          height: 60,
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation(appColors.waveformFixedColor),
-                            strokeWidth: 3,
-                            backgroundColor: Colors.transparent,
-                          ),
-                        ).animate().fadeIn(duration: 300.ms),
-                      ElevatedButton.icon(
-                        icon: const Icon(Icons.play_arrow, color: Colors.white),
-                        label: Text(
-                          'Odtwórz',
-                          style: GoogleFonts.poppins(color: Colors.white),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: appColors.buttonPrimaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
-                          ),
-                        ),
-                        onPressed: _playRecording,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(width: 16),
-                  ElevatedButton.icon(
-                    icon: const Icon(Icons.pause, color: Colors.white),
-                    label: Text(
-                      'Pauza',
-                      style: GoogleFonts.poppins(color: Colors.white),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: appColors.buttonSecondaryColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                    ),
-                    onPressed: () {
-                      recordingController.pausePlayer();
-                      setState(() => isRecordingPlaying = false);
-                    },
-                  ),
-                ],
-              ],
-            ),
-          ],
-        ),
-      ),
-    ).animate().fadeIn(duration: 500.ms);
-  }
-
-  Widget _buildSpeedButton({
-    required double speed,
-    required String label,
-    required IconData icon,
-  }) {
-    final appColors = Theme.of(context).extension<AppColors>()!;
-    final isSelected = playbackSpeed == speed;
-    return ElevatedButton.icon(
-      icon: Icon(
-        icon,
-        color: isSelected ? Colors.white : appColors.highlightColor,
-        size: 20,
-      ),
-      label: Text(
-        label,
-        style: GoogleFonts.poppins(
-          color: isSelected ? Colors.white : appColors.highlightColor,
-          fontSize: 12,
-        ),
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: isSelected ? appColors.buttonTertiaryColor : appColors.cardColor,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-        minimumSize: const Size(80, 40),
-      ),
-      onPressed: () {
-        setState(() {
-          playbackSpeed = speed;
-          patternController.setRate(speed);
-        });
-      },
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     final appColors = Theme.of(context).extension<AppColors>()!;
     final pattern = widget.pattern;
+    final screenWidth = MediaQuery.of(context).size.width;
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                appColors.gradientStartColor,
-                appColors.gradientEndColor,
-              ],
+    return Scaffold(
+      backgroundColor: appColors.backgroundColor,
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 160,
+            pinned: true,
+            backgroundColor: appColors.cardColor,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(24),
+                bottomRight: Radius.circular(8),
+              ),
+            ),
+            title: Text(
+              pattern['name'] ?? 'Pattern',
+              style: GoogleFonts.poppins(
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+                color: appColors.primaryColor,
+              ),
+            ),
+            centerTitle: true,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                color: appColors.cardColor,
+                child: Center(
+                  child: Icon(
+                    Icons.library_music,
+                    size: 48,
+                    color: appColors.accentColor,
+                  ),
+                ),
+              ).animate().fadeIn(duration: 600.ms),
             ),
           ),
-          child: Column(
-            children: [
-              AppBar(
-                title: Text(
-                  pattern['name'] ?? 'Brak nazwy',
-                  style: GoogleFonts.poppins(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                centerTitle: true,
-                backgroundColor: appColors.patternColor,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
-                ),
-                elevation: 4,
-                flexibleSpace: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        appColors.patternColor,
-                        appColors.accentColor,
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
+          SliverPadding(
+            padding: EdgeInsets.all(screenWidth * 0.05),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: screenWidth > 600 ? 600 : screenWidth * 0.9),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildDescriptionCard(),
-                      const SizedBox(height: 16),
-                      _buildPatternCard(),
-                      const SizedBox(height: 16),
-                      _buildPatternPlayer(),
-                      const SizedBox(height: 16),
-                      _buildRecordingPlayer(),
+                      _PatternInfoSection(pattern: pattern, sounds: widget.sounds)
+                          .animate().fadeIn(duration: 600.ms, delay: 100.ms),
+                      const SizedBox(height: 32),
+                      _PatternPlayerSection(
+                        controller: _patternController,
+                        isPlaying: _isPatternPlaying,
+                        playbackSpeed: _playbackSpeed,
+                        onPlayPressed: _togglePatternPlayback,
+                        onSpeedChanged: _setPlaybackSpeed,
+                      ).animate().fadeIn(duration: 600.ms, delay: 200.ms),
+                      const SizedBox(height: 32),
+                      _RecordingSection(
+                        recorderController: _recordingController,
+                        playerController: _recordingPlayerController,
+                        isRecording: _isRecording,
+                        isPlaying: _isRecordingPlaying,
+                        onRecordPressed: _toggleRecording,
+                        onPlayPressed: _playRecording,
+                      ).animate().fadeIn(duration: 600.ms, delay: 300.ms),
                     ],
                   ),
                 ),
+              ]),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PatternInfoSection extends StatelessWidget {
+  final Map<String, dynamic> pattern;
+  final List<Map<String, dynamic>> sounds;
+
+  const _PatternInfoSection({
+    required this.pattern,
+    required this.sounds,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
+    final patternList = pattern['pattern'] as List<dynamic>? ?? [];
+    final description = pattern['description'] ?? 'Brak opisu';
+    final bpm = pattern['base_BPM']?.toString() ?? 'N/A';
+
+    return Card(
+      elevation: 6,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(8),
+          bottomLeft: Radius.circular(8),
+          bottomRight: Radius.circular(24),
+        ),
+      ),
+      color: appColors.cardColor,
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'O co chodzi?',
+              style: GoogleFonts.poppins(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                color: appColors.primaryColor,
               ),
-            ],
+            ),
+            const SizedBox(height: 12),
+            Text(
+              '$description\n\nBPM: $bpm',
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                color: appColors.secondaryColor,
+                height: 1.5,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Notacja patternu',
+              style: GoogleFonts.poppins(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                color: appColors.primaryColor,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              children: patternList.map((note) {
+                return _PatternNoteTile(
+                  note: note.toString(),
+                  sounds: sounds,
+                ).animate().scale(
+                      duration: 400.ms,
+                      curve: Curves.easeOutBack,
+                      begin: const Offset(0.95, 0.95),
+                    );
+              }).toList(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PatternNoteTile extends StatelessWidget {
+  final String note;
+  final List<Map<String, dynamic>> sounds;
+
+  const _PatternNoteTile({
+    required this.note,
+    required this.sounds,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
+    final sound = sounds.firstWhere(
+      (s) => s['notation'] == note,
+      orElse: () => <String, dynamic>{},
+    );
+
+    return Tooltip(
+      message: sound['name'] ?? 'Nieznany dźwięk',
+      child: GestureDetector(
+        onTap: sound.isEmpty
+            ? null
+            : () async {
+                await AudioPlayer().play(AssetSource('audio/click.mp3'));
+                Vibration.vibrate(pattern: [0, 50, 50, 50]);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SoundDetailsPage(sound: sound),
+                  ),
+                );
+              },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          decoration: BoxDecoration(
+            color: appColors.cardColor,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: appColors.accentColor, width: 1.5),
+          ),
+          child: Text(
+            note,
+            style: GoogleFonts.poppins(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: appColors.accentColor,
+            ),
           ),
         ),
       ),
     );
   }
+}
 
-  IconData _getDifficultyIcon(String difficulty) {
-    try {
-      final level = int.parse(difficulty);
-      if (level <= 1) return Icons.circle;
-      if (level == 2) return Icons.star_border;
-      return Icons.star;
-    } catch (e) {
-      return Icons.info_outline;
-    }
+class _PatternPlayerSection extends StatelessWidget {
+  final audio_waveforms.PlayerController controller;
+  final bool isPlaying;
+  final double playbackSpeed;
+  final VoidCallback onPlayPressed;
+  final ValueChanged<double> onSpeedChanged;
+
+  const _PatternPlayerSection({
+    required this.controller,
+    required this.isPlaying,
+    required this.playbackSpeed,
+    required this.onPlayPressed,
+    required this.onSpeedChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
+    final isSmallScreen = MediaQuery.of(context).size.width < 800;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Odtwórz pattern',
+          style: GoogleFonts.poppins(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            color: appColors.primaryColor,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Card(
+          elevation: 6,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24),
+              topRight: Radius.circular(8),
+              bottomLeft: Radius.circular(8),
+              bottomRight: Radius.circular(24),
+            ),
+          ),
+          color: appColors.cardColor,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                audio_waveforms.AudioFileWaveforms(
+                  enableSeekGesture: true,
+                  playerController: controller,
+                  size: const Size(double.infinity, 60),
+                  waveformType: audio_waveforms.WaveformType.fitWidth,
+                  playerWaveStyle: audio_waveforms.PlayerWaveStyle(
+                    liveWaveColor: appColors.waveformLiveColor,
+                    fixedWaveColor: appColors.waveformFixedColor,
+                    seekLineColor: appColors.waveformSeekColor,
+                    seekLineThickness: 2,
+                    waveCap: StrokeCap.butt,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                if (isSmallScreen) ...[
+                  _PlaybackButton(
+                    icon: isPlaying ? Icons.pause : Icons.play_arrow,
+                    label: isPlaying ? 'Pauza' : 'Odtwórz',
+                    color: appColors.buttonPrimaryColor,
+                    onPressed: onPlayPressed,
+                    isActive: isPlaying,
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _SpeedControlButton(
+                        speed: 0.5,
+                        currentSpeed: playbackSpeed,
+                        onChanged: onSpeedChanged,
+                      ),
+                      const SizedBox(width: 12),
+                      _SpeedControlButton(
+                        speed: 1.0,
+                        currentSpeed: playbackSpeed,
+                        onChanged: onSpeedChanged,
+                      ),
+                      const SizedBox(width: 12),
+                      _SpeedControlButton(
+                        speed: 1.5,
+                        currentSpeed: playbackSpeed,
+                        onChanged: onSpeedChanged,
+                      ),
+                    ],
+                  ),
+                ] else ...[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _PlaybackButton(
+                        icon: isPlaying ? Icons.pause : Icons.play_arrow,
+                        label: isPlaying ? 'Pauza' : 'Odtwórz',
+                        color: appColors.buttonPrimaryColor,
+                        onPressed: onPlayPressed,
+                        isActive: isPlaying,
+                      ),
+                      const SizedBox(width: 16),
+                      _SpeedControlButton(
+                        speed: 0.5,
+                        currentSpeed: playbackSpeed,
+                        onChanged: onSpeedChanged,
+                      ),
+                      const SizedBox(width: 12),
+                      _SpeedControlButton(
+                        speed: 1.0,
+                        currentSpeed: playbackSpeed,
+                        onChanged: onSpeedChanged,
+                      ),
+                      const SizedBox(width: 12),
+                      _SpeedControlButton(
+                        speed: 1.5,
+                        currentSpeed: playbackSpeed,
+                        onChanged: onSpeedChanged,
+                      ),
+                    ],
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _RecordingSection extends StatelessWidget {
+  final audio_waveforms.RecorderController recorderController;
+  final audio_waveforms.PlayerController playerController;
+  final bool isRecording;
+  final bool isPlaying;
+  final VoidCallback onRecordPressed;
+  final VoidCallback onPlayPressed;
+
+  const _RecordingSection({
+    required this.recorderController,
+    required this.playerController,
+    required this.isRecording,
+    required this.isPlaying,
+    required this.onRecordPressed,
+    required this.onPlayPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
+    final isSmallScreen = MediaQuery.of(context).size.width < 800;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Nagraj swoje próby',
+          style: GoogleFonts.poppins(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            color: appColors.primaryColor,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Card(
+          elevation: 6,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(24),
+              bottomLeft: Radius.circular(24),
+              bottomRight: Radius.circular(8),
+            ),
+          ),
+          color: appColors.cardColor,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                audio_waveforms.AudioWaveforms(
+                  enableGesture: true,
+                  size: Size(MediaQuery.of(context).size.width / 2, 50),
+                  recorderController: recorderController,
+                  waveStyle: audio_waveforms.WaveStyle(
+                    waveColor: appColors.waveformLiveColor,
+                    extendWaveform: true,
+                    showMiddleLine: false,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                audio_waveforms.AudioFileWaveforms(
+                  playerController: playerController,
+                  enableSeekGesture: true,
+              
+                  size: const Size(double.infinity, 60),
+                  waveformType: audio_waveforms.WaveformType.fitWidth,
+                  playerWaveStyle: audio_waveforms.PlayerWaveStyle(
+                    liveWaveColor: appColors.waveformLiveColor,
+                    fixedWaveColor: appColors.waveformFixedColor,
+                    seekLineColor: appColors.waveformSeekColor,
+                    seekLineThickness: 2,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                if (isSmallScreen) ...[
+                  _PlaybackButton(
+                    icon: isRecording ? Icons.stop : Icons.mic,
+                    label: isRecording ? 'Stop' : 'Nagraj',
+                    color: appColors.buttonSecondaryColor,
+                    onPressed: onRecordPressed,
+                    isActive: isRecording,
+                  ),
+                  const SizedBox(height: 12),
+                  _PlaybackButton(
+                    icon: isPlaying ? Icons.pause : Icons.play_arrow,
+                    label: isPlaying ? 'Pauza' : 'Odtwórz',
+                    color: appColors.buttonPrimaryColor,
+                    onPressed: onPlayPressed,
+                    isActive: isPlaying,
+                  ),
+                ] else ...[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _PlaybackButton(
+                        icon: isRecording ? Icons.stop : Icons.mic,
+                        label: isRecording ? 'Stop' : 'Nagraj',
+                        color: appColors.buttonSecondaryColor,
+                        onPressed: onRecordPressed,
+                        isActive: isRecording,
+                      ),
+                      const SizedBox(width: 16),
+                      _PlaybackButton(
+                        icon: isPlaying ? Icons.pause : Icons.play_arrow,
+                        label: isPlaying ? 'Pauza' : 'Odtwórz',
+                        color: appColors.buttonPrimaryColor,
+                        onPressed: onPlayPressed,
+                        isActive: isPlaying,
+                      ),
+                    ],
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _PlaybackButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onPressed;
+  final bool isActive;
+
+  const _PlaybackButton({
+    required this.icon,
+    required this.label,
+    required this.color,
+    required this.onPressed,
+    required this.isActive,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
+
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        if (isActive)
+          Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: appColors.accentColor.withOpacity(0.2),
+            ),
+          ).animate().scale(duration: 600.ms, curve: Curves.easeInOut),
+        ElevatedButton.icon(
+          icon: Icon(icon, size: 28, color: Colors.white),
+          label: Text(
+            label,
+            style: GoogleFonts.poppins(
+              fontSize: 16,
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: color,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+            elevation: 4,
+          ),
+          onPressed: onPressed,
+        ).animate().scale(
+              duration: 400.ms,
+              curve: Curves.easeOutBack,
+              begin: const Offset(0.95, 0.95),
+            ),
+      ],
+    );
+  }
+}
+
+class _SpeedControlButton extends StatelessWidget {
+  final double speed;
+  final double currentSpeed;
+  final ValueChanged<double> onChanged;
+
+  const _SpeedControlButton({
+    required this.speed,
+    required this.currentSpeed,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
+    final isSelected = currentSpeed == speed;
+    final icon = speed == 0.5
+        ? Icons.arrow_downward
+        : speed == 1.0
+            ? Icons.play_arrow
+            : Icons.arrow_upward;
+
+    return IconButton(
+      icon: Icon(icon, size: 24),
+      color: isSelected ? Colors.white : appColors.secondaryColor,
+      style: IconButton.styleFrom(
+        backgroundColor: isSelected ? appColors.buttonPrimaryColor : appColors.cardColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        padding: const EdgeInsets.all(12),
+        elevation: isSelected ? 4 : 0,
+      ),
+      onPressed: () async {
+        await AudioPlayer().play(AssetSource('audio/click.mp3'));
+        Vibration.vibrate(duration: 30);
+        onChanged(speed);
+      },
+    ).animate().scale(
+          duration: 400.ms,
+          curve: Curves.easeOutBack,
+          begin: const Offset(0.95, 0.95),
+        );
   }
 }

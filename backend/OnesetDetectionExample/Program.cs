@@ -2,7 +2,11 @@
 using OnesetDetection; // z powyższego źródła zrobiłem dll i dorobiłem BeatScorer.cs
 
 // Tymczasowa ścieżka absolutna (ZMIENIĆ)
-string examplesPath = "E:\\SzkolaProgramowanie\\BeatboxBasics\\backend\\OnesetDetectionExample\\";
+string examplesPath = "D:\\studia\\BeatboxBasics\\backend\\OnesetDetectionExample\\";
+
+//string relativePath = @"..\..\backend\OnesetDetectionExample\";
+//string examplesPath = Path.Combine(Directory.GetCurrentDirectory(), relativePath);
+
 
 //string audioName = "pattern_basic_B_130BPM.wav";
 //string audioName = "example_recording.wav";
