@@ -18,7 +18,6 @@ public class ScoreController : ControllerBase
         if (string.IsNullOrWhiteSpace(req.AudioPath) ||
             string.IsNullOrWhiteSpace(req.PatternKey))
             return BadRequest("AudioPath i PatternKey są wymagane.");
-
         // 1. Wczytaj bibliotekę patternów
         Dictionary<string, Pattern>? patterns;
         try
@@ -43,7 +42,7 @@ public class ScoreController : ControllerBase
 
         // Algorytm Dawida oczekuje tablicy długości nut (4-ka = ćwierćnuta, 8-ka = ósemka …).
         // Jeśli w JSON-ie nie trzymasz długości, przyjmijmy, że każdy krok to ósemka:
-        int[] rhythm = Enumerable.Repeat(8, p.PatternList.Count).ToArray();
+        int[] rhythm = p.Musical_notes.ToArray();
 
         // 3. Uruchom skoring
         BeatScoreResult result;
