@@ -2,6 +2,6 @@
 
 public class ScoreRequest
 {
-    public string AudioPath { get; set; }   // np. "C:/Users/me/recording.wav"
-    public string PatternKey { get; set; }  // np. "basic_beat"
+    public IFormFile AudioPath { get; set; }   // Changed to IFormFile for file upload
+    public string PatternKey { get; set; }     // np. "basic_beat"
 }

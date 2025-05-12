@@ -2,6 +2,7 @@
 using api.Models;
 using Microsoft.AspNetCore.Mvc;
 using OnesetDetection;
+using NAudio.Wave; // Add for audio conversion
 
 namespace api.Controllers;
 
@@ -13,12 +14,46 @@ public class ScoreController : ControllerBase
         @"..\..\frontend\assets\text\pattern_library.json";
 
     [HttpPost]                         // POST /api/score
-    public IActionResult ScoreBeat([FromBody] ScoreRequest req)
+    public async Task<IActionResult> ScoreBeat([FromForm] ScoreRequest req)
     {
-        if (string.IsNullOrWhiteSpace(req.AudioPath) ||
-            string.IsNullOrWhiteSpace(req.PatternKey))
+        if (req.AudioPath == null || string.IsNullOrWhiteSpace(req.PatternKey))
             return BadRequest("AudioPath i PatternKey są wymagane.");
-        // 1. Wczytaj bibliotekę patternów
+
+        // 1. Save the uploaded file to a temporary location as .m4a
+        string? tempM4aPath = null;
+        string? tempWavPath = null;
+        try
+        {
+            var tempDir = Path.GetTempPath();
+            tempM4aPath = Path.Combine(tempDir, $"recording_{Guid.NewGuid()}.m4a");
+            tempWavPath = Path.Combine(tempDir, $"recording_{Guid.NewGuid()}.wav");
+            using (var stream = new FileStream(tempM4aPath, FileMode.Create))
+            {
+                await req.AudioPath.CopyToAsync(stream);
+            }
+
+            // 2. Convert .m4a to .wav using NAudio
+            using (var reader = new MediaFoundationReader(tempM4aPath))
+            using (var writer = new WaveFileWriter(tempWavPath, reader.WaveFormat))
+            {
+                reader.CopyTo(writer);
+            }
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Nie można zapisać lub przekonwertować pliku: {ex.Message}");
+        }
+        finally
+        {
+          
+            // Clean up the temporary .m4a file
+            if (System.IO.File.Exists(tempM4aPath))
+            {
+                System.IO.File.Delete(tempM4aPath);
+            }
+        }
+
+        // 3. Wczytaj bibliotekę patternów
         Dictionary<string, Pattern>? patterns;
         try
         {
@@ -29,32 +64,34 @@ public class ScoreController : ControllerBase
         }
         catch (Exception ex)
         {
+            System.IO.File.Delete(tempWavPath); // Clean up temp .wav file
             return StatusCode(500, $"Nie mogę wczytać patternów: {ex.Message}");
         }
 
         if (patterns is null ||
             !patterns.TryGetValue(req.PatternKey, out var p))
+        {
+            System.IO.File.Delete(tempWavPath); // Clean up temp .wav file
             return NotFound($"Brak patternu o kluczu „{req.PatternKey}”.");
+        }
 
-        // 2. Przekonwertuj pattern na parametry dla algorytmu
+        // 4. Przekonwertuj pattern na parametry dla algorytmu
         int bpm = p.Base_BPM;
         int noBars = p.No_Bars;
-
-        // Algorytm Dawida oczekuje tablicy długości nut (4-ka = ćwierćnuta, 8-ka = ósemka …).
-        // Jeśli w JSON-ie nie trzymasz długości, przyjmijmy, że każdy krok to ósemka:
         int[] rhythm = p.Musical_notes.ToArray();
 
-        // 3. Uruchom skoring
+        // 5. Uruchom skoring
         BeatScoreResult result;
         try
         {
-            result = BeatScorer.ScoreBeat(req.AudioPath, bpm, noBars, rhythm);
+            result = BeatScorer.ScoreBeat(tempWavPath, bpm, noBars, rhythm);
         }
         catch (Exception ex)
         {
+            System.IO.File.Delete(tempWavPath); // Clean up temp .wav file
             return StatusCode(500, $"Błąd algorytmu: {ex.Message}");
         }
-
+       
         return Ok(result);   // serializuje się automatycznie do JSON
     }
 }

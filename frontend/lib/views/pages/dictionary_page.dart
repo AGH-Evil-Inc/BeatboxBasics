@@ -1,9 +1,8 @@
 import 'dart:io';
+import 'package:app/data/globals.dart';
+import 'package:app/data/globals.dart' as globals;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:audioplayers/audioplayers.dart';
-import 'package:vibration/vibration.dart';
 import 'package:http/io_client.dart';
 import 'dart:convert';
 import 'package:app/main.dart';
@@ -21,7 +20,6 @@ class _DictionaryPageState extends State<DictionaryPage> {
   bool isLoading = true;
   bool hasError = false;
   final TextEditingController searchController = TextEditingController();
-  int learnedTerms = 0;
 
   @override
   void initState() {
@@ -35,10 +33,10 @@ class _DictionaryPageState extends State<DictionaryPage> {
       isLoading = true;
       hasError = false;
     });
-
+    final localIp = globals.localIP;
     String url;
     if (Platform.isAndroid || Platform.isIOS) {
-      url = 'https://192.168.218.107:5001/api/Dictionary';
+      url = 'https://$localIp:5001/api/Dictionary';
     } else {
       url = 'https://localhost:5001/api/Dictionary';
     }
@@ -64,7 +62,6 @@ class _DictionaryPageState extends State<DictionaryPage> {
                     'key': entry.key,
                     'name': entry.value['name'] ?? 'Brak nazwy',
                     'description': entry.value['description'] ?? 'Brak opisu',
-                    'isLearned': false,
                   })
               .toList();
           filteredEntries = entries;
@@ -99,31 +96,6 @@ class _DictionaryPageState extends State<DictionaryPage> {
     });
   }
 
-  void _markAsLearned(int index) {
-    setState(() {
-      entries[index]['isLearned'] = true;
-      filteredEntries[index]['isLearned'] = true;
-      learnedTerms = entries.where((entry) => entry['isLearned'] == true).length;
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'Ogarnąłeś nowe pojęcie! 💪',
-          style: GoogleFonts.poppins(
-            fontSize: 16,
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        backgroundColor: Theme.of(context).extension<AppColors>()!.accentColor,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-    );
-  }
-
   @override
   void dispose() {
     searchController.dispose();
@@ -137,88 +109,65 @@ class _DictionaryPageState extends State<DictionaryPage> {
 
     return Scaffold(
       backgroundColor: appColors.backgroundColor,
+      appBar: _buildAppBar(appColors),
       body: SafeArea(
-        child: Column(
-          children: [
-            _buildAppBar(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Text(
-                'Poznałeś $learnedTerms/${entries.length} pojęć!',
-                style: GoogleFonts.poppins(
-                  fontSize: 16,
-                  color: appColors.accentColor,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ).animate().fadeIn(duration: 500.ms),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.all(screenWidth * 0.05),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: screenWidth > 600 ? 600 : screenWidth * 0.9),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildSearchBar(),
-                      const SizedBox(height: 16),
-                      _buildContent(),
-                    ],
-                  ),
-                ),
-              ),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(screenWidth * 0.04),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: screenWidth > 600 ? 600 : screenWidth * 0.92),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildSearchBar(appColors),
+                const SizedBox(height: 12),
+                _buildContent(appColors),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildAppBar() {
-    final appColors = Theme.of(context).extension<AppColors>()!;
+  PreferredSizeWidget _buildAppBar(AppColors appColors) {
     return AppBar(
       title: Text(
-        'Ogarnij beatboxowe pojęcia!',
+        'Słownik Beatboxu',
         style: GoogleFonts.poppins(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
+          fontSize: 22,
+          fontWeight: FontWeight.w700,
           color: Colors.white,
         ),
       ),
       centerTitle: true,
-      backgroundColor: appColors.accentColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(bottom: Radius.circular(24)),
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              appColors.dictionaryGradientStart,
+              appColors.dictionaryGradientEnd,
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: const BorderRadius.vertical(bottom: Radius.circular(16)),
+        ),
       ),
-      elevation: 6,
+      elevation: 4,
       actions: [
         IconButton(
-          icon: const Icon(Icons.refresh, color: Colors.white, size: 28),
-          onPressed: () async {
-            await AudioPlayer().play(AssetSource('audio/click.mp3'));
-            Vibration.vibrate(pattern: [0, 50, 50, 50]);
-            fetchDictionary();
-          },
-        ).animate().scale(
-              duration: 400.ms,
-              curve: Curves.easeOutBack,
-              begin: const Offset(0.95, 0.95),
-            ),
+          icon: Icon(Icons.refresh, color: Colors.white, size: 24),
+          onPressed: fetchDictionary,
+        ),
       ],
-    ).animate().fadeIn(duration: 500.ms);
+    );
   }
 
-  Widget _buildSearchBar() {
-    final appColors = Theme.of(context).extension<AppColors>()!;
+  Widget _buildSearchBar(AppColors appColors) {
     return Card(
-      elevation: 6,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(8),
-          bottomLeft: Radius.circular(8),
-          bottomRight: Radius.circular(24),
-        ),
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
       ),
       color: appColors.cardColor,
       child: TextField(
@@ -227,59 +176,47 @@ class _DictionaryPageState extends State<DictionaryPage> {
           hintText: 'Szukaj pojęć…',
           hintStyle: GoogleFonts.poppins(
             color: appColors.navUnselectedColor,
-            fontSize: 16,
+            fontSize: 14,
           ),
           prefixIcon: Icon(
             Icons.search,
             color: appColors.accentColor,
-            size: 28,
+            size: 24,
           ),
           suffixIcon: searchController.text.isNotEmpty
               ? IconButton(
                   icon: Icon(
                     Icons.clear,
                     color: appColors.accentColor,
-                    size: 24,
+                    size: 20,
                   ),
-                  onPressed: () async {
-                    await AudioPlayer().play(AssetSource('audio/click.mp3'));
-                    Vibration.vibrate(pattern: [0, 50, 50, 50]);
+                  onPressed: () {
                     searchController.clear();
                     _filterEntries();
                   },
                 )
               : null,
           border: OutlineInputBorder(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(24),
-              topRight: Radius.circular(8),
-              bottomLeft: Radius.circular(8),
-              bottomRight: Radius.circular(24),
-            ),
+            borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide.none,
           ),
           filled: true,
           fillColor: appColors.cardColor,
-          contentPadding: const EdgeInsets.symmetric(vertical: 16),
+          contentPadding: const EdgeInsets.symmetric(vertical: 12),
         ),
-        style: GoogleFonts.poppins(fontSize: 16, color: appColors.primaryColor),
-        onChanged: (_) async {
-          await AudioPlayer().play(AssetSource('audio/click.mp3'));
-          Vibration.vibrate(duration: 30);
-        },
+        style: GoogleFonts.poppins(fontSize: 14, color: appColors.primaryColor),
       ),
-    ).animate();
+    );
   }
 
-  Widget _buildContent() {
-    final appColors = Theme.of(context).extension<AppColors>()!;
+  Widget _buildContent(AppColors appColors) {
     if (isLoading) {
       return Center(
         child: CircularProgressIndicator(
           color: appColors.accentColor,
-          strokeWidth: 4,
+          strokeWidth: 3,
         ),
-      ).animate().fadeIn(duration: 300.ms);
+      );
     }
 
     if (hasError) {
@@ -288,66 +225,58 @@ class _DictionaryPageState extends State<DictionaryPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Coś poszło nie tak! 😕',
+              'Ups, coś poszło nie tak!',
               style: GoogleFonts.poppins(
-                fontSize: 20,
+                fontSize: 18,
                 color: appColors.primaryColor,
                 fontWeight: FontWeight.w600,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             ElevatedButton(
-              onPressed: () async {
-                await AudioPlayer().play(AssetSource('audio/click.mp3'));
-                Vibration.vibrate(pattern: [0, 50, 50, 50]);
-                fetchDictionary();
-              },
+              onPressed: fetchDictionary,
               style: ElevatedButton.styleFrom(
                 backgroundColor: appColors.buttonPrimaryColor,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               ),
               child: Text(
-                'Spróbuj jeszcze raz',
+                'Spróbuj ponownie',
                 style: GoogleFonts.poppins(
-                  fontSize: 16,
+                  fontSize: 14,
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
                 ),
               ),
-            ).animate().scale(duration: 400.ms, curve: Curves.easeOutBack),
+            ),
           ],
         ),
-      ).animate().fadeIn(duration: 300.ms);
+      );
     }
 
     if (filteredEntries.isEmpty) {
       return Center(
         child: Text(
-          'Nic nie znalazłem… 🤔',
+          'Brak wyników',
           style: GoogleFonts.poppins(
-            fontSize: 18,
+            fontSize: 16,
             color: appColors.navUnselectedColor,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w500,
           ),
         ),
-      ).animate().fadeIn(duration: 300.ms);
+      );
     }
 
     return Column(
-      children: filteredEntries.asMap().entries.map((entry) {
-        final index = entry.key;
-        final item = entry.value;
+      children: filteredEntries.map((item) {
         return Padding(
-          padding: const EdgeInsets.only(bottom: 16),
+          padding: const EdgeInsets.only(bottom: 12),
           child: _buildDictionaryCard(
-            index: index,
             name: item['name'],
             description: item['description'],
-            isLearned: item['isLearned'] ?? false,
-            delay: Duration(milliseconds: 100 * index),
+            appColors: appColors,
           ),
         );
       }).toList(),
@@ -355,29 +284,24 @@ class _DictionaryPageState extends State<DictionaryPage> {
   }
 
   Widget _buildDictionaryCard({
-    required int index,
     required String name,
     required String description,
-    required bool isLearned,
-    required Duration delay,
+    required AppColors appColors,
   }) {
-    final appColors = Theme.of(context).extension<AppColors>()!;
-    return GestureDetector(
-      onTap: () async {
-        await AudioPlayer().play(AssetSource('audio/click.mp3'));
-        Vibration.vibrate(pattern: [0, 50, 50, 50]);
+    return InkWell(
+      onTap: () {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(16),
             ),
             backgroundColor: appColors.cardColor,
             title: Text(
               name,
               style: GoogleFonts.poppins(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
                 color: appColors.primaryColor,
               ),
             ),
@@ -385,39 +309,19 @@ class _DictionaryPageState extends State<DictionaryPage> {
               child: Text(
                 description,
                 style: GoogleFonts.poppins(
-                  fontSize: 16,
+                  fontSize: 14,
                   color: appColors.secondaryColor,
-                  height: 1.5,
+                  height: 1.4,
                 ),
               ),
             ),
             actions: [
               TextButton(
-                onPressed: () async {
-                  await AudioPlayer().play(AssetSource('audio/click.mp3'));
-                  Vibration.vibrate(pattern: [0, 50, 50, 50]);
-                  _markAsLearned(index);
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  'Ogarnąłem!',
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    color: appColors.accentColor,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: () async {
-                  await AudioPlayer().play(AssetSource('audio/click.mp3'));
-                  Vibration.vibrate(duration: 50);
-                  Navigator.pop(context);
-                },
+                onPressed: () => Navigator.pop(context),
                 child: Text(
                   'Zamknij',
                   style: GoogleFonts.poppins(
-                    fontSize: 16,
+                    fontSize: 14,
                     color: appColors.accentColor,
                     fontWeight: FontWeight.w600,
                   ),
@@ -427,57 +331,40 @@ class _DictionaryPageState extends State<DictionaryPage> {
           ),
         );
       },
+      borderRadius: BorderRadius.circular(12),
       child: Card(
-        elevation: 6,
+        elevation: 4,
         color: appColors.cardColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      name,
-                      style: GoogleFonts.poppins(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: appColors.primaryColor,
-                      ),
-                    ),
-                  ),
-                  if (isLearned)
-                    Icon(
-                      Icons.check_circle,
-                      color: appColors.accentColor,
-                      size: 24,
-                    ),
-                ],
-              ),
-              const SizedBox(height: 8),
               Text(
-                description,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
+                name,
                 style: GoogleFonts.poppins(
-                  fontSize: 14,
-                  color: appColors.secondaryColor,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: appColors.primaryColor,
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 6),
               Text(
-                'Dotknij, by dowiedzieć się więcej',
+                description,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.poppins(
                   fontSize: 12,
-                  color: appColors.accentColor,
-                  fontStyle: FontStyle.italic,
+                  color: appColors.secondaryColor,
                 ),
               ),
             ],
           ),
         ),
       ),
-    ).animate();
+    );
   }
 }

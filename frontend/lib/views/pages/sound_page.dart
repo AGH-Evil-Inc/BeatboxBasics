@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:app/data/globals.dart' as globals;
 import 'package:app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:http/io_client.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:vibration/vibration.dart';
 import 'sound_details_page.dart';
 
 class SoundPage extends StatefulWidget {
@@ -23,7 +22,6 @@ class _SoundPageState extends State<SoundPage> {
   bool hasError = false;
   bool isPlaying = false;
   String? currentlyPlayingPath;
-  int playedSounds = 0;
 
   @override
   void initState() {
@@ -36,9 +34,10 @@ class _SoundPageState extends State<SoundPage> {
       isLoading = true;
       hasError = false;
     });
+    final localIp = globals.localIP;
 
     String url = Platform.isAndroid || Platform.isIOS
-        ? "https://192.168.218.107:5001/api/sound"
+        ? "https://$localIp:5001/api/sound"
         : "https://localhost:5001/api/sound";
 
     try {
@@ -61,7 +60,6 @@ class _SoundPageState extends State<SoundPage> {
               .map((entry) => {
                     'key': entry.key,
                     ...entry.value as Map<String, dynamic>,
-                    'isPlayed': false,
                   })
               .toList();
           isLoading = false;
@@ -84,8 +82,6 @@ class _SoundPageState extends State<SoundPage> {
 
   Future<void> playSound(String path, int index) async {
     try {
-      await AudioPlayer().play(AssetSource('audio/click.mp3'));
-      Vibration.vibrate(pattern: [0, 50, 50, 50]);
       if (isPlaying && currentlyPlayingPath == path) {
         await audioPlayer.stop();
         setState(() {
@@ -98,10 +94,6 @@ class _SoundPageState extends State<SoundPage> {
         setState(() {
           isPlaying = true;
           currentlyPlayingPath = path;
-          if (!items[index]['isPlayed']) {
-            items[index]['isPlayed'] = true;
-            playedSounds = items.where((item) => item['isPlayed'] == true).length;
-          }
         });
         audioPlayer.onPlayerComplete.listen((_) {
           setState(() {
@@ -128,112 +120,71 @@ class _SoundPageState extends State<SoundPage> {
           ),
           const SizedBox(height: 16),
           Text(
-            'Coś poszło nie tak! 😕',
-            style: GoogleFonts.poppins(
-              fontSize: 20,
-              color: appColors.primaryColor,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Nie udało się załadować dźwięków.',
-            style: GoogleFonts.poppins(
-              fontSize: 16,
-              color: appColors.secondaryColor,
-            ),
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () async {
-              await AudioPlayer().play(AssetSource('audio/click.mp3'));
-              Vibration.vibrate(pattern: [0, 50, 50, 50]);
-              fetchSounds();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: appColors.buttonPrimaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            ),
-            child: Text(
-              'Spróbuj ponownie',
-              style: GoogleFonts.poppins(
-                fontSize: 16,
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ).animate().scale(duration: 400.ms, curve: Curves.easeOutBack),
-        ],
-      ),
-    ).animate().fadeIn(duration: 500.ms);
-  }
-
-  Widget _buildLoadingState() {
-    final appColors = Theme.of(context).extension<AppColors>()!;
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: 60,
-            height: 60,
-            child: CircularProgressIndicator(
-              strokeWidth: 4,
-              color: appColors.accentColor,
-            ),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            'Ładujemy dźwięki...',
+            'Ups, coś poszło nie tak!',
             style: GoogleFonts.poppins(
               fontSize: 18,
               color: appColors.primaryColor,
               fontWeight: FontWeight.w600,
             ),
           ),
+          const SizedBox(height: 12),
+          ElevatedButton(
+            onPressed: fetchSounds,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: appColors.buttonPrimaryColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            ),
+            child: Text(
+              'Spróbuj ponownie',
+              style: GoogleFonts.poppins(
+                fontSize: 14,
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
         ],
       ),
-    ).animate().fadeIn(duration: 500.ms);
+    );
+  }
+
+  Widget _buildLoadingState() {
+    final appColors = Theme.of(context).extension<AppColors>()!;
+    return Center(
+      child: CircularProgressIndicator(
+        color: appColors.accentColor,
+        strokeWidth: 3,
+      ),
+    );
   }
 
   Widget _buildSoundList() {
     final appColors = Theme.of(context).extension<AppColors>()!;
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return ListView.separated(
-      padding: EdgeInsets.all(screenWidth * 0.05),
+    return ListView.builder(
+      padding: EdgeInsets.all(screenWidth * 0.04),
       itemCount: items.length,
-      separatorBuilder: (context, index) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
         final item = items[index];
         final name = item['name'] ?? 'Brak nazwy';
         final path = item['audioPath'] ?? '';
         final description = item['description'] ?? 'Dowiedz się więcej!';
         final notation = item['notation'] ?? 'Brak notacji';
-        final isPlayed = item['isPlayed'] ?? false;
 
-        return Material(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(24),
-            topRight: Radius.circular(8),
-            bottomLeft: Radius.circular(8),
-            bottomRight: Radius.circular(24),
-          ),
+        return Card(
+          margin: const EdgeInsets.only(bottom: 12),
           color: appColors.cardColor,
-          elevation: 6,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          elevation: 4,
           child: InkWell(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(24),
-              topRight: Radius.circular(8),
-              bottomLeft: Radius.circular(8),
-              bottomRight: Radius.circular(24),
-            ),
-            onTap: () async {
-              await AudioPlayer().play(AssetSource('audio/click.mp3'));
-              Vibration.vibrate(pattern: [0, 50, 50, 50]);
+            borderRadius: BorderRadius.circular(12),
+            onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -242,7 +193,7 @@ class _SoundPageState extends State<SoundPage> {
               );
             },
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(12),
               child: Row(
                 children: [
                   Container(
@@ -255,33 +206,21 @@ class _SoundPageState extends State<SoundPage> {
                     child: Icon(
                       Icons.music_note,
                       color: appColors.accentColor,
-                      size: 28,
+                      size: 24,
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                name,
-                                style: GoogleFonts.poppins(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                  color: appColors.primaryColor,
-                                ),
-                              ),
-                            ),
-                            if (isPlayed)
-                              Icon(
-                                Icons.check_circle,
-                                color: appColors.accentColor,
-                                size: 20,
-                              ),
-                          ],
+                        Text(
+                          name,
+                          style: GoogleFonts.poppins(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: appColors.primaryColor,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Text(
@@ -289,7 +228,7 @@ class _SoundPageState extends State<SoundPage> {
                               ? '${description.substring(0, 60)}...'
                               : description,
                           style: GoogleFonts.poppins(
-                            fontSize: 14,
+                            fontSize: 12,
                             color: appColors.secondaryColor,
                           ),
                         ),
@@ -306,8 +245,8 @@ class _SoundPageState extends State<SoundPage> {
                           child: Text(
                             notation,
                             style: GoogleFonts.poppins(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
                               color: appColors.accentColor,
                             ),
                           ),
@@ -317,31 +256,25 @@ class _SoundPageState extends State<SoundPage> {
                   ),
                   const SizedBox(width: 12),
                   IconButton(
-                    icon: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 200),
-                      child: isPlaying && path == currentlyPlayingPath
-                          ? const Icon(Icons.pause_rounded, key: ValueKey('pause'))
-                          : const Icon(Icons.play_arrow_rounded, key: ValueKey('play')),
+                    icon: Icon(
+                      isPlaying && path == currentlyPlayingPath
+                          ? Icons.pause
+                          : Icons.play_arrow,
+                      color: Colors.white,
                     ),
                     style: IconButton.styleFrom(
                       backgroundColor: appColors.accentColor,
-                      foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      padding: const EdgeInsets.all(12),
                     ),
                     onPressed: () => playSound(path, index),
-                  ).animate().scale(
-                        duration: 400.ms,
-                        curve: Curves.easeOutBack,
-                        begin: const Offset(0.95, 0.95),
-                      ),
+                  ),
                 ],
               ),
             ),
           ),
-        ).animate();
+        );
       },
     );
   }
@@ -353,71 +286,48 @@ class _SoundPageState extends State<SoundPage> {
 
     return Scaffold(
       backgroundColor: appColors.backgroundColor,
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            SliverAppBar(
-              expandedHeight: 160,
-              floating: true,
-              pinned: true,
-              snap: false,
-              backgroundColor: appColors.accentColor,
-              elevation: 6,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(bottom: Radius.circular(24)),
-              ),
-              flexibleSpace: FlexibleSpaceBar(
-                title: Text(
-                  'Rozkmin dźwięki!',
-                  style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 24,
-                    color: Colors.white,
-                  ),
-                ),
-                centerTitle: true,
-              ),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.refresh, color: Colors.white, size: 28),
-                  onPressed: () async {
-                    await AudioPlayer().play(AssetSource('audio/click.mp3'));
-                    Vibration.vibrate(pattern: [0, 50, 50, 50]);
-                    fetchSounds();
-                  },
-                ).animate().scale(
-                      duration: 400.ms,
-                      curve: Curves.easeOutBack,
-                      begin: const Offset(0.95, 0.95),
-                    ),
+      appBar: AppBar(
+        title: Text(
+          'Dźwięki',
+          style: GoogleFonts.poppins(
+            fontSize: 22,
+            fontWeight: FontWeight.w700,
+            color: Colors.white,
+          ),
+        ),
+        centerTitle: true,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                appColors.soundGradientStart,
+                appColors.soundGradientEnd,
               ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-          ];
-        },
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Text(
-                'Odtworzyłeś $playedSounds/${items.length} dźwięków!',
-                style: GoogleFonts.poppins(
-                  fontSize: 16,
-                  color: appColors.accentColor,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ).animate().fadeIn(duration: 500.ms),
-            Expanded(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: screenWidth > 600 ? 600 : screenWidth * 0.9),
-                child: isLoading
-                    ? _buildLoadingState()
-                    : hasError
-                        ? _buildErrorState()
-                        : _buildSoundList(),
-              ),
-            ),
-          ],
+            borderRadius: const BorderRadius.vertical(bottom: Radius.circular(16)),
+          ),
+        ),
+        elevation: 4,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh, color: Colors.white, size: 24),
+            onPressed: fetchSounds,
+          ),
+        ],
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: screenWidth > 600 ? (screenWidth - 600) / 2 : screenWidth * 0.04),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: screenWidth > 600 ? 600 : screenWidth * 0.92),
+            child: isLoading
+                ? _buildLoadingState()
+                : hasError
+                    ? _buildErrorState()
+                    : _buildSoundList(),
+          ),
         ),
       ),
     );

@@ -3,23 +3,20 @@ import 'package:app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:audioplayers/audioplayers.dart';
-import 'package:vibration/vibration.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
     final appColors = Theme.of(context).extension<AppColors>()!;
 
     return Scaffold(
       backgroundColor: appColors.backgroundColor,
       appBar: AppBar(
         title: Text(
-          'Dostosuj vibe aplikacji!',
+          'Dostosuj kolory aplikacji',
           style: GoogleFonts.poppins(
             fontSize: 24,
             fontWeight: FontWeight.w700,
@@ -29,12 +26,6 @@ class SettingsPage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: appColors.backgroundColor,
         elevation: 6,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(24),
-            bottomRight: Radius.circular(8),
-          ),
-        ),
         actions: [
           IconButton(
             icon: Icon(
@@ -43,116 +34,159 @@ class SettingsPage extends StatelessWidget {
               size: 28,
             ),
             onPressed: () async {
-              await AudioPlayer().play(AssetSource('audio/click.mp3'));
-              Vibration.vibrate(pattern: [0, 50, 50, 50]);
+              final prefs = await SharedPreferences.getInstance();
               customColorsNotifier.value = isLightModeNotifier.value
                   ? AppColors.light()
                   : AppColors.dark();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    'Kolory zresetowane do domyślnych!',
-                    style: GoogleFonts.poppins(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  backgroundColor: appColors.accentColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
+              await _saveColorsToPrefs(customColorsNotifier.value, isLightModeNotifier.value, prefs);
             },
             tooltip: 'Resetuj kolory',
-          ).animate().scale(
-                duration: 400.ms,
-                curve: Curves.easeOutBack,
-                begin: const Offset(0.95, 0.95),
-                end: const Offset(1.0, 1.0),
-              ),
+          ),
         ],
       ),
       body: ValueListenableBuilder<bool>(
         valueListenable: isLightModeNotifier,
         builder: (context, isLightMode, child) {
           return ListView(
-            padding: EdgeInsets.all(screenWidth * 0.05),
+            padding: const EdgeInsets.all(16),
             children: [
-              _buildThemeModeSwitch(context, isLightMode).animate().fadeIn(duration: 400.ms),
-              const SizedBox(height: 32),
-              _buildSectionTitle(context, 'Kolory główne').animate().fadeIn(duration: 400.ms),
+              _buildThemeModeSwitch(context, isLightMode),
+              const SizedBox(height: 24),
+              _buildSectionTitle(context, 'Kolory główne'),
               _buildColorPickerTile(
                 context,
-                'Kolor główny (tekst)',
+                'Kolor główny (primary)',
                 appColors.primaryColor,
-                (color) {
-                  customColorsNotifier.value = customColorsNotifier.value.copyWith(primaryColor: color);
-                },
-              ).animate().fadeIn(duration: 400.ms, delay: 100.ms),
+                (color) => _updateColors(primaryColor: color),
+              ),
               _buildColorPickerTile(
                 context,
-                'Kolor dodatkowy (tekst)',
+                'Kolor dodatkowy (secondary)',
                 appColors.secondaryColor,
-                (color) {
-                  customColorsNotifier.value = customColorsNotifier.value.copyWith(secondaryColor: color);
-                },
-              ).animate().fadeIn(duration: 400.ms, delay: 150.ms),
+                (color) => _updateColors(secondaryColor: color),
+              ),
+              _buildColorPickerTile(
+                context,
+                'Kolor tekstu',
+                appColors.textColor,
+                (color) => _updateColors(textColor: color),
+              ),
               _buildColorPickerTile(
                 context,
                 'Kolor tła',
                 appColors.backgroundColor,
-                (color) {
-                  customColorsNotifier.value = customColorsNotifier.value.copyWith(backgroundColor: color);
-                },
-              ).animate().fadeIn(duration: 400.ms, delay: 200.ms),
-              _buildColorPickerTile(
-                context,
-                'Kolor kart',
-                appColors.cardColor,
-                (color) {
-                  customColorsNotifier.value = customColorsNotifier.value.copyWith(cardColor: color);
-                },
-              ).animate().fadeIn(duration: 400.ms, delay: 250.ms),
+                (color) => _updateColors(backgroundColor: color),
+              ),
               _buildColorPickerTile(
                 context,
                 'Kolor akcentu',
                 appColors.accentColor,
-                (color) {
-                  customColorsNotifier.value = customColorsNotifier.value.copyWith(
-                    accentColor: color,
-                    navSelectedColor: color,
-                    buttonPrimaryColor: color,
-                    waveformLiveColor: color,
-                    waveformSeekColor: color,
-                  );
-                },
-              ).animate().fadeIn(duration: 400.ms, delay: 300.ms),
+                (color) => _updateColors(
+                  accentColor: color,
+                  navSelectedColor: color,
+                  buttonPrimaryColor: color,
+                ),
+              ),
+              const SizedBox(height: 24),
+              _buildSectionTitle(context, 'Kolory nawigacji'),
               _buildColorPickerTile(
                 context,
-                'Kolor niewybranej nawigacji',
+                'Wybrany element nawigacji',
+                appColors.navSelectedColor,
+                (color) => _updateColors(navSelectedColor: color),
+              ),
+              _buildColorPickerTile(
+                context,
+                'Niewybrany element nawigacji',
                 appColors.navUnselectedColor,
-                (color) {
-                  customColorsNotifier.value = customColorsNotifier.value.copyWith(navUnselectedColor: color);
-                },
-              ).animate().fadeIn(duration: 400.ms, delay: 350.ms),
+                (color) => _updateColors(navUnselectedColor: color),
+              ),
+              const SizedBox(height: 24),
+              _buildSectionTitle(context, 'Kolory kart i przycisków'),
               _buildColorPickerTile(
                 context,
-                'Kolor dodatkowego przycisku',
+                'Kolor kart',
+                appColors.cardColor,
+                (color) => _updateColors(cardColor: color),
+              ),
+              _buildColorPickerTile(
+                context,
+                'Główny kolor przycisków',
+                appColors.buttonPrimaryColor,
+                (color) => _updateColors(buttonPrimaryColor: color),
+              ),
+              _buildColorPickerTile(
+                context,
+                'Dodatkowy kolor przycisków',
                 appColors.buttonSecondaryColor,
-                (color) {
-                  customColorsNotifier.value = customColorsNotifier.value.copyWith(buttonSecondaryColor: color);
-                },
-              ).animate().fadeIn(duration: 400.ms, delay: 400.ms),
+                (color) => _updateColors(buttonSecondaryColor: color),
+              ),
+              const SizedBox(height: 24),
+              _buildSectionTitle(context, 'Kolory waveform'),
+              _buildColorPickerTile(
+                context,
+                'Kolor aktywny waveform',
+                appColors.waveformLiveColor,
+                (color) => _updateColors(waveformLiveColor: color),
+              ),
+              _buildColorPickerTile(
+                context,
+                'Kolor nieaktywny waveform',
+                appColors.waveformFixedColor,
+                (color) => _updateColors(waveformFixedColor: color),
+              ),
+              _buildColorPickerTile(
+                context,
+                'Kolor linii przewijania',
+                appColors.waveformSeekColor,
+                (color) => _updateColors(waveformSeekColor: color),
+              ),
+              const SizedBox(height: 24),
+              _buildSectionTitle(context, 'Kolory gradientów kart funkcji'),
+              _buildColorPickerTile(
+                context,
+                'Gradient dźwięków - początek',
+                appColors.soundGradientStart,
+                (color) => _updateColors(soundGradientStart: color),
+              ),
+              _buildColorPickerTile(
+                context,
+                'Gradient dźwięków - koniec',
+                appColors.soundGradientEnd,
+                (color) => _updateColors(soundGradientEnd: color),
+              ),
+              _buildColorPickerTile(
+                context,
+                'Gradient patternów - początek',
+                appColors.patternGradientStart,
+                (color) => _updateColors(patternGradientStart: color),
+              ),
+              _buildColorPickerTile(
+                context,
+                'Gradient patternów - koniec',
+                appColors.patternGradientEnd,
+                (color) => _updateColors(patternGradientEnd: color),
+              ),
+              _buildColorPickerTile(
+                context,
+                'Gradient słownika - początek',
+                appColors.dictionaryGradientStart,
+                (color) => _updateColors(dictionaryGradientStart: color),
+              ),
+              _buildColorPickerTile(
+                context,
+                'Gradient słownika - koniec',
+                appColors.dictionaryGradientEnd,
+                (color) => _updateColors(dictionaryGradientEnd: color),
+              ),
+              const SizedBox(height: 24),
+              _buildSectionTitle(context, 'Inne kolory'),
               _buildColorPickerTile(
                 context,
                 'Kolor błędu',
                 appColors.errorColor,
-                (color) {
-                  customColorsNotifier.value = customColorsNotifier.value.copyWith(errorColor: color);
-                },
-              ).animate().fadeIn(duration: 400.ms, delay: 450.ms),
+                (color) => _updateColors(errorColor: color),
+              ),
             ],
           );
         },
@@ -160,17 +194,86 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
+  Future<void> _saveColorsToPrefs(AppColors colors, bool isLightMode, SharedPreferences prefs) async {
+    await prefs.setBool('isLightMode', isLightMode);
+    await prefs.setInt('primaryColor', colors.primaryColor.value);
+    await prefs.setInt('secondaryColor', colors.secondaryColor.value);
+    await prefs.setInt('textColor', colors.textColor.value);
+    await prefs.setInt('backgroundColor', colors.backgroundColor.value);
+    await prefs.setInt('accentColor', colors.accentColor.value);
+    await prefs.setInt('navSelectedColor', colors.navSelectedColor.value);
+    await prefs.setInt('navUnselectedColor', colors.navUnselectedColor.value);
+    await prefs.setInt('cardColor', colors.cardColor.value);
+    await prefs.setInt('buttonPrimaryColor', colors.buttonPrimaryColor.value);
+    await prefs.setInt('buttonSecondaryColor', colors.buttonSecondaryColor.value);
+    await prefs.setInt('waveformLiveColor', colors.waveformLiveColor.value);
+    await prefs.setInt('waveformFixedColor', colors.waveformFixedColor.value);
+    await prefs.setInt('waveformSeekColor', colors.waveformSeekColor.value);
+    await prefs.setInt('errorColor', colors.errorColor.value);
+    await prefs.setInt('soundGradientStart', colors.soundGradientStart.value);
+    await prefs.setInt('soundGradientEnd', colors.soundGradientEnd.value);
+    await prefs.setInt('patternGradientStart', colors.patternGradientStart.value);
+    await prefs.setInt('patternGradientEnd', colors.patternGradientEnd.value);
+    await prefs.setInt('dictionaryGradientStart', colors.dictionaryGradientStart.value);
+    await prefs.setInt('dictionaryGradientEnd', colors.dictionaryGradientEnd.value);
+  }
+
+  void _updateColors({
+    Color? primaryColor,
+    Color? secondaryColor,
+    Color? textColor,
+    Color? backgroundColor,
+    Color? accentColor,
+    Color? navSelectedColor,
+    Color? navUnselectedColor,
+    Color? cardColor,
+    Color? buttonPrimaryColor,
+    Color? buttonSecondaryColor,
+    Color? waveformLiveColor,
+    Color? waveformFixedColor,
+    Color? waveformSeekColor,
+    Color? errorColor,
+    Color? soundGradientStart,
+    Color? soundGradientEnd,
+    Color? patternGradientStart,
+    Color? patternGradientEnd,
+    Color? dictionaryGradientStart,
+    Color? dictionaryGradientEnd,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    final currentColors = customColorsNotifier.value;
+    final updatedColors = currentColors.copyWith(
+      primaryColor: primaryColor,
+      secondaryColor: secondaryColor,
+      textColor: textColor,
+      backgroundColor: backgroundColor,
+      accentColor: accentColor,
+      navSelectedColor: navSelectedColor,
+      navUnselectedColor: navUnselectedColor,
+      cardColor: cardColor,
+      buttonPrimaryColor: buttonPrimaryColor,
+      buttonSecondaryColor: buttonSecondaryColor,
+      waveformLiveColor: waveformLiveColor,
+      waveformFixedColor: waveformFixedColor,
+      waveformSeekColor: waveformSeekColor,
+      errorColor: errorColor,
+      soundGradientStart: soundGradientStart,
+      soundGradientEnd: soundGradientEnd,
+      patternGradientStart: patternGradientStart,
+      patternGradientEnd: patternGradientEnd,
+      dictionaryGradientStart: dictionaryGradientStart,
+      dictionaryGradientEnd: dictionaryGradientEnd,
+    );
+    customColorsNotifier.value = updatedColors;
+    await _saveColorsToPrefs(updatedColors, isLightModeNotifier.value, prefs);
+  }
+
   Widget _buildThemeModeSwitch(BuildContext context, bool isLightMode) {
     final appColors = Theme.of(context).extension<AppColors>()!;
     return Card(
       elevation: 6,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(8),
-          bottomLeft: Radius.circular(8),
-          bottomRight: Radius.circular(24),
-        ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
       ),
       color: appColors.cardColor,
       child: Padding(
@@ -187,7 +290,7 @@ class SettingsPage extends StatelessWidget {
               child: Text(
                 isLightMode ? 'Tryb jasny' : 'Tryb ciemny',
                 style: GoogleFonts.poppins(
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: appColors.primaryColor,
                 ),
@@ -196,13 +299,12 @@ class SettingsPage extends StatelessWidget {
             Switch(
               value: isLightMode,
               onChanged: (value) async {
-                await AudioPlayer().play(AssetSource('audio/click.mp3'));
-                Vibration.vibrate(pattern: [0, 50, 50, 50]);
                 isLightModeNotifier.value = value;
                 customColorsNotifier.value = value ? AppColors.light() : AppColors.dark();
+                final prefs = await SharedPreferences.getInstance();
+                await _saveColorsToPrefs(customColorsNotifier.value, value, prefs);
               },
               activeColor: appColors.accentColor,
-              inactiveThumbColor: appColors.navUnselectedColor,
             ),
           ],
         ),
@@ -213,11 +315,11 @@ class SettingsPage extends StatelessWidget {
   Widget _buildSectionTitle(BuildContext context, String title) {
     final appColors = Theme.of(context).extension<AppColors>()!;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Text(
         title,
         style: GoogleFonts.poppins(
-          fontSize: 22,
+          fontSize: 20,
           fontWeight: FontWeight.w700,
           color: appColors.primaryColor,
         ),
@@ -233,44 +335,27 @@ class SettingsPage extends StatelessWidget {
   ) {
     final appColors = Theme.of(context).extension<AppColors>()!;
     return Card(
-      elevation: 6,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(8),
-          topRight: Radius.circular(24),
-          bottomLeft: Radius.circular(24),
-          bottomRight: Radius.circular(8),
-        ),
-      ),
+      elevation: 2,
+      margin: const EdgeInsets.symmetric(vertical: 4),
       color: appColors.cardColor,
       child: ListTile(
         title: Text(
           title,
           style: GoogleFonts.poppins(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
+            fontSize: 16,
             color: appColors.primaryColor,
           ),
         ),
         leading: Container(
-          width: 36,
-          height: 36,
+          width: 24,
+          height: 24,
           decoration: BoxDecoration(
             color: color,
             shape: BoxShape.circle,
-            border: Border.all(color: appColors.secondaryColor, width: 1.5),
+            border: Border.all(color: appColors.secondaryColor),
           ),
         ),
-        trailing: Icon(
-          Icons.arrow_forward_ios,
-          size: 20,
-          color: appColors.accentColor,
-        ),
-        onTap: () async {
-          await AudioPlayer().play(AssetSource('audio/click.mp3'));
-          Vibration.vibrate(pattern: [0, 50, 50, 50]);
-          _showColorPickerDialog(context, title, color, onColorChanged);
-        },
+        onTap: () => _showColorPickerDialog(context, title, color, onColorChanged),
       ),
     );
   }
@@ -288,14 +373,12 @@ class SettingsPage extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           backgroundColor: appColors.cardColor,
           title: Text(
             'Wybierz $title',
             style: GoogleFonts.poppins(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
               color: appColors.primaryColor,
+              fontWeight: FontWeight.w600,
             ),
           ),
           content: SingleChildScrollView(
@@ -304,40 +387,27 @@ class SettingsPage extends StatelessWidget {
               onColorChanged: (color) => tempColor = color,
               displayThumbColor: true,
               enableAlpha: false,
-              labelTypes: const [],
-              pickerAreaHeightPercent: 0.7,
-              hexInputBar: true,
-              portraitOnly: true,
-              pickerAreaBorderRadius: BorderRadius.circular(16),
+              pickerAreaHeightPercent: 0.5,
             ),
           ),
           actions: [
             TextButton(
-              onPressed: () async {
-                await AudioPlayer().play(AssetSource('audio/click.mp3'));
-                Vibration.vibrate(duration: 50);
-                Navigator.pop(context);
-              },
+              onPressed: () => Navigator.pop(context),
               child: Text(
                 'Anuluj',
                 style: GoogleFonts.poppins(
-                  fontSize: 16,
-                  color: appColors.accentColor,
-                  fontWeight: FontWeight.w600,
+                  color: appColors.primaryColor,
                 ),
               ),
             ),
             TextButton(
-              onPressed: () async {
-                await AudioPlayer().play(AssetSource('audio/click.mp3'));
-                Vibration.vibrate(duration: 50);
+              onPressed: () {
                 onColorChanged(tempColor);
                 Navigator.pop(context);
               },
               child: Text(
                 'Zapisz',
                 style: GoogleFonts.poppins(
-                  fontSize: 16,
                   color: appColors.accentColor,
                   fontWeight: FontWeight.w600,
                 ),
