@@ -17,9 +17,6 @@ class ScoreResponse {
   final double stepMse;
   final int stepSe;
   final int score;
-  final List<bool> actualOnsets;
-  final List<bool> modelOnsets;
-  final double timePerSample;
 
   ScoreResponse({
     required this.beatAccepted,
@@ -28,22 +25,16 @@ class ScoreResponse {
     required this.stepMse,
     required this.stepSe,
     required this.score,
-    required this.actualOnsets,
-    required this.modelOnsets,
-    required this.timePerSample,
   });
 
   factory ScoreResponse.fromJson(Map<String, dynamic> json) {
     return ScoreResponse(
-      beatAccepted: json['BeatAccepted'] ?? false,
-      mse: (json['MSE'] ?? -1.0).toDouble(),
-      se: (json['SE'] ?? -1.0).toDouble(),
-      stepMse: (json['StepMSE'] ?? -1.0).toDouble(),
-      stepSe: json['StepSE'] ?? -1,
-      score: json['Score'] ?? -1,
-      actualOnsets: List<bool>.from(json['ActualOnsets'] ?? []),
-      modelOnsets: List<bool>.from(json['ModelOnsets'] ?? []),
-      timePerSample: (json['TimePerSample'] ?? 0.0).toDouble(),
+      beatAccepted: json['beatAccepted'],
+      mse: (json['mse']).toDouble(),
+      se: (json['se']).toDouble(),
+      stepMse: (json['stepMSE']).toDouble(),
+      stepSe: json['stepSE'] ,
+      score: json['score'],
     );
   }
 }
@@ -85,10 +76,9 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
   Future<void> _initControllers() async {
     _patternController = audio_waveforms.PlayerController();
     _recordingController = audio_waveforms.RecorderController()
-      ..androidEncoder = audio_waveforms.AndroidEncoder.aac
-      ..androidOutputFormat = audio_waveforms.AndroidOutputFormat.mpeg4
-      ..iosEncoder = audio_waveforms.IosEncoder.kAudioFormatLinearPCM
-      ..sampleRate = 16000;
+      ..androidEncoder = audio_waveforms.AndroidEncoder.opus
+      ..androidOutputFormat = audio_waveforms.AndroidOutputFormat.ogg
+      ..iosEncoder = audio_waveforms.IosEncoder.kAudioFormatOpus;
     _recordingPlayerController = audio_waveforms.PlayerController();
     await _loadPatternAudio();
   }
@@ -134,7 +124,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
   Future<void> _startRecording() async {
     if (await _recorder.hasPermission()) {
       final tempDir = await getTemporaryDirectory();
-      _recordingPath = '${tempDir.path}/recording.m4a'; 
+      _recordingPath = '${tempDir.path}/recording.ogg'; 
       await _recordingController.record(path: _recordingPath);
       setState(() => _isRecording = true);
     }
@@ -226,7 +216,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
 
       final responseBody = await response.stream.bytesToString();
       print('Debug: Response body: $responseBody.');
-
+      print('Debug: Response status code: ${response.statusCode}.');
       if (response.statusCode == 200) {
         final scoreResponse = ScoreResponse.fromJson(jsonDecode(responseBody));
         print('Debug: ScoreResponse parsed successfully.');
@@ -865,30 +855,6 @@ class _DetailedResultsSectionState extends State<_DetailedResultsSection> {
           const SizedBox(height: 8),
           Text(
             'StepSE: ${widget.response.stepSe >= 0 ? widget.response.stepSe : "N/A"}',
-            style: GoogleFonts.poppins(
-              fontSize: 14,
-              color: appColors.secondaryColor,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Actual Onsets: ${widget.response.actualOnsets.isNotEmpty ? widget.response.actualOnsets.join(", ") : "N/A"}',
-            style: GoogleFonts.poppins(
-              fontSize: 14,
-              color: appColors.secondaryColor,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Model Onsets: ${widget.response.modelOnsets.isNotEmpty ? widget.response.modelOnsets.join(", ") : "N/A"}',
-            style: GoogleFonts.poppins(
-              fontSize: 14,
-              color: appColors.secondaryColor,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Time per Sample: ${widget.response.timePerSample > 0 ? widget.response.timePerSample.toStringAsFixed(6) : "N/A"} s',
             style: GoogleFonts.poppins(
               fontSize: 14,
               color: appColors.secondaryColor,

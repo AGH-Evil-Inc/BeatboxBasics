@@ -3,6 +3,8 @@ using api.Models;
 using Microsoft.AspNetCore.Mvc;
 using OnesetDetection;
 using NAudio.Wave; // Add for audio conversion
+using Concentus.Structs; // Add for OPUS decoding
+using Xabe.FFmpeg;
 
 namespace api.Controllers;
 
@@ -20,24 +22,24 @@ public class ScoreController : ControllerBase
             return BadRequest("AudioPath i PatternKey są wymagane.");
 
         // 1. Save the uploaded file to a temporary location as .m4a
-        string? tempM4aPath = null;
+        string? tempOggPath = null;
         string? tempWavPath = null;
         try
         {
+           
             var tempDir = Path.GetTempPath();
-            tempM4aPath = Path.Combine(tempDir, $"recording_{Guid.NewGuid()}.m4a");
+            tempOggPath = Path.Combine(tempDir, $"recording_{Guid.NewGuid()}.ogg");
             tempWavPath = Path.Combine(tempDir, $"recording_{Guid.NewGuid()}.wav");
-            using (var stream = new FileStream(tempM4aPath, FileMode.Create))
+            using (var stream = new FileStream(tempOggPath, FileMode.Create))
             {
                 await req.AudioPath.CopyToAsync(stream);
             }
 
-            // 2. Convert .m4a to .wav using NAudio
-            using (var reader = new MediaFoundationReader(tempM4aPath))
-            using (var writer = new WaveFileWriter(tempWavPath, reader.WaveFormat))
-            {
-                reader.CopyTo(writer);
-            }
+            // 2. Convert .ogg (OPUS) to .wav using FFmpeg
+            var conversion = FFmpeg.Conversions.New()
+                .AddParameter($"-i {tempOggPath} {tempWavPath}")
+                .SetOverwriteOutput(true);
+            await conversion.Start();
         }
         catch (Exception ex)
         {
@@ -45,12 +47,11 @@ public class ScoreController : ControllerBase
         }
         finally
         {
-          
-            // Clean up the temporary .m4a file
-            if (System.IO.File.Exists(tempM4aPath))
-            {
-                System.IO.File.Delete(tempM4aPath);
-            }
+            //// Clean up the temporary .ogg file
+            //if (tempOggPath != null && System.IO.File.Exists(tempOggPath))
+            //{
+            //    System.IO.File.Delete(tempOggPath);
+            //}
         }
 
         // 3. Wczytaj bibliotekę patternów
@@ -81,10 +82,19 @@ public class ScoreController : ControllerBase
         int[] rhythm = p.Musical_notes.ToArray();
 
         // 5. Uruchom skoring
-        BeatScoreResult result;
+        ScoreResponse result;
         try
         {
-            result = BeatScorer.ScoreBeat(tempWavPath, bpm, noBars, rhythm);
+            BeatScoreResult beatScoreResult = BeatScorer.ScoreBeat(tempWavPath, bpm, noBars, rhythm);
+            result = new ScoreResponse
+            {
+                BeatAccepted = beatScoreResult.BeatAccepted,
+                MSE = beatScoreResult.MSE,
+                SE = beatScoreResult.SE,
+                StepMSE = beatScoreResult.StepMSE,
+                StepSE = beatScoreResult.StepSE,
+                Score = beatScoreResult.Score
+            };
         }
         catch (Exception ex)
         {
