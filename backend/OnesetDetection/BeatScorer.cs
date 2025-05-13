@@ -13,8 +13,8 @@ namespace OnesetDetection
     public class BeatScoreResult
     {
         public bool BeatAccepted { get; set; } = true; // Niezaakceptowany jeśli zostanie wykrytych mniej beatów niż powinno być
-        public float MSE { get; set; } = -1f; // time diff mean square error (seconds)
-        public float SE { get; set; } = -1f; // time diff square error (seconds)
+        public float MSE { get; set; } = -1f; // time diff mean square error (miliseconds)
+        public float SE { get; set; } = -1f; // time diff square error (miliseconds)
         public float StepMSE { get; set; } = -1f; // no samples diff mean square error
         public int StepSE { get; set; } = -1; // no samples diff square error
         public int Score { get; set; } = -1;
@@ -141,11 +141,12 @@ namespace OnesetDetection
                 stepse += lenientDifference * lenientDifference;
             }
 
+            se *= 1000000;
             result.MSE = se / (noNotes - 1);
             result.StepMSE = (float)stepse / (noNotes - 1);
             result.SE = se; result.StepSE = stepse;
 
-            float[] scoreThresholds = [4.0f, 2.0f, 1.0f, 0.5f, 0.0f];
+            float[] scoreThresholds = [8.0f, 2.0f, 1.0f, 0.5f, 0.0f];
             int score = -1;
             for (int i = 0; i < scoreThresholds.Length; i++)
             {
