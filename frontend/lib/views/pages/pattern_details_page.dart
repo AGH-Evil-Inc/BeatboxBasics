@@ -3,6 +3,7 @@ import 'package:app/data/globals.dart' as globals;
 import 'package:app/main.dart';
 import 'package:app/views/pages/sound_details_page.dart';
 import 'package:flutter/material.dart';
+import 'package:metronome/metronome.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:audio_waveforms/audio_waveforms.dart' as audio_waveforms;
 import 'package:record/record.dart';
@@ -14,16 +15,12 @@ class ScoreResponse {
   final bool beatAccepted;
   final double mse;
   final double se;
-  final double stepMse;
-  final int stepSe;
   final int score;
 
   ScoreResponse({
     required this.beatAccepted,
     required this.mse,
     required this.se,
-    required this.stepMse,
-    required this.stepSe,
     required this.score,
   });
 
@@ -32,8 +29,6 @@ class ScoreResponse {
       beatAccepted: json['beatAccepted'],
       mse: (json['mse']).toDouble(),
       se: (json['se']).toDouble(),
-      stepMse: (json['stepMSE']).toDouble(),
-      stepSe: json['stepSE'] ,
       score: json['score'],
     );
   }
@@ -42,7 +37,7 @@ class ScoreResponse {
 class PatternDetailsPage extends StatefulWidget {
   final Map<String, dynamic> pattern;
   final List<Map<String, dynamic>> sounds;
-  final String patternkey;
+  final String patternkey; 
 
   const PatternDetailsPage({
     super.key,
@@ -66,12 +61,33 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
   bool _isRecordingPlaying = false;
   double _playbackSpeed = 1.0;
   bool _isSubmitting = false;
+  late final Metronome _metronome;
+  bool _isMetronomeActive = false;
 
   @override
   void initState() {
     super.initState();
+    _metronome = Metronome();
+    _initializeMetronome();
     _initControllers();
   }
+
+  void _initializeMetronome() {
+    _metronome.init(
+      'assets/audio/snare.wav',
+      accentedPath: 'assets/audio/claves44_wav.wav',
+      bpm: widget.pattern["base_BPM"], // Używamy BPM z patternu
+      volume: 50,
+      enableTickCallback: true,
+      timeSignature: 4,
+      sampleRate: 44100,
+    );
+
+    _metronome.tickStream.listen((tick) {
+      // Logika dla wizualizacji ticków jeśli potrzebna
+    });
+  }
+
 
   Future<void> _initControllers() async {
     _patternController = audio_waveforms.PlayerController();
@@ -79,7 +95,11 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
       ..androidEncoder = audio_waveforms.AndroidEncoder.opus
       ..androidOutputFormat = audio_waveforms.AndroidOutputFormat.ogg
       ..iosEncoder = audio_waveforms.IosEncoder.kAudioFormatOpus;
+    
     _recordingPlayerController = audio_waveforms.PlayerController();
+    _recordingPlayerController.setFinishMode(
+      finishMode: audio_waveforms.FinishMode.pause,
+    );
     await _loadPatternAudio();
   }
 
@@ -121,6 +141,17 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
     }
   }
 
+  void _toggleMetronome() {
+    if (_isMetronomeActive) {
+      _metronome.pause();
+    } else {
+      _metronome.play();
+    }
+    setState(() {
+      _isMetronomeActive = !_isMetronomeActive;
+    });
+  }
+
   Future<void> _startRecording() async {
     if (await _recorder.hasPermission()) {
       final tempDir = await getTemporaryDirectory();
@@ -138,18 +169,20 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
         scrollScale: 1.2,
       );
       final samples = style.getSamplesForWidth(MediaQuery.sizeOf(context).width / 1.2);
-      await _recordingPlayerController.preparePlayer(
+      _recordingPlayerController.preparePlayer(
         path: _recordingPath!,
         shouldExtractWaveform: true,
         noOfSamples: samples,
       );
-      await _recordingPlayerController.setFinishMode(finishMode: audio_waveforms.FinishMode.pause);
-    }
-    setState(() => _isRecording = false);
+       _recordingPlayerController.setFinishMode(finishMode: audio_waveforms.FinishMode.pause);
+      setState(() => _isRecording = false);
+      
+    };
   }
 
   Future<void> _playRecording() async {
     if (_recordingPath == null) return;
+    
     if (_isRecordingPlaying) {
       await _recordingPlayerController.pausePlayer();
     } else {
@@ -258,40 +291,20 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Wynik: ${response.score}',
-                  style: GoogleFonts.poppins(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    color: appColors.accentColor,
-                  ),
-                ),
+                _ScoreStars(score: response.score),
                 const SizedBox(height: 8),
-                Text(
-                  'Zaakceptowano: ${response.beatAccepted ? "Tak" : "Nie"}',
-                  style: GoogleFonts.poppins(
-                    fontSize: 14,
-                    color: response.beatAccepted ? Colors.green : Colors.red,
-                    fontWeight: FontWeight.w600,
+                if (!response.beatAccepted) ...[
+                  Text(
+                    'Przesłane nagranie jest za krótkie lub niepoprawne.',
+                    style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      color: response.beatAccepted ? Colors.green : Colors.red,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
+                ],
+                
                 const SizedBox(height: 8),
-                Text(
-                  'MSE: ${response.mse >= 0 ? response.mse.toStringAsFixed(3) : "N/A"} s',
-                  style: GoogleFonts.poppins(
-                    fontSize: 14,
-                    color: appColors.secondaryColor,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'SE: ${response.se >= 0 ? response.se.toStringAsFixed(3) : "N/A"} s',
-                  style: GoogleFonts.poppins(
-                    fontSize: 14,
-                    color: appColors.secondaryColor,
-                  ),
-                ),
-                const SizedBox(height: 16),
                 _DetailedResultsSection(response: response),
               ],
             ),
@@ -346,6 +359,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
     _recordingController.dispose();
     _recordingPlayerController.dispose();
     _recorder.dispose();
+    _metronome.destroy();
     super.dispose();
   }
 
@@ -414,9 +428,11 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
                   isPlaying: _isRecordingPlaying,
                   onRecordPressed: _toggleRecording,
                   onPlayPressed: _playRecording,
+                  onMetronomePressed: _toggleMetronome,
                   onSubmitPressed: _submitRecording,
                   hasRecording: _recordingPath != null,
                   isSubmitting: _isSubmitting,
+                  isMetronomeActive: _isMetronomeActive,
                 ),
               ],
             ),
@@ -623,11 +639,6 @@ class _PatternPlayerSection extends StatelessWidget {
                     fixedWaveColor: appColors.waveformFixedColor,
                     seekLineColor: appColors.waveformSeekColor,
                     seekLineThickness: 2,
-                    scaleFactor: 100,
-                    scrollScale: 10,
-                    showSeekLine: true,
-                    showBottom: true,
-                    showTop: true,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -709,8 +720,10 @@ class _RecordingSection extends StatelessWidget {
   final VoidCallback onRecordPressed;
   final VoidCallback onPlayPressed;
   final VoidCallback onSubmitPressed;
+  final VoidCallback onMetronomePressed;
   final bool hasRecording;
   final bool isSubmitting;
+  final bool isMetronomeActive;
 
   const _RecordingSection({
     required this.recorderController,
@@ -720,8 +733,10 @@ class _RecordingSection extends StatelessWidget {
     required this.onRecordPressed,
     required this.onPlayPressed,
     required this.onSubmitPressed,
+    required this.onMetronomePressed,
     required this.hasRecording,
     required this.isSubmitting,
+    required this.isMetronomeActive,
   });
 
   @override
@@ -770,10 +785,6 @@ class _RecordingSection extends StatelessWidget {
                       seekLineColor: appColors.waveformSeekColor,
                       seekLineThickness: 2,
                       scaleFactor: 1000,
-                      scrollScale: 40,
-                      showSeekLine: true,
-                      showBottom: true,
-                      showTop: true,
                     ),
                   ),
                 ],
@@ -783,6 +794,23 @@ class _RecordingSection extends StatelessWidget {
                   spacing: 16,
                   runSpacing: 12,
                   children: [
+                    FloatingActionButton(
+                    onPressed: onMetronomePressed,
+                    tooltip: 'Metronom',
+                    heroTag: 'metronome',
+                    backgroundColor: isMetronomeActive ? appColors.buttonPrimaryColor : appColors.navUnselectedColor,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.access_time), // lub Icons.music_note / FontAwesomeIcons.metronome
+                        SizedBox(height: 4),
+                        Text(
+                          isMetronomeActive ? 'ON' : 'OFF',
+                          style: TextStyle(fontSize: 11),
+                        ),
+                      ],
+                    ),
+                  ),
                     _PlaybackButton(
                       icon: isRecording ? Icons.stop : Icons.mic,
                       label: isRecording ? 'Zatrzymaj' : 'Nagraj',
@@ -798,7 +826,7 @@ class _RecordingSection extends StatelessWidget {
                       ),
                       _PlaybackButton(
                         icon: isSubmitting ? Icons.hourglass_empty : Icons.send,
-                        label: isSubmitting ? 'Wysyłanie...' : 'Wyślij do oceny',
+                        label: isSubmitting ? 'Wysyłanie...' : 'Oceń rytm',
                         color: isSubmitting ? appColors.navUnselectedColor : appColors.buttonPrimaryColor,
                         onPressed: isSubmitting ? null : onSubmitPressed,
                       ),
@@ -846,20 +874,21 @@ class _DetailedResultsSectionState extends State<_DetailedResultsSection> {
         ),
         if (_showDetails) ...[
           Text(
-            'StepMSE: ${widget.response.stepMse >= 0 ? widget.response.stepMse.toStringAsFixed(3) : "N/A"}',
-            style: GoogleFonts.poppins(
-              fontSize: 14,
-              color: appColors.secondaryColor,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'StepSE: ${widget.response.stepSe >= 0 ? widget.response.stepSe : "N/A"}',
-            style: GoogleFonts.poppins(
-              fontSize: 14,
-              color: appColors.secondaryColor,
-            ),
-          ),
+                  'MSE: ${widget.response.mse >= 0 ? widget.response.mse.toStringAsFixed(0) : "N/A"} ms^2',
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    color: appColors.secondaryColor,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'SE: ${widget.response.se >= 0 ? widget.response.se.toStringAsFixed(0) : "N/A"} ms^2',
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    color: appColors.secondaryColor,
+                  ),
+                ),
+                const SizedBox(height: 16),
         ],
       ],
     );
@@ -937,6 +966,56 @@ class _SpeedControlButton extends StatelessWidget {
         padding: const EdgeInsets.all(10),
       ),
       onPressed: () => onChanged(speed),
+    );
+  }
+}
+
+class _ScoreStars extends StatelessWidget {
+  final int score;
+
+  const _ScoreStars({required this.score});
+
+  Color _getColor(int score) {
+    switch (score) {
+      case 1:
+        return Colors.red;
+      case 2:
+        return Colors.orange;
+      case 3:
+        return Colors.yellow.shade700;
+      case 4:
+        return Colors.lightGreen;
+      case 5:
+        return Colors.green.shade800;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final color = _getColor(score);
+
+    return Row(
+      children: [
+        Text(
+          'Wynik:',
+          style: GoogleFonts.poppins(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Row(
+          children: List.generate(5, (index) {
+            return Icon(
+              Icons.star,
+              color: index < score ? color : Colors.grey.shade300,
+              size: 28,
+            );
+          }),
+        ),
+      ],
     );
   }
 }

@@ -91,8 +91,6 @@ public class ScoreController : ControllerBase
                 BeatAccepted = beatScoreResult.BeatAccepted,
                 MSE = beatScoreResult.MSE,
                 SE = beatScoreResult.SE,
-                StepMSE = beatScoreResult.StepMSE,
-                StepSE = beatScoreResult.StepSE,
                 Score = beatScoreResult.Score
             };
         }

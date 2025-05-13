@@ -46,9 +46,9 @@ dependencies:
   flutter_colorpicker: ^1.1.0
   provider: ^6.1.4
   connectivity_plus: ^6.1.4
-  flutter_sound: ^9.25.6
   permission_handler: ^11.3.0
   shared_preferences: ^2.5.3
+  metronome: ^2.0.3
 
 dev_dependencies:
   flutter_test:
