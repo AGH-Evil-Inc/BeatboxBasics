@@ -41,7 +41,7 @@
         "base_BPM": 170,
         "no_bars": 2,
         "pattern": ["B", "t", "K", "t", "t", "B", "K", "t"],
-        "musical_notes": [4, 4, 4, 4, 4, 4, 4, 4],
+        "musical_notes": [8, 8, 8, 8, 8, 8, 8, 8],
         "difficulty": 2,
         "audioPath": "audio/patterns/pattern_dnb_A_170BPM.wav",
         "description": "Jeden z najpopularniejszych patternów w gatunku Drum and Bass. Możesz zamienić \"K\" na \"Pf\" (użycie \"k\" jest niepolecane, muzyka DnB powinna mieć silne werble). \"K\" ułatwia oddychanie, ponieważ jest robione na wdechu."
@@ -53,7 +53,7 @@
         "base_BPM": 160,
         "no_bars": 2,
         "pattern": ["B", "t", "K", "t", "k", "t", "k", "B", "K", "t"],
-        "musical_notes": [4, 4, 4, 8, 8, 8, 8, 4, 4, 4],
+        "musical_notes": [8, 8, 8, 16, 16, 16, 16, 8, 8, 8],
         "difficulty": 2,
         "audioPath": "audio/patterns/pattern_dnb_B_160BPM.wav",
         "description": "Wariacja normalnego patternu DnB dodająca dodatkowe dźwięki \"k\", tworzące podwójne hi-haty (lżejszy dźwięk \"k\" brzmi jak hi-hat). Możesz zamienić \"K\" na \"Pf\". Przed nauką całego patternu warto przećwiczyć szybkie naprzemienne wykonywanie dźwięków \"t\" i \"k\". \"K\" ułatwia oddychanie, ponieważ jest robione na wdechu."
@@ -65,7 +65,7 @@
         "base_BPM": 120,
         "no_bars": 2,
         "pattern": ["B", "B", "K", "t", "K", "t", "K", "B", "B", "K", "t", "K"],
-        "musical_notes": [4, 4, 4, 8, 8, 8, 8, 8, 8, 4, 8, 8],
+        "musical_notes": [8, 8, 8, 16, 16, 16, 16, 16, 16, 8, 16, 16],
         "difficulty": 3,
         "audioPath": "audio/patterns/pattern_amen_break_120BPM.wav",
         "description": "Jeden z najpopularniejszych patternów w historii muzyki. Pattern ten jest dobrym ćwiczeniem dźwięku \"K\", który warto mieć dobrze opanowany przed przystąpieniem do nauki."
@@ -77,7 +77,7 @@
         "base_BPM": 110,
         "no_bars": 2,
         "pattern": ["B", "t", "Pf", "t", "Pf", "t", "Pf", "t", "Pf", "t"],
-        "musical_notes": [4, 4, 4, 8, 8, 8, 8, 4, 4, 4],
+        "musical_notes": [8, 8, 8, 16, 16, 16, 16, 8, 8, 8],
         "difficulty": 2,
         "audioPath": "audio/patterns/pattern_amen_break_simpler_110BPM.wav",
         "description": "Łatwiejsza wersja Amen Break, wykorzystująca dźwięk \"Pf\" zamiast \"K\". Oczywiście możesz użyć dźwięku \"K\", jeżeli czujesz się z nim lepiej. Dobre opanowane \"K\" pozwala na szybsze i czystsze wykonywanie tego patternu. \"K\" ułatwia oddychanie, ponieważ jest robione na wdechu."

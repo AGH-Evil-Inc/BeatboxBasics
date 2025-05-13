@@ -37,12 +37,12 @@ namespace OnesetDetection
             float[] onsets = audioAnalysis.GetOnsets();
 
             float timePerSample = audioAnalysis.GetTimePerSample();
-            result.TimePerSample = timePerSample;
+            result.TimePerSample = timePerSample; 
 
-            /*foreach (var onset in onsets)
+            foreach (var onset in onsets)
             {
                 Console.WriteLine(onset);
-            }*/
+            }
 
             bool[] actualOnsets = GetQuantizedOnsets(onsets);
             result.ActualOnsets = actualOnsets;
@@ -163,7 +163,7 @@ namespace OnesetDetection
         }
 
         // For very very fast beats there is a risk of cooldown being too long and eating actual percussion
-        private static bool[] GetQuantizedOnsets(float[] onsets, int cooldownSteps=4, float threshold=0.03f)
+        private static bool[] GetQuantizedOnsets(float[] onsets, int cooldownSteps=3, float threshold=0.03f)
         {
             List<bool> quantizedOnsets = new();
             int cooldown = 0;

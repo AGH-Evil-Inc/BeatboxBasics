@@ -12,11 +12,17 @@ string examplesPath = "E:\\SzkolaProgramowanie\\BeatboxBasics\\backend\\OnesetDe
 //string audioName = "example_recording.wav";
 //string audioName = "example_2.wav";
 //string audioName = "example_bad.wav";
-string audioName = "recording_basicB.wav";
-//string audioName = "recording_basicA.wav";
+//string audioName = "recording_basicB.wav";
+
+//string audioName = "recording_dnb.wav";
+//string audioName = "pattern_dnb_A_170BPM.wav";
+
+//string audioName = "pattern_amen_break_120BPM.wav";
+string audioName = "recording_amen.wav";
+
 
 string audioPath = examplesPath + audioName;
-BeatScoreResult score = BeatScorer.ScoreBeat(audioPath, 130, 2, [4, 4, 4, 4, 4, 4, 4, 4]);
+BeatScoreResult score = BeatScorer.ScoreBeat(audioPath, 120, 2, [8, 8, 8, 16, 16, 16, 16, 16, 16, 8, 16, 16]);
 
 Console.WriteLine($"\nBeat accepted: {score.BeatAccepted}");
 Console.WriteLine($"\nSE: {score.SE}");
