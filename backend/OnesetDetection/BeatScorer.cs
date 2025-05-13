@@ -25,7 +25,7 @@ namespace OnesetDetection
 
     public static class BeatScorer
     {
-        public static BeatScoreResult ScoreBeat(string audioPath, int bpm, int noBars, int[] rhythm, int leniency=1, int scoreHarshnessMul=6) // Harshness could be variable on beat difficulty
+        public static BeatScoreResult ScoreBeat(string audioPath, int bpm, int noBars, int[] rhythm, int leniency=1) // (redundant) , int scoreHarshnessMul=6 Harshness could be variable on beat difficulty
         {
             BeatScoreResult result = new();
 
@@ -129,7 +129,7 @@ namespace OnesetDetection
             Console.WriteLine("\nRóżnice nut:");
             float se = 0.0f;
             int stepse = 0;
-            for (int i = 0; i < noNotes; i++)
+            for (int i = 1; i < noNotes; i++) // Nie bierzemy pod uwagę pierwszego porównania bo zawsze wynosi 0 (synchronizacja)
             {
                 Console.WriteLine(noteDifferences[i]);
 
@@ -141,12 +141,22 @@ namespace OnesetDetection
                 stepse += lenientDifference * lenientDifference;
             }
 
-            result.MSE = se / noNotes;
-            result.StepMSE = (float)stepse / noNotes;
-
+            result.MSE = se / (noNotes - 1);
+            result.StepMSE = (float)stepse / (noNotes - 1);
             result.SE = se; result.StepSE = stepse;
 
-            int score = Math.Max(0, 100 - (int)(result.StepMSE * scoreHarshnessMul)); // TODO: temporary score calculation, make it cool
+            float[] scoreThresholds = [4.0f, 2.0f, 1.0f, 0.5f, 0.0f];
+            int score = -1;
+            for (int i = 0; i < scoreThresholds.Length; i++)
+            {
+                if (result.StepMSE >= scoreThresholds[i])
+                {
+                    score = i + 1; // Wynik od 1 do 5 (gwiazdek - im więcej tym lepiej)
+                    break;
+                }
+            }
+
+            //int score = Math.Max(0, 100 - (int)(result.StepMSE * scoreHarshnessMul)); // TODO: temporary score calculation, make it cool
             result.Score = score;
 
             return result;
