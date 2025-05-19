@@ -63,6 +63,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
   bool _isSubmitting = false;
   late final Metronome _metronome;
   bool _isMetronomeActive = false;
+  
 
   @override
   void initState() {
@@ -94,7 +95,8 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
     _recordingController = audio_waveforms.RecorderController()
       ..androidEncoder = audio_waveforms.AndroidEncoder.opus
       ..androidOutputFormat = audio_waveforms.AndroidOutputFormat.ogg
-      ..iosEncoder = audio_waveforms.IosEncoder.kAudioFormatOpus;
+      ..iosEncoder = audio_waveforms.IosEncoder.kAudioFormatOpus
+      ..sampleRate = 44100;
     
     _recordingPlayerController = audio_waveforms.PlayerController();
     _recordingPlayerController.setFinishMode(

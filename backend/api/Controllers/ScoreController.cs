@@ -21,14 +21,14 @@ public class ScoreController : ControllerBase
         if (req.AudioPath == null || string.IsNullOrWhiteSpace(req.PatternKey))
             return BadRequest("AudioPath i PatternKey są wymagane.");
 
-        // 1. Save the uploaded file to a temporary location as .m4a
+        // 1. Save the uploaded file to a temporary location
         string? tempOggPath = null;
         string? tempWavPath = null;
         try
         {
            
             var tempDir = Path.GetTempPath();
-            tempOggPath = Path.Combine(tempDir, $"recording_{Guid.NewGuid()}.ogg");
+            tempOggPath = Path.Combine(tempDir, $"recording_{Guid.NewGuid()}.mpeg4");
             tempWavPath = Path.Combine(tempDir, $"recording_{Guid.NewGuid()}.wav");
             using (var stream = new FileStream(tempOggPath, FileMode.Create))
             {
@@ -37,7 +37,7 @@ public class ScoreController : ControllerBase
 
             // 2. Convert .ogg (OPUS) to .wav using FFmpeg
             var conversion = FFmpeg.Conversions.New()
-                .AddParameter($"-i {tempOggPath} {tempWavPath}")
+                .AddParameter($"-i {tempOggPath} -ar 44100 {tempWavPath}")
                 .SetOverwriteOutput(true);
             await conversion.Start();
         }
