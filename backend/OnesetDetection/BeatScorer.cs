@@ -32,7 +32,7 @@ namespace OnesetDetection
             AudioAnalysis audioAnalysis = new();
 
             audioAnalysis.LoadAudioFromFile(audioPath);
-            audioAnalysis.DetectOnsets(1.5f); // parametr: czułość wykrywania onsetów, im mniejsza wartość tym bardziej czułe (autor rekomenduje od 1.3 do 1.6) 
+            audioAnalysis.DetectOnsets(0.5f); // parametr: czułość wykrywania onsetów, im mniejsza wartość tym bardziej czułe (autor rekomenduje od 1.3 do 1.6) 
             audioAnalysis.NormalizeOnsets(0); // parametr: 0 - normalizacja między 0 a max, 1 - normalizacja między min a max
             float[] onsets = audioAnalysis.GetOnsets();
 
@@ -146,7 +146,7 @@ namespace OnesetDetection
             result.StepMSE = (float)stepse / (noNotes - 1);
             result.SE = se; result.StepSE = stepse;
 
-            float[] scoreThresholds = [8.0f, 2.0f, 1.0f, 0.5f, 0.0f];
+            float[] scoreThresholds = [4.0f, 1.5f, 0.75f, 0.3f, 0.0f];
             int score = -1;
             for (int i = 0; i < scoreThresholds.Length; i++)
             {
@@ -164,7 +164,7 @@ namespace OnesetDetection
         }
 
         // For very very fast beats there is a risk of cooldown being too long and eating actual percussion
-        private static bool[] GetQuantizedOnsets(float[] onsets, int cooldownSteps=3, float threshold=0.03f)
+        private static bool[] GetQuantizedOnsets(float[] onsets, int cooldownSteps=2, float threshold=0.05f)
         {
             List<bool> quantizedOnsets = new();
             int cooldown = 0;
