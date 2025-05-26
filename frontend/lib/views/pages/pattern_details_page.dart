@@ -96,7 +96,7 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
       ..androidEncoder = audio_waveforms.AndroidEncoder.opus
       ..androidOutputFormat = audio_waveforms.AndroidOutputFormat.ogg
       ..iosEncoder = audio_waveforms.IosEncoder.kAudioFormatOpus
-      ..sampleRate = 44100;
+      ..sampleRate = 48000;
     
     _recordingPlayerController = audio_waveforms.PlayerController();
     _recordingPlayerController.setFinishMode(
@@ -245,7 +245,8 @@ class _PatternDetailsPageState extends State<PatternDetailsPage> {
       print('Debug: Audio file added to request with Content-Type: ${audioFile.contentType}');
       request.files.add(audioFile);
       print('Debug: Audio file added from path $_recordingPath.');
-
+      request.fields['AudioFileName'] =_recordingPath!; 
+      print('Debug: AudioFileName set to ${_recordingPath!}.');
       final response = await request.send();
       print('Debug: Request sent. Status code: ${response.statusCode}.');
 

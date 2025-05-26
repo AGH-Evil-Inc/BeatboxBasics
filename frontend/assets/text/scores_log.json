@@ -1,0 +1,47 @@
+[
+  {
+    "Timestamp": "2025-05-26T15:54:03.1456101Z",
+    "PatternKey": "dnb",
+    "BeatAccepted": false,
+    "MSE": -1,
+    "SE": -1,
+    "Score": -1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-26T15:54:30.8822037Z",
+    "PatternKey": "amen_break",
+    "BeatAccepted": true,
+    "MSE": 5766.735,
+    "SE": 132634.9,
+    "Score": 1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-26T17:26:35.3283502Z",
+    "PatternKey": "basic_beat_two_kicks",
+    "BeatAccepted": true,
+    "MSE": 104202.86,
+    "SE": 1563042.9,
+    "Score": 1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-26T17:26:50.9155229Z",
+    "PatternKey": "basic_beat_two_kicks",
+    "BeatAccepted": true,
+    "MSE": 97229.65,
+    "SE": 1458444.8,
+    "Score": 1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-26T17:27:22.6549809Z",
+    "PatternKey": "basic_beat_two_kicks",
+    "BeatAccepted": true,
+    "MSE": 100213.04,
+    "SE": 1503195.6,
+    "Score": 1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  }
+]

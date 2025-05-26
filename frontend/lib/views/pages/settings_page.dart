@@ -179,6 +179,18 @@ class SettingsPage extends StatelessWidget {
                 appColors.dictionaryGradientEnd,
                 (color) => _updateColors(dictionaryGradientEnd: color),
               ),
+              _buildColorPickerTile(
+                context,
+                'Gradient statystyk - początek',
+                appColors.statsGradientStart,
+                (color) => _updateColors(statsGradientStart: color),
+              ),
+              _buildColorPickerTile(
+                context,
+                'Gradient statystyk - koniec',
+                appColors.statsGradientEnd,
+                (color) => _updateColors(statsGradientEnd: color),
+              ),
               const SizedBox(height: 24),
               _buildSectionTitle(context, 'Inne kolory'),
               _buildColorPickerTile(
@@ -239,6 +251,8 @@ class SettingsPage extends StatelessWidget {
     Color? patternGradientEnd,
     Color? dictionaryGradientStart,
     Color? dictionaryGradientEnd,
+    Color? statsGradientStart,
+    Color? statsGradientEnd,
   }) async {
     final prefs = await SharedPreferences.getInstance();
     final currentColors = customColorsNotifier.value;

@@ -33,6 +33,8 @@ void main() async {
     patternGradientEnd: Color(prefs.getInt('patternGradientEnd') ?? 0xFF1A936F),
     dictionaryGradientStart: Color(prefs.getInt('dictionaryGradientStart') ?? 0xFFFFD166),
     dictionaryGradientEnd: Color(prefs.getInt('dictionaryGradientEnd') ?? 0xFFEF476F),
+    statsGradientStart: Color(prefs.getInt('statsGradientStart') ?? 0xFFFD9A23),
+    statsGradientEnd: Color(prefs.getInt('statsGradientEnd') ?? 0xFFFA1A23),
   );
 
   isLightModeNotifier.value = isLightMode;
@@ -237,6 +239,8 @@ class AppColors extends ThemeExtension<AppColors> {
   final Color patternGradientEnd;
   final Color dictionaryGradientStart;
   final Color dictionaryGradientEnd;
+  final Color statsGradientStart;
+  final Color statsGradientEnd;
 
   const AppColors({
     required this.primaryColor,
@@ -259,6 +263,8 @@ class AppColors extends ThemeExtension<AppColors> {
     required this.patternGradientEnd,
     required this.dictionaryGradientStart,
     required this.dictionaryGradientEnd,
+    required this.statsGradientStart,
+    required this.statsGradientEnd,
   });
 
   @override
@@ -283,6 +289,8 @@ class AppColors extends ThemeExtension<AppColors> {
     Color? patternGradientEnd,
     Color? dictionaryGradientStart,
     Color? dictionaryGradientEnd,
+    Color? statsGradientStart,
+    Color? statsGradientEnd,
   }) {
     return AppColors(
       primaryColor: primaryColor ?? this.primaryColor,
@@ -305,6 +313,8 @@ class AppColors extends ThemeExtension<AppColors> {
       patternGradientEnd: patternGradientEnd ?? this.patternGradientEnd,
       dictionaryGradientStart: dictionaryGradientStart ?? this.dictionaryGradientStart,
       dictionaryGradientEnd: dictionaryGradientEnd ?? this.dictionaryGradientEnd,
+      statsGradientStart: statsGradientStart ?? this.statsGradientStart,
+      statsGradientEnd: statsGradientEnd ?? this.statsGradientEnd,
     );
   }
 
@@ -334,6 +344,8 @@ class AppColors extends ThemeExtension<AppColors> {
       patternGradientEnd: Color.lerp(patternGradientEnd, other.patternGradientEnd, t)!,
       dictionaryGradientStart: Color.lerp(dictionaryGradientStart, other.dictionaryGradientStart, t)!,
       dictionaryGradientEnd: Color.lerp(dictionaryGradientEnd, other.dictionaryGradientEnd, t)!,
+      statsGradientStart: Color.lerp(statsGradientStart, other.statsGradientStart, t)!,
+      statsGradientEnd: Color.lerp(statsGradientEnd, other.statsGradientEnd, t)!,
     );
   }
 
@@ -359,6 +371,8 @@ class AppColors extends ThemeExtension<AppColors> {
       patternGradientEnd: const Color(0xFF1A936F),
       dictionaryGradientStart: const Color(0xFFFFD166),
       dictionaryGradientEnd: const Color(0xFFEF476F),
+      statsGradientStart: const Color(0xFFFD9A23),
+      statsGradientEnd: const Color(0xFFFA1A23),
     );
   }
 
@@ -384,6 +398,8 @@ class AppColors extends ThemeExtension<AppColors> {
       patternGradientEnd: const Color(0xFF1A936F),
       dictionaryGradientStart: const Color(0xFFFFD166),
       dictionaryGradientEnd: const Color(0xFFEF476F),
+      statsGradientEnd: const Color(0xFFFA1A23),
+      statsGradientStart: const Color(0xFFFD9A23),
     );
   }
 

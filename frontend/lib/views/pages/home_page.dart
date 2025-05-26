@@ -134,6 +134,17 @@ class HomePage extends StatelessWidget {
           ],
           onTap: () => _navigateToPage(3),
         ),
+        _buildFeatureCard(
+          context: context,
+          icon: Icons.bar_chart,
+          label: 'STATYSTYKI',
+          description: 'Przeglądaj swoje postępy',
+          gradientColors: [
+            appColors.statsGradientStart,
+            appColors.statsGradientEnd,
+          ],
+          onTap: () => _navigateToPage(4),
+        ),
       ],
     );
   }

@@ -15,6 +15,8 @@ public class ScoreController : ControllerBase
     private const string PatternFileRelative =
         @"..\..\frontend\assets\text\pattern_library.json";
 
+    protected const string ScoresLogFile = @"..\..\frontend\assets\text\scores_log.json";
+
     [HttpPost]                         // POST /api/score
     public async Task<IActionResult> ScoreBeat([FromForm] ScoreRequest req)
     {
@@ -93,6 +95,20 @@ public class ScoreController : ControllerBase
                 SE = beatScoreResult.SE,
                 Score = beatScoreResult.Score
             };
+
+            var record = new ScoreRecord
+            {
+                Timestamp = DateTime.UtcNow,
+                PatternKey = req.PatternKey,
+                BeatAccepted = result.BeatAccepted,
+                MSE = result.MSE,
+                SE = result.SE,
+                Score = result.Score,
+                AudioFileName = req?.AudioFileName
+            };
+
+            await AppendScoreRecordAsync(record);
+
         }
         catch (Exception ex)
         {
@@ -101,5 +117,26 @@ public class ScoreController : ControllerBase
         }
        
         return Ok(result);   // serializuje się automatycznie do JSON
+    }
+
+    private async Task AppendScoreRecordAsync(ScoreRecord record)
+    {
+        var records = new List<ScoreRecord>();
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), ScoresLogFile);
+
+        // Odczytaj istniejące rekordy jeśli plik istnieje
+        if (System.IO.File.Exists(filePath))
+        {
+            var json = await System.IO.File.ReadAllTextAsync(filePath);
+            records = JsonSerializer.Deserialize<List<ScoreRecord>>(json) ?? new List<ScoreRecord>();
+        }
+
+        // Dodaj nowy rekord
+        records.Add(record);
+
+        // Zapisz zaktualizowaną listę
+        var options = new JsonSerializerOptions { WriteIndented = true };
+        var newJson = JsonSerializer.Serialize(records, options);
+        await System.IO.File.WriteAllTextAsync(filePath, newJson);
     }
 }
