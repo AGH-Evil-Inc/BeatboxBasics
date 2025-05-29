@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Concentus" Version="2.2.2" />
+    <PackageReference Include="NAudio" Version="2.2.1" />
     <PackageReference Include="NAudio.Extras" Version="2.2.1" />
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />

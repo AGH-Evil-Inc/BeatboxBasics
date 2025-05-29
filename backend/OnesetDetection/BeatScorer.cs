@@ -37,6 +37,7 @@ namespace OnesetDetection
             float[] onsets = audioAnalysis.GetOnsets();
 
             float timePerSample = audioAnalysis.GetTimePerSample();
+            Console.WriteLine(timePerSample);
             result.TimePerSample = timePerSample; 
 
             foreach (var onset in onsets)
@@ -146,11 +147,17 @@ namespace OnesetDetection
             result.StepMSE = (float)stepse / (noNotes - 1);
             result.SE = se; result.StepSE = stepse;
 
-            float[] scoreThresholds = [4.0f, 1.5f, 0.75f, 0.3f, 0.0f];
+            float[] scoreThresholds = [15.0f, 5.0f, 0.75f, 0.1f, 0.0f];
+            float scale = 455f;
+            for (int i = 0; i < scoreThresholds.Length; i++)
+            {
+                scoreThresholds[i] *= scale;
+            }
+
             int score = -1;
             for (int i = 0; i < scoreThresholds.Length; i++)
             {
-                if (result.StepMSE >= scoreThresholds[i])
+                if (result.MSE >= scoreThresholds[i])
                 {
                     score = i + 1; // Wynik od 1 do 5 (gwiazdek - im więcej tym lepiej)
                     break;
@@ -164,7 +171,7 @@ namespace OnesetDetection
         }
 
         // For very very fast beats there is a risk of cooldown being too long and eating actual percussion
-        private static bool[] GetQuantizedOnsets(float[] onsets, int cooldownSteps=2, float threshold=0.05f)
+        private static bool[] GetQuantizedOnsets(float[] onsets, int cooldownSteps=3, float threshold=0.05f)
         {
             List<bool> quantizedOnsets = new();
             int cooldown = 0;

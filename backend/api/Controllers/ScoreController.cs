@@ -30,7 +30,7 @@ public class ScoreController : ControllerBase
         {
            
             var tempDir = Path.GetTempPath();
-            tempOggPath = Path.Combine(tempDir, $"recording_{Guid.NewGuid()}.mpeg4");
+            tempOggPath = Path.Combine(tempDir, $"recording_{Guid.NewGuid()}.ogg");
             tempWavPath = Path.Combine(tempDir, $"recording_{Guid.NewGuid()}.wav");
             using (var stream = new FileStream(tempOggPath, FileMode.Create))
             {
