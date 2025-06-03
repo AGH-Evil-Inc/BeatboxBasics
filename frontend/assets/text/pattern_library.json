@@ -1,0 +1,85 @@
+{
+    "basic_beat": {
+        "id": 0,
+        "name": "Rock A",
+        "base_BPM": 120,
+        "no_bars": 4,
+        "pattern": ["B", "t", "Pf", "t"],
+        "musical_notes": [4, 4, 4, 4],
+        "difficulty": 1,
+        "audioPath": "audio/patterns/pattern_basic_A_120BPM.wav",
+        "description": "Najprostszy rockowy beat. Rodzaj werbla jaki użyjesz nie jest istotny (możesz zamienić \"Pf\" na \"k\" albo \"K\"). \"K\" ułatwia oddychanie, ponieważ jest robione na wdechu."
+    },
+
+    "basic_beat_two_kicks": {
+        "id": 1,
+        "name": "Rock B",
+        "base_BPM": 130,
+        "no_bars": 2,
+        "pattern": ["B", "t", "K", "t", "B", "B", "K", "t"],
+        "musical_notes": [4, 4, 4, 4, 4, 4, 4, 4],
+        "difficulty": 1,
+        "audioPath": "audio/patterns/pattern_basic_B_130BPM.wav",
+        "description": "Najprostszy rockowy beat ale robimy dwie stopy przed drugim werblem. Rodzaj werbla jaki użyjesz nie jest istotny (możesz zamienić \"K\" na \"Pf\" albo \"k\"). \"K\" ułatwia oddychanie, ponieważ jest robione na wdechu."
+    },
+
+    "waltz": {
+        "id": 5,
+        "name": "Walc (metrum 6/4)",
+        "base_BPM": 170,
+        "no_bars": 4,
+        "pattern": ["B", "t", "t", "Pf", "t", "t"],
+        "musical_notes": [4, 4, 4, 4, 4, 4],
+        "difficulty": 2,
+        "audioPath": "audio/patterns/pattern_waltz_170BPM.wav",
+        "description": "Metrum 6/4, oznacza, że w każdym takcie zamiast liczyć do 4, liczymy do 6 w równych odstępach (albo do 3 dwa razy). Użycie \"Pf\" dodaje dodatkową trudność, ponieważ musimy wdychać powietrze między dźwiękami. Można użyć \"K\" zamiast \"Pf\" aby ułatwić sobie wdychanie."
+    },
+
+    "dnb": {
+        "id": 10,
+        "name": "Drum and Bass A",
+        "base_BPM": 170,
+        "no_bars": 2,
+        "pattern": ["B", "t", "K", "t", "t", "B", "K", "t"],
+        "musical_notes": [8, 8, 8, 8, 8, 8, 8, 8],
+        "difficulty": 2,
+        "audioPath": "audio/patterns/pattern_dnb_A_170BPM.wav",
+        "description": "Jeden z najpopularniejszych patternów w gatunku Drum and Bass. Możesz zamienić \"K\" na \"Pf\" (użycie \"k\" jest niepolecane, muzyka DnB powinna mieć silne werble). \"K\" ułatwia oddychanie, ponieważ jest robione na wdechu."
+    },
+
+    "dnb_double_hat": {
+        "id": 11,
+        "name": "Drum and Bass B",
+        "base_BPM": 160,
+        "no_bars": 2,
+        "pattern": ["B", "t", "K", "t", "k", "t", "k", "B", "K", "t"],
+        "musical_notes": [8, 8, 8, 16, 16, 16, 16, 8, 8, 8],
+        "difficulty": 2,
+        "audioPath": "audio/patterns/pattern_dnb_B_160BPM.wav",
+        "description": "Wariacja normalnego patternu DnB dodająca dodatkowe dźwięki \"k\", tworzące podwójne hi-haty (lżejszy dźwięk \"k\" brzmi jak hi-hat). Możesz zamienić \"K\" na \"Pf\". Przed nauką całego patternu warto przećwiczyć szybkie naprzemienne wykonywanie dźwięków \"t\" i \"k\". \"K\" ułatwia oddychanie, ponieważ jest robione na wdechu."
+    },
+
+    "amen_break": {
+        "id": 20,
+        "name": "Amen Break",
+        "base_BPM": 120,
+        "no_bars": 2,
+        "pattern": ["B", "B", "K", "t", "K", "t", "K", "B", "B", "K", "t", "K"],
+        "musical_notes": [8, 8, 8, 16, 16, 16, 16, 16, 16, 8, 16, 16],
+        "difficulty": 3,
+        "audioPath": "audio/patterns/pattern_amen_break_120BPM.wav",
+        "description": "Jeden z najpopularniejszych patternów w historii muzyki. Pattern ten jest dobrym ćwiczeniem dźwięku \"K\", który warto mieć dobrze opanowany przed przystąpieniem do nauki."
+    },
+
+    "amen_break_simplified": {
+        "id": 21,
+        "name": "Amen Break (uproszczony)",
+        "base_BPM": 110,
+        "no_bars": 2,
+        "pattern": ["B", "t", "Pf", "t", "Pf", "t", "Pf", "t", "Pf", "t"],
+        "musical_notes": [8, 8, 8, 16, 16, 16, 16, 8, 8, 8],
+        "difficulty": 2,
+        "audioPath": "audio/patterns/pattern_amen_break_simpler_110BPM.wav",
+        "description": "Łatwiejsza wersja Amen Break, wykorzystująca dźwięk \"Pf\" zamiast \"K\". Oczywiście możesz użyć dźwięku \"K\", jeżeli czujesz się z nim lepiej. Dobre opanowane \"K\" pozwala na szybsze i czystsze wykonywanie tego patternu. \"K\" ułatwia oddychanie, ponieważ jest robione na wdechu."
+    }
+}

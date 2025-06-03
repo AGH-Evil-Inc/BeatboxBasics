@@ -1,0 +1,43 @@
+{
+    "drum_sound": {
+        "name": "Dźwięk perkusyjny",
+        "description": "Krótki, niemelodyjny dźwięk wydawany przez beatboxera, często imitujący dźwięki prawdziwej perkusji."
+    },
+
+    "breathing": {
+        "name": "Oddychanie podczas beatboxu",
+        "description": "Istnieją trzy rodzaje dźwięków: robione na wydechu, wdechu oraz te robione samymi mięśniami i ciśnieniem w jamie ustnej. Odpowiednie manipulowanie dźwiękami na wdechu i wydechu pozwala na jednoczesny beatbox i oddychanie. Jeżeli robimy dużo dźwięków na wydechu, musimy po prostu znaleźć czas między dźwiękami na zaczerpnięcie powietrza."
+    },
+
+    "pattern": {
+        "name": "Pattern",
+        "description": "Rytmicznie wykonywana kombinacja dźwięków perkusyjnych, którą zapętlamy, tworząc perkusyjną część muzyki."
+    },
+
+    "notation": {
+        "name": "Notacja beatboxowa",
+        "description": "W beatbox można zapisywać patterny, oznaczając każdy dźwięk jakimś skrótem (np. \"K\", \"Pf\"). Można w ten sposób zapisać jakie dźwięki, w jakiej kolejności należy wykonać. Należy pamiętać, że notacja nie uwzględnia rytmu, który trzeba zapamiętać ze słuchu, albo użyć zapisu nutowego."
+    },
+
+    "bar": {
+        "name": "Takt",
+        "description": "Regularny odcinek czasowy utworu muzycznego. W przypadku utworów pisanych w najpopularniejszym metrum 4/4, każdy takt ma długość czterech ćwierćnut."
+    },
+
+    "note": {
+        "name": "Nuta",
+        "description": "Fragment taktu oznaczający uderzenie w danym momencie czasu. W przypadku metrum 4/4 pełna nuta ma długość całego taktu, półnuta - połowy taktu, ćwierćnuta - ćwiartki taktu itd."
+    },
+
+    "metrum": {
+        "name": "Metrum",
+        "description": "Na przykład 4/4, 6/8, 7/4. Górna (lewa) liczba określa liczbę nut w takcie. Dolna (prawa) liczba określa rodzaj nuty (2 - półnuta, 4 - ćwierćnuta, 8 - ósemka itd), jej długość jest definiowana przez BPM utworu. W muzyce zwykle używamy metrum 4/4 więc nie trzeba tego rozumieć."
+    },
+
+    "bpm": {
+        "name": "BPM",
+        "description": "Skrót od \"Beats Per Minute\" - uderzenia na minutę. Jest to liczba określająca tempo utworu - ile ćwierćnut na minutę (w przypadku metrum z 4 na dole)."
+    }
+
+    
+}

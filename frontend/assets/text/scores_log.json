@@ -1,0 +1,731 @@
+[
+  {
+    "Timestamp": "2025-05-26T15:54:03.1456101Z",
+    "PatternKey": "dnb",
+    "BeatAccepted": false,
+    "MSE": -1,
+    "SE": -1,
+    "Score": -1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-26T15:54:30.8822037Z",
+    "PatternKey": "amen_break",
+    "BeatAccepted": true,
+    "MSE": 5766.735,
+    "SE": 132634.9,
+    "Score": 1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-26T17:26:35.3283502Z",
+    "PatternKey": "basic_beat_two_kicks",
+    "BeatAccepted": true,
+    "MSE": 104202.86,
+    "SE": 1563042.9,
+    "Score": 1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-26T17:26:50.9155229Z",
+    "PatternKey": "basic_beat_two_kicks",
+    "BeatAccepted": true,
+    "MSE": 97229.65,
+    "SE": 1458444.8,
+    "Score": 1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-26T17:27:22.6549809Z",
+    "PatternKey": "basic_beat_two_kicks",
+    "BeatAccepted": true,
+    "MSE": 100213.04,
+    "SE": 1503195.6,
+    "Score": 1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:22:42.0370205Z",
+    "PatternKey": "basic_beat",
+    "BeatAccepted": true,
+    "MSE": 98954.98,
+    "SE": 1484324.6,
+    "Score": 1,
+    "AudioFileName": "string"
+  },
+  {
+    "Timestamp": "2025-05-29T17:23:09.5859441Z",
+    "PatternKey": "basic_beat_two_kicks",
+    "BeatAccepted": true,
+    "MSE": 9381.493,
+    "SE": 140722.39,
+    "Score": 1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:23:50.4476949Z",
+    "PatternKey": "basic_beat_two_kicks",
+    "BeatAccepted": true,
+    "MSE": 107.83325,
+    "SE": 1617.4988,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:24:20.0984981Z",
+    "PatternKey": "basic_beat",
+    "BeatAccepted": true,
+    "MSE": 11789.77,
+    "SE": 176846.55,
+    "Score": 1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:25:37.8018065Z",
+    "PatternKey": "waltz",
+    "BeatAccepted": true,
+    "MSE": 3821.0479,
+    "SE": 87884.1,
+    "Score": 1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:35:10.7218073Z",
+    "PatternKey": "basic_beat",
+    "BeatAccepted": true,
+    "MSE": 35.944416,
+    "SE": 539.16626,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:35:37.4860956Z",
+    "PatternKey": "basic_beat_two_kicks",
+    "BeatAccepted": true,
+    "MSE": 35.944416,
+    "SE": 539.16626,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:35:57.4053324Z",
+    "PatternKey": "waltz",
+    "BeatAccepted": true,
+    "MSE": 70.326035,
+    "SE": 1617.4988,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:36:12.4575536Z",
+    "PatternKey": "dnb",
+    "BeatAccepted": true,
+    "MSE": 0,
+    "SE": 0,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:36:31.8228542Z",
+    "PatternKey": "dnb_double_hat",
+    "BeatAccepted": false,
+    "MSE": -1,
+    "SE": -1,
+    "Score": -1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:37:06.38871Z",
+    "PatternKey": "amen_break",
+    "BeatAccepted": false,
+    "MSE": -1,
+    "SE": -1,
+    "Score": -1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:37:15.6643091Z",
+    "PatternKey": "amen_break",
+    "BeatAccepted": false,
+    "MSE": -1,
+    "SE": -1,
+    "Score": -1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:48:12.4133098Z",
+    "PatternKey": "basic_beat",
+    "BeatAccepted": true,
+    "MSE": 35.944416,
+    "SE": 539.16626,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:48:29.9087852Z",
+    "PatternKey": "basic_beat_two_kicks",
+    "BeatAccepted": true,
+    "MSE": 143.77766,
+    "SE": 2156.665,
+    "Score": 4,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:48:50.5232314Z",
+    "PatternKey": "waltz",
+    "BeatAccepted": true,
+    "MSE": 70.326035,
+    "SE": 1617.4988,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:49:04.3760334Z",
+    "PatternKey": "dnb",
+    "BeatAccepted": true,
+    "MSE": 467.2774,
+    "SE": 7009.161,
+    "Score": 3,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:49:11.9839068Z",
+    "PatternKey": "dnb",
+    "BeatAccepted": true,
+    "MSE": 0,
+    "SE": 0,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:49:27.6057266Z",
+    "PatternKey": "amen_break",
+    "BeatAccepted": false,
+    "MSE": -1,
+    "SE": -1,
+    "Score": -1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:49:36.261592Z",
+    "PatternKey": "amen_break",
+    "BeatAccepted": true,
+    "MSE": 0,
+    "SE": 0,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:49:50.8780436Z",
+    "PatternKey": "amen_break_simplified",
+    "BeatAccepted": true,
+    "MSE": 56.754345,
+    "SE": 1078.3325,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:50:00.8345545Z",
+    "PatternKey": "amen_break_simplified",
+    "BeatAccepted": true,
+    "MSE": 0,
+    "SE": 0,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:50:10.5027468Z",
+    "PatternKey": "amen_break_simplified",
+    "BeatAccepted": true,
+    "MSE": 709.4292,
+    "SE": 13479.155,
+    "Score": 2,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:50:24.7945187Z",
+    "PatternKey": "dnb_double_hat",
+    "BeatAccepted": false,
+    "MSE": -1,
+    "SE": -1,
+    "Score": -1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:50:31.6958148Z",
+    "PatternKey": "dnb_double_hat",
+    "BeatAccepted": false,
+    "MSE": -1,
+    "SE": -1,
+    "Score": -1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:53:10.4641938Z",
+    "PatternKey": "amen_break",
+    "BeatAccepted": true,
+    "MSE": 23.44201,
+    "SE": 539.16626,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:53:21.2828606Z",
+    "PatternKey": "amen_break",
+    "BeatAccepted": true,
+    "MSE": 609.49225,
+    "SE": 14018.321,
+    "Score": 3,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:53:40.1061623Z",
+    "PatternKey": "amen_break_simplified",
+    "BeatAccepted": false,
+    "MSE": -1,
+    "SE": -1,
+    "Score": -1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:53:47.6093265Z",
+    "PatternKey": "amen_break_simplified",
+    "BeatAccepted": true,
+    "MSE": 56.754345,
+    "SE": 1078.3325,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:53:57.4494351Z",
+    "PatternKey": "amen_break_simplified",
+    "BeatAccepted": true,
+    "MSE": 879.69244,
+    "SE": 16714.156,
+    "Score": 2,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:54:05.0700035Z",
+    "PatternKey": "amen_break_simplified",
+    "BeatAccepted": true,
+    "MSE": 2610.7,
+    "SE": 49603.297,
+    "Score": 1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:54:15.5151985Z",
+    "PatternKey": "dnb",
+    "BeatAccepted": true,
+    "MSE": 0,
+    "SE": 0,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:54:28.9772967Z",
+    "PatternKey": "dnb",
+    "BeatAccepted": true,
+    "MSE": 179.7221,
+    "SE": 2695.8315,
+    "Score": 4,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:54:50.1178894Z",
+    "PatternKey": "basic_beat",
+    "BeatAccepted": true,
+    "MSE": 71.88883,
+    "SE": 1078.3325,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:57:09.9668669Z",
+    "PatternKey": "basic_beat",
+    "BeatAccepted": true,
+    "MSE": 35.944416,
+    "SE": 539.16626,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:57:23.5319267Z",
+    "PatternKey": "basic_beat",
+    "BeatAccepted": true,
+    "MSE": 2875.5537,
+    "SE": 43133.305,
+    "Score": 1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:57:38.116547Z",
+    "PatternKey": "basic_beat",
+    "BeatAccepted": true,
+    "MSE": 4816.5527,
+    "SE": 72248.29,
+    "Score": 1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:57:50.5668372Z",
+    "PatternKey": "basic_beat",
+    "BeatAccepted": true,
+    "MSE": 4421.1636,
+    "SE": 66317.45,
+    "Score": 1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:58:15.2762604Z",
+    "PatternKey": "basic_beat",
+    "BeatAccepted": true,
+    "MSE": 71.88883,
+    "SE": 1078.3325,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T17:58:30.1800696Z",
+    "PatternKey": "basic_beat",
+    "BeatAccepted": true,
+    "MSE": 862.666,
+    "SE": 12939.99,
+    "Score": 2,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:00:48.3319086Z",
+    "PatternKey": "basic_beat",
+    "BeatAccepted": true,
+    "MSE": 71.88883,
+    "SE": 1078.3325,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:01:58.566543Z",
+    "PatternKey": "basic_beat",
+    "BeatAccepted": true,
+    "MSE": 0,
+    "SE": 0,
+    "Score": 4,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:02:52.8128966Z",
+    "PatternKey": "basic_beat",
+    "BeatAccepted": true,
+    "MSE": 107.83325,
+    "SE": 1617.4988,
+    "Score": 4,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:03:05.6160243Z",
+    "PatternKey": "basic_beat",
+    "BeatAccepted": true,
+    "MSE": 71.88883,
+    "SE": 1078.3325,
+    "Score": 4,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:03:18.0921558Z",
+    "PatternKey": "basic_beat",
+    "BeatAccepted": true,
+    "MSE": 71.88883,
+    "SE": 1078.3325,
+    "Score": 4,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:03:38.3637599Z",
+    "PatternKey": "basic_beat_two_kicks",
+    "BeatAccepted": true,
+    "MSE": 323.4998,
+    "SE": 4852.4966,
+    "Score": 4,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:03:52.5634785Z",
+    "PatternKey": "basic_beat_two_kicks",
+    "BeatAccepted": true,
+    "MSE": 2587.9976,
+    "SE": 38819.965,
+    "Score": 2,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:04:04.5865317Z",
+    "PatternKey": "basic_beat_two_kicks",
+    "BeatAccepted": false,
+    "MSE": -1,
+    "SE": -1,
+    "Score": -1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:04:16.2264119Z",
+    "PatternKey": "basic_beat_two_kicks",
+    "BeatAccepted": true,
+    "MSE": 1473.7211,
+    "SE": 22105.816,
+    "Score": 2,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:05:32.6621535Z",
+    "PatternKey": "basic_beat",
+    "BeatAccepted": true,
+    "MSE": 35.944416,
+    "SE": 539.16626,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:05:48.5255516Z",
+    "PatternKey": "basic_beat",
+    "BeatAccepted": true,
+    "MSE": 575.11066,
+    "SE": 8626.66,
+    "Score": 3,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:06:12.2490765Z",
+    "PatternKey": "waltz",
+    "BeatAccepted": true,
+    "MSE": 70.326035,
+    "SE": 1617.4988,
+    "Score": 4,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:06:28.8833648Z",
+    "PatternKey": "amen_break",
+    "BeatAccepted": true,
+    "MSE": 0,
+    "SE": 0,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:06:44.5974484Z",
+    "PatternKey": "amen_break_simplified",
+    "BeatAccepted": true,
+    "MSE": 28.377172,
+    "SE": 539.16626,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:06:54.3516436Z",
+    "PatternKey": "amen_break_simplified",
+    "BeatAccepted": true,
+    "MSE": 1787.762,
+    "SE": 33967.477,
+    "Score": 3,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:07:09.0251805Z",
+    "PatternKey": "amen_break_simplified",
+    "BeatAccepted": true,
+    "MSE": 24432.746,
+    "SE": 464222.2,
+    "Score": 1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:07:18.7669892Z",
+    "PatternKey": "amen_break_simplified",
+    "BeatAccepted": true,
+    "MSE": 9733.369,
+    "SE": 184934.02,
+    "Score": 1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:08:04.068406Z",
+    "PatternKey": "amen_break_simplified",
+    "BeatAccepted": true,
+    "MSE": 3348.5059,
+    "SE": 63621.61,
+    "Score": 2,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:09:50.0903494Z",
+    "PatternKey": "basic_beat",
+    "BeatAccepted": true,
+    "MSE": 107.83325,
+    "SE": 1617.4988,
+    "Score": 4,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:10:11.9942343Z",
+    "PatternKey": "basic_beat_two_kicks",
+    "BeatAccepted": true,
+    "MSE": 107.83325,
+    "SE": 1617.4988,
+    "Score": 4,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:10:35.833677Z",
+    "PatternKey": "basic_beat_two_kicks",
+    "BeatAccepted": true,
+    "MSE": 107.83325,
+    "SE": 1617.4988,
+    "Score": 4,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:10:51.4947564Z",
+    "PatternKey": "basic_beat_two_kicks",
+    "BeatAccepted": true,
+    "MSE": 23220.098,
+    "SE": 348301.47,
+    "Score": 1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:11:16.5593819Z",
+    "PatternKey": "basic_beat_two_kicks",
+    "BeatAccepted": true,
+    "MSE": 0,
+    "SE": 0,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:11:49.7890874Z",
+    "PatternKey": "waltz",
+    "BeatAccepted": true,
+    "MSE": 2789.599,
+    "SE": 64160.777,
+    "Score": 2,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:12:06.193147Z",
+    "PatternKey": "dnb",
+    "BeatAccepted": false,
+    "MSE": -1,
+    "SE": -1,
+    "Score": -1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:12:12.1630332Z",
+    "PatternKey": "dnb",
+    "BeatAccepted": true,
+    "MSE": 0,
+    "SE": 0,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:12:19.8525098Z",
+    "PatternKey": "dnb",
+    "BeatAccepted": true,
+    "MSE": 0,
+    "SE": 0,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:12:26.2414268Z",
+    "PatternKey": "dnb",
+    "BeatAccepted": true,
+    "MSE": 682.9439,
+    "SE": 10244.158,
+    "Score": 3,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:12:36.6627006Z",
+    "PatternKey": "dnb",
+    "BeatAccepted": true,
+    "MSE": 1761.2765,
+    "SE": 26419.146,
+    "Score": 3,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:12:43.8857732Z",
+    "PatternKey": "dnb",
+    "BeatAccepted": true,
+    "MSE": 35.944416,
+    "SE": 539.16626,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:13:02.086994Z",
+    "PatternKey": "amen_break",
+    "BeatAccepted": true,
+    "MSE": 23.44201,
+    "SE": 539.16626,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:13:12.0507417Z",
+    "PatternKey": "amen_break",
+    "BeatAccepted": true,
+    "MSE": 6071.481,
+    "SE": 139644.06,
+    "Score": 2,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:13:20.7915087Z",
+    "PatternKey": "amen_break",
+    "BeatAccepted": false,
+    "MSE": -1,
+    "SE": -1,
+    "Score": -1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:13:30.7664676Z",
+    "PatternKey": "amen_break",
+    "BeatAccepted": true,
+    "MSE": 61957.227,
+    "SE": 1425016.2,
+    "Score": 1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:13:38.0128489Z",
+    "PatternKey": "amen_break",
+    "BeatAccepted": false,
+    "MSE": -1,
+    "SE": -1,
+    "Score": -1,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:13:45.3509058Z",
+    "PatternKey": "amen_break",
+    "BeatAccepted": true,
+    "MSE": 70.326035,
+    "SE": 1617.4988,
+    "Score": 4,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  },
+  {
+    "Timestamp": "2025-05-29T18:14:31.3318255Z",
+    "PatternKey": "basic_beat_two_kicks",
+    "BeatAccepted": true,
+    "MSE": 35.944416,
+    "SE": 539.16626,
+    "Score": 5,
+    "AudioFileName": "/data/user/0/com.example.app/cache/recording.ogg"
+  }
+]

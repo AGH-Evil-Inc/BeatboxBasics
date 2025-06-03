@@ -1,0 +1,56 @@
+{
+    "B": {
+        "id": 0,
+        "name": "Stopa",
+        "notation": "B",
+        "difficulty": 1,
+        "audioPath": "audio/sounds/example_kicks.wav",
+        "description": "Stopa jest pierwszym dźwiękiem, którego powinien się nauczyć każdy przyszły beatboxer. Oryginalnie stopa jest dźwiękiem wydawanym przez bęben basowy perkusji, a imitowanie jej sprowadza się do wypowiedzenia głoski \"p\" lub \"b\" w odpowiedni sposób.",
+        "tips": ["Zacznij naukę od wypowiadania głoski \"p\" albo \"b\" bez używania głosu.", "Staraj się włożyć więcej energii w początek głoski, spróbuj zrobić to bez wydychania powietrza.", "Eksperymentuj z ułożeniem i ruchem ust podczas wykonywania dźwięku.", "Jeśli chcesz żeby dźwięk był mocniejszy, możesz zwiększyć ciśnienie wydychając powietrze z płuc."],
+        "links": ["https://www.youtube.com/watch?v=kfB9owT9ats", "https://www.youtube.com/watch?v=m37cDsDl-4I"]
+    },
+
+    "t": {
+        "id": 1,
+        "name": "Hi-hat",
+        "notation": "t",
+        "difficulty": 1,
+        "audioPath": "audio/sounds/example_hats.wav",
+        "description": "Hi-hat to najważniejszy talerz w perkusji. Aby go wykonać, wystarczy wymówić bezdźwięczne \"c\" (albo \"t\").",
+        "tips": ["Wysuń język do przodu, tak żeby był przyłożony do górnych zębów i powiedz \"c\". W momencie wydania dźwięku język powinien \"odskoczyć\" od zębów.", "Postaraj się nie wydychać powietrza z płuc, tylko użyć samych mięśni języka.", "(Opcjonalnie) możesz zrobić otwartą wersje hi-hat'a wydychając powietrze z płuc, tak aby dźwięk był długi (\"tsss\").", "(Opcjonalnie) możesz spróbować zrobić hi-hat na inne sposoby, na przykład za pomocą głosek \"f\", \"ć\", \"ś\" i \"cz\"."],
+        "links": ["https://www.youtube.com/watch?v=klZBkCyK9Co", "https://www.youtube.com/watch?v=B19ZKJaHamo"]
+    },
+
+    "Pf": {
+        "id": 2,
+        "name": "Werbel \"Pf\"",
+        "notation": "Pf",
+        "difficulty": 1,
+        "audioPath": "audio/sounds/example_snares.wav",
+        "description": "Oryginalnie werbel to niewielki bęben, podstawowy element perkusji nadający rytmikę. Werbel \"Pf\" jest chyba najpopularniejszym werblem używanym w beatbox, aby go wykonać należy po prostu zrobić stopę z dodatkiem głoski \"f\" na końcu.",
+        "tips": ["Zaraz po wykonaniu stopy dolna warga musi zetknąć się z górnymi zębami, aby wydać dźwięk \"f\".", "Dźwięk możesz zrobić wydychając powietrze z płuc, będzie wtedy dużo głośniejszy. Jeśli użyjesz samego ciśnienia powietrza, będzie czystszy.", "Spróbuj użyć więcej powietrza niż w przypadku samej stopy, aby dźwięk \"f\" trwał dłużej.", "(Opcjonalnie) możesz eksperymentować z różnymi głoskami na końcu stopy, zamiast \"f\" możesz zrobić na przykład \"s\", \"sz\", lub nawet \"h\"."],
+        "links": ["https://www.youtube.com/watch?v=guteyLuSOU4"]
+    },
+
+    "k": {
+        "id": 3,
+        "name": "Rimshot",
+        "notation": "k",
+        "difficulty": 1,
+        "audioPath": "audio/sounds/example_k.wav",
+        "description": "Dźwięk \"k\" (rimshot) imituje dźwięk wydawany przez uderzenie pałeczki w kant werbla. Najprostszym sposobem na jego imitację jest wypowiadanie głoski \"k\" za pomocą samych mięśni języka i jamy ustnej.",
+        "tips": ["W uproszczeniu musisz wypowiedzieć mocne, krótkie, bezdźwięczne \"k\" bez używania płuc.", "Skupiamy się tylko na początkowym napięciu między tyłem języka a podniebieniem, podczas wymawiania litery \"k\".", "Ruch dolnej szczęki pomaga w zwiększeniu napięcia.", "Tego dźwięku można używać zamiast zwykłego werbla, warto jednak zrobić go wydychając powietrze z płuc aby był głośniejszy."],
+        "links": ["https://www.youtube.com/watch?v=xsnuWhrXLfo", "https://www.youtube.com/watch?v=BTWwO_Dh21g"]
+    },
+
+    "K": {
+        "id": 4,
+        "name": "Werbel \"K\"",
+        "notation": "K",
+        "difficulty": 2,
+        "audioPath": "audio/sounds/example_kch.wav",
+        "description": "Dźwięk \"K\" (K pisane wielką literą) to inny, bardzo popularny sposób na imitację werbla w perkusji. Jest to jeden z najbardziej przydatnych dźwięków perkusyjnych, ponieważ wykonujemy go na wdechu, co bardzo ułatwia oddychanie podczas beatboxu. Jest to również jeden z najtrudniejszych podstawowych dźwięków perkusyjnych, ale posiada on również wiele wariacji, każdy robi go trochę inaczej.",
+        "tips": ["Pierwszym krokiem jest przyklejenie języka do podniebienia, tak żeby czubek dotykał dziąseł (może on być zaraz przy zębach albo dużo dalej w tyle, należy eksperymentować).", "Język powinien być przyklejony do podniebienia tak, aby blokować nam możliwość zrobienia wdechu przez usta (język całym obwodem styka się z dziąsłami/zębami).", "W tej pozycji należy spróbować zrobić wdech przez usta (w jamie ustnej powinno zrobić się duże ciśnienie) jednocześnie luzując lekko mięśnie języka aby powietrze mogło wlecieć do płuc.", "W zasadzie można powiedzieć, że zamiast luzować mięśnie języka, szybko przesuwamy go do tyłu tworząc szczeliny dla powietrza, należy dużo ćwiczyć i eksperymentować.", "Uważaj, przy ćwiczeniu tego dźwięku można się zakrztusić!", "Są różne sposoby i metody nauki tego dźwięku. Niektórzy zalecają robienie tego dźwięku przekręcając język na jedną ze stron jamy ustnej. Ma to swoje plusy i minusy. Ja uważam, że należy eksperymentować i znaleźć sposób, który jest najwygodniejszy dla nas.", "(Opcjonalnie) można wykonać dźwięk samymi mięśniami języka (bez wdychania powietrza). Brzmi on wtedy jak rimshot i jest przydatny w zaawansowanych patternach."],
+        "links": ["https://www.youtube.com/watch?v=IxAQxxZKitY", "https://www.youtube.com/watch?v=y5ZP7dkxNpg", "https://youtu.be/q5kz_Oclz30?t=82"]
+    }
+}
